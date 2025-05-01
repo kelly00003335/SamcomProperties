@@ -10,10 +10,15 @@ import { Property, Agent, Testimonial, ContactMessage, Newsletter } from '@share
 // API wrapper for Property-related operations
 export const PropertyAPI = {
   getAllProperties: async (): Promise<Property[]> => {
-    console.log('Fetching all properties...');
-    const properties = await propertyService.getAll();
-    console.log(`Fetched ${properties.length} properties`);
-    return properties;
+    console.log('PropertyAPI.getAllProperties called');
+    try {
+      const properties = await propertyService.getAll();
+      console.log(`PropertyAPI returned ${properties.length} properties:`, properties.map(p => ({ id: p.id, title: p.title })));
+      return properties;
+    } catch (error) {
+      console.error('Error in PropertyAPI.getAllProperties:', error);
+      throw error;
+    }
   },
   
   getPropertyById: async (id: string): Promise<Property | null> => {
@@ -35,7 +40,15 @@ export const PropertyAPI = {
   },
   
   createProperty: async (property: any): Promise<Property> => {
-    return await propertyService.create(property);
+    console.log('PropertyAPI.createProperty called with:', JSON.stringify(property, null, 2));
+    try {
+      const newProperty = await propertyService.create(property);
+      console.log('PropertyAPI.createProperty created new property:', JSON.stringify(newProperty, null, 2));
+      return newProperty;
+    } catch (error) {
+      console.error('Error in PropertyAPI.createProperty:', error);
+      throw error;
+    }
   },
   
   updateProperty: async (id: string, property: any): Promise<void> => {

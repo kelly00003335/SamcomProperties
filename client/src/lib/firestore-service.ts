@@ -59,8 +59,16 @@ const convertDocument = <T>(doc: DocumentData): T => {
 export const propertyService = {
   // Get all properties
   async getAll(): Promise<Property[]> {
-    const querySnapshot = await getDocs(collection(db, COLLECTIONS.PROPERTIES));
-    return querySnapshot.docs.map(doc => convertDocument<Property>(doc));
+    console.log('Fetching all properties from Firestore...');
+    try {
+      const querySnapshot = await getDocs(collection(db, COLLECTIONS.PROPERTIES));
+      const properties = querySnapshot.docs.map(doc => convertDocument<Property>(doc));
+      console.log(`Fetched ${properties.length} properties:`, properties.map(p => p.id));
+      return properties;
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+      return [];
+    }
   },
   
   // Get a property by ID

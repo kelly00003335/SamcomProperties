@@ -161,8 +161,17 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
 
   const onSubmit = async (data: PropertyFormValues) => {
     try {
+      console.log('PropertyForm onSubmit with data:', data);
       setIsSubmitting(true);
-      await propertyMutation.mutateAsync(data);
+      const result = await propertyMutation.mutateAsync(data);
+      console.log('Property mutation completed with result:', result);
+      
+      // Force an immediate manual refetch after creation
+      if (!property) {
+        console.log('Triggering manual refetch of properties');
+        await queryClient.refetchQueries({ queryKey: ["/api/properties"] });
+      }
+      
     } catch (error) {
       console.error("Submit error:", error);
     } finally {

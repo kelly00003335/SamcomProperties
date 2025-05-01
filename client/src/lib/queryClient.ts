@@ -38,16 +38,28 @@ export async function apiRequest(
     
     if (method === "GET") {
       if (url.includes('/featured')) {
-        return { json: async () => await PropertyAPI.getFeaturedProperties() };
+        console.log('Fetching featured properties via API wrapper');
+        const properties = await PropertyAPI.getFeaturedProperties();
+        console.log(`Got ${properties.length} featured properties`);
+        return { json: async () => properties };
       } else if (url.includes('/search')) {
         // Extract search params from URL query string
         const params = {};
         // Note: In a real implementation, we would parse query params here
-        return { json: async () => await PropertyAPI.searchProperties(params) };
+        console.log('Searching properties with params:', params);
+        const properties = await PropertyAPI.searchProperties(params);
+        console.log(`Search returned ${properties.length} properties`);
+        return { json: async () => properties };
       } else if (id) {
-        return { json: async () => await PropertyAPI.getPropertyById(id[1]) };
+        console.log(`Fetching property by ID: ${id[1]}`);
+        const property = await PropertyAPI.getPropertyById(id[1]);
+        console.log('Got property:', property ? property.id : 'null');
+        return { json: async () => property };
       } else {
-        return { json: async () => await PropertyAPI.getAllProperties() };
+        console.log('Fetching all properties via API wrapper');
+        const properties = await PropertyAPI.getAllProperties();
+        console.log(`Got ${properties.length} properties:`, properties.map(p => p.id));
+        return { json: async () => properties };
       }
     } else if (method === "POST") {
       console.log('Creating property via API:', JSON.stringify(data, null, 2));
