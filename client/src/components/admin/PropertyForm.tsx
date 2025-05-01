@@ -121,7 +121,8 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
         // Convert string to array
         images: data.imagesString.split(",").filter(Boolean).map(img => img.trim()),
         isFeatured: data.isFeatured,
-        agentId: data.agentId
+        // Set agentId to null instead of undefined for Firestore compatibility
+        agentId: data.agentId || null
       };
 
       if (property) {

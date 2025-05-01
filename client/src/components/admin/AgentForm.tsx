@@ -79,7 +79,7 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
       const processedData = {
         ...data,
         // Convert social from string to JSON object
-        social: data.social ? JSON.parse(data.social) : {},
+        social: data.social ? JSON.parse(data.social) : null,
       };
 
       if (agent) {
