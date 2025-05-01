@@ -6,12 +6,10 @@ import { Property } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const FeaturedProperties = () => {
-  const { data: properties, isLoading, error, refetch } = useQuery<Property[]>({
+  const { data: properties, isLoading, error } = useQuery<Property[]>({
     queryKey: ['/api/properties/featured'],
     refetchOnMount: true,
     staleTime: 0, // Consider data always stale to ensure fresh data
-    retry: 3,
-    retryDelay: (attempt) => Math.min(attempt > 1 ? 2 ** attempt * 1000 : 1000, 30 * 1000),
   });
 
   // Loading state
@@ -49,13 +47,7 @@ const FeaturedProperties = () => {
         <div className="container mx-auto px-4">
           <div className="text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading">Featured Properties</h2>
-            <p className="text-red-500 mb-4">Failed to load properties.</p>
-            <Button 
-              onClick={() => refetch()} 
-              className="bg-primary hover:bg-primary-dark text-white"
-            >
-              Try Again
-            </Button>
+            <p className="text-red-500">Failed to load properties. Please try again later.</p>
           </div>
         </div>
       </section>

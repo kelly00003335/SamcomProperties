@@ -14,18 +14,11 @@ export const queryClient = new QueryClient({
       refetchInterval: false,
       refetchOnWindowFocus: true,
       staleTime: 5 * 60 * 1000, // 5 minutes
-      retry: 2,
-      retryDelay: (attempt) => Math.min(attempt > 1 ? 2 ** attempt * 1000 : 1000, 30 * 1000),
+      retry: 1,
       gcTime: 10 * 60 * 1000, // 10 minutes
-      onError: (error) => {
-        console.error('Query error:', error);
-      }
     },
     mutations: {
       retry: 1,
-      onError: (error) => {
-        console.error('Mutation error:', error);
-      }
     },
   },
 });

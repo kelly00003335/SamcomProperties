@@ -41,12 +41,10 @@ const Properties = () => {
     return queryString ? `/api/properties/search?${queryString}` : '/api/properties';
   };
 
-  const { data: properties, isLoading, error, refetch } = useQuery<Property[]>({
+  const { data: properties, isLoading, error } = useQuery<Property[]>({
     queryKey: [getQueryString()],
     refetchOnMount: true,
     staleTime: 0, // Consider data always stale to ensure fresh data
-    retry: 3,
-    retryDelay: (attempt) => Math.min(attempt > 1 ? 2 ** attempt * 1000 : 1000, 30 * 1000),
   });
 
   // Build page title based on search params
@@ -108,15 +106,8 @@ const Properties = () => {
               ))}
             </div>
           ) : error ? (
-            <div className="text-center py-8 bg-white rounded-lg shadow-sm p-6">
-              <h3 className="text-xl font-bold mb-2">Error Loading Properties</h3>
-              <p className="text-red-500 mb-4">Failed to load properties.</p>
-              <Button 
-                onClick={() => refetch()} 
-                className="bg-primary hover:bg-primary-dark text-white"
-              >
-                Try Again
-              </Button>
+            <div className="text-center py-8">
+              <p className="text-red-500">Failed to load properties. Please try again later.</p>
             </div>
           ) : properties?.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-lg shadow-sm">

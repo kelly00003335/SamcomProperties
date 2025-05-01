@@ -107,8 +107,7 @@ export const propertyService = {
       return properties;
     } catch (error) {
       console.error('Error fetching properties:', error);
-      // Rethrow the error so it can be properly handled by the queryClient
-      throw error;
+      return [];
     }
   },
   
