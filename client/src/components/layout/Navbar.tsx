@@ -154,14 +154,15 @@ interface NavLinkProps {
 const NavLink: React.FC<NavLinkProps> = ({ href, text, isActive, isMobile }) => {
   return (
     <Link href={href}>
-      <a 
+      <div 
         className={`
           ${isActive ? "text-primary font-medium" : "text-neutral-dark font-medium hover:text-primary"} 
           ${isMobile ? "py-2" : ""}
+          cursor-pointer
         `}
       >
         {text}
-      </a>
+      </div>
     </Link>
   );
 };

@@ -76,10 +76,22 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
   const agentMutation = useMutation({
     mutationFn: async (data: AgentFormValues) => {
       // Process data to match schema
+      let processedSocial = null;
+      if (data.social) {
+        try {
+          // Convert social from string to JSON object
+          // Use String() to ensure we're parsing a string, even if somehow a number is passed
+          processedSocial = JSON.parse(String(data.social));
+        } catch (error) {
+          console.error('Error parsing social JSON:', error);
+          processedSocial = {}; // Fallback to empty object
+        }
+      }
+      
       const processedData = {
         ...data,
         // Convert social from string to JSON object
-        social: data.social ? JSON.parse(data.social) : null,
+        social: processedSocial,
       };
 
       if (agent) {
@@ -249,7 +261,11 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
                     <Textarea
                       placeholder='{"email":"agent@example.com","phone":"+2547XXXXXXXX","twitter":"http://twitter.com/agent","linkedin":"http://linkedin.com/in/agent"}'
                       className="min-h-[120px]"
-                      {...field}
+                      value={field.value as string || ''}
+                      onChange={field.onChange}
+                      onBlur={field.onBlur}
+                      name={field.name}
+                      ref={field.ref}
                     />
                   </FormControl>
                   <FormDescription>
