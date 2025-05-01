@@ -69,7 +69,11 @@ export const insertContactMessageSchema = createInsertSchema(contactMessages).om
 export const insertNewsletterSchema = createInsertSchema(newsletters).omit({ id: true, createdAt: true });
 
 // Create Types
+// Base PostgreSQL type
 export type Property = typeof properties.$inferSelect;
+// Extended type to support Firebase string IDs
+export type FirebaseProperty = Omit<Property, 'id'> & { id: string | number };
+// Use FirebaseProperty where needed in the frontend
 export type InsertProperty = z.infer<typeof insertPropertySchema>;
 
 export type Agent = typeof agents.$inferSelect;

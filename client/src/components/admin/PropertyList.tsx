@@ -39,12 +39,13 @@ interface PropertyListProps {
 }
 
 const PropertyList = ({ properties, onEditClick }: PropertyListProps) => {
-  const [deletePropertyId, setDeletePropertyId] = useState<number | null>(null);
+  const [deletePropertyId, setDeletePropertyId] = useState<string | number | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const deleteProperty = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string | number) => {
+      console.log(`Attempting to delete property with ID: ${id} (type: ${typeof id})`);
       return await apiRequest(`/api/properties/${id}`, "DELETE");
     },
     onSuccess: () => {
@@ -57,7 +58,8 @@ const PropertyList = ({ properties, onEditClick }: PropertyListProps) => {
     },
   });
 
-  const handleDeleteProperty = (id: number) => {
+  const handleDeleteProperty = (id: string | number) => {
+    console.log(`Handling delete for property ID: ${id}`);
     deleteProperty.mutate(id);
   };
 
