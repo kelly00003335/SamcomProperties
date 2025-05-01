@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { Analytics, getAnalytics, isSupported } from "firebase/analytics";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -22,8 +22,12 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 
 // Initialize Analytics if supported
-export let analytics = null;
-isSupported().then(yes => yes && (analytics = getAnalytics(app)));
+export let analytics: Analytics | null = null;
+isSupported().then(yes => {
+  if (yes) {
+    analytics = getAnalytics(app);
+  }
+});
 
 // Export types for Firebase services
 export type Auth = typeof auth;

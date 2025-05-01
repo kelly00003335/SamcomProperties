@@ -63,7 +63,7 @@ const Contact = () => {
     try {
       setIsSubmitting(true);
       
-      await apiRequest("POST", "/api/contact", values);
+      await apiRequest("/api/contact", "POST", values);
       
       toast({
         title: "Message sent!",
