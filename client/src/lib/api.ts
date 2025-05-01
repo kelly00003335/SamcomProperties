@@ -1,0 +1,101 @@
+import {
+  propertyService,
+  agentService,
+  testimonialService,
+  contactService,
+  newsletterService
+} from './firestore-service';
+import { Property, Agent, Testimonial, ContactMessage, Newsletter } from '@shared/schema';
+
+// API wrapper for Property-related operations
+export const PropertyAPI = {
+  getAllProperties: async (): Promise<Property[]> => {
+    return await propertyService.getAll();
+  },
+  
+  getPropertyById: async (id: string): Promise<Property | null> => {
+    return await propertyService.getById(id);
+  },
+  
+  getFeaturedProperties: async (): Promise<Property[]> => {
+    return await propertyService.getFeatured();
+  },
+  
+  searchProperties: async (params: {
+    location?: string;
+    type?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    status?: string;
+  }): Promise<Property[]> => {
+    return await propertyService.search(params);
+  },
+  
+  createProperty: async (property: any): Promise<Property> => {
+    return await propertyService.create(property);
+  },
+  
+  updateProperty: async (id: string, property: any): Promise<void> => {
+    return await propertyService.update(id, property);
+  },
+  
+  deleteProperty: async (id: string): Promise<void> => {
+    return await propertyService.delete(id);
+  }
+};
+
+// API wrapper for Agent-related operations
+export const AgentAPI = {
+  getAllAgents: async (): Promise<Agent[]> => {
+    return await agentService.getAll();
+  },
+  
+  getAgentById: async (id: string): Promise<Agent | null> => {
+    return await agentService.getById(id);
+  },
+  
+  createAgent: async (agent: any): Promise<Agent> => {
+    return await agentService.create(agent);
+  },
+  
+  updateAgent: async (id: string, agent: any): Promise<void> => {
+    return await agentService.update(id, agent);
+  },
+  
+  deleteAgent: async (id: string): Promise<void> => {
+    return await agentService.delete(id);
+  }
+};
+
+// API wrapper for Testimonial-related operations
+export const TestimonialAPI = {
+  getAllTestimonials: async (): Promise<Testimonial[]> => {
+    return await testimonialService.getAll();
+  },
+  
+  createTestimonial: async (testimonial: any): Promise<Testimonial> => {
+    return await testimonialService.create(testimonial);
+  }
+};
+
+// API wrapper for Contact-related operations
+export const ContactAPI = {
+  getAllContactMessages: async (): Promise<ContactMessage[]> => {
+    return await contactService.getAll();
+  },
+  
+  createContactMessage: async (message: any): Promise<ContactMessage> => {
+    return await contactService.create(message);
+  },
+  
+  deleteContactMessage: async (id: string): Promise<void> => {
+    return await contactService.delete(id);
+  }
+};
+
+// API wrapper for Newsletter-related operations
+export const NewsletterAPI = {
+  subscribe: async (email: string): Promise<Newsletter> => {
+    return await newsletterService.subscribe(email);
+  }
+};

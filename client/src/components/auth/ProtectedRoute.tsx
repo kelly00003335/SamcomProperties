@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { Redirect } from 'wouter';
-import { Spinner } from '@/components/ui/spinner';
+import { Loader2 } from 'lucide-react';
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children, adminOnly = true }: ProtectedRouteProps) => 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Spinner size="lg" />
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
