@@ -6,6 +6,8 @@ import {
   type ContactMessage, type InsertContactMessage,
   type Newsletter, type InsertNewsletter
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and, between, like, desc, asc, sql } from "drizzle-orm";
 
 export interface IStorage {
   // Property methods
@@ -414,4 +416,158 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getAllProperties(): Promise<Property[]> {
+    return await db.select().from(properties);
+  }
+
+  async getPropertyById(id: number): Promise<Property | undefined> {
+    const [property] = await db.select().from(properties).where(eq(properties.id, id));
+    return property || undefined;
+  }
+
+  async getFeaturedProperties(): Promise<Property[]> {
+    return await db.select().from(properties).where(eq(properties.isFeatured, true));
+  }
+
+  async searchProperties(options: { 
+    location?: string;
+    type?: string;
+    minPrice?: number;
+    maxPrice?: number;
+  }): Promise<Property[]> {
+    let query = db.select().from(properties);
+
+    const conditions = [];
+    
+    if (options.location && options.location !== '') {
+      conditions.push(like(properties.location, `%${options.location}%`));
+    }
+    
+    if (options.type && options.type !== '') {
+      conditions.push(eq(properties.type, options.type));
+    }
+    
+    if (options.minPrice !== undefined) {
+      conditions.push(sql`${properties.price} >= ${options.minPrice}`);
+    }
+    
+    if (options.maxPrice !== undefined) {
+      conditions.push(sql`${properties.price} <= ${options.maxPrice}`);
+    }
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+    
+    return await query;
+  }
+
+  async createProperty(property: InsertProperty): Promise<Property> {
+    const [newProperty] = await db.insert(properties).values({
+      ...property,
+      createdAt: new Date(),
+    }).returning();
+    return newProperty;
+  }
+
+  async updateProperty(id: number, property: Partial<InsertProperty>): Promise<Property> {
+    const [updatedProperty] = await db.update(properties)
+      .set(property)
+      .where(eq(properties.id, id))
+      .returning();
+    
+    if (!updatedProperty) {
+      throw new Error(`Property with ID ${id} not found`);
+    }
+    
+    return updatedProperty;
+  }
+
+  async deleteProperty(id: number): Promise<void> {
+    const result = await db.delete(properties).where(eq(properties.id, id));
+    if (result.rowCount === 0) {
+      throw new Error(`Property with ID ${id} not found`);
+    }
+  }
+
+  // Agent methods
+  async getAllAgents(): Promise<Agent[]> {
+    return await db.select().from(agents);
+  }
+
+  async getAgentById(id: number): Promise<Agent | undefined> {
+    const [agent] = await db.select().from(agents).where(eq(agents.id, id));
+    return agent || undefined;
+  }
+
+  async createAgent(agent: InsertAgent): Promise<Agent> {
+    const [newAgent] = await db.insert(agents).values(agent).returning();
+    return newAgent;
+  }
+
+  async updateAgent(id: number, agent: Partial<InsertAgent>): Promise<Agent> {
+    const [updatedAgent] = await db.update(agents)
+      .set(agent)
+      .where(eq(agents.id, id))
+      .returning();
+    
+    if (!updatedAgent) {
+      throw new Error(`Agent with ID ${id} not found`);
+    }
+    
+    return updatedAgent;
+  }
+
+  async deleteAgent(id: number): Promise<void> {
+    const result = await db.delete(agents).where(eq(agents.id, id));
+    if (result.rowCount === 0) {
+      throw new Error(`Agent with ID ${id} not found`);
+    }
+  }
+
+  // Testimonial methods
+  async getAllTestimonials(): Promise<Testimonial[]> {
+    return await db.select().from(testimonials);
+  }
+
+  async createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial> {
+    const [newTestimonial] = await db.insert(testimonials).values(testimonial).returning();
+    return newTestimonial;
+  }
+
+  // Contact message methods
+  async getAllContactMessages(): Promise<ContactMessage[]> {
+    return await db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt));
+  }
+  
+  async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
+    const [newMessage] = await db.insert(contactMessages).values({
+      ...message,
+      createdAt: new Date()
+    }).returning();
+    return newMessage;
+  }
+
+  async deleteContactMessage(id: number): Promise<void> {
+    const result = await db.delete(contactMessages).where(eq(contactMessages.id, id));
+    if (result.rowCount === 0) {
+      throw new Error(`Contact message with ID ${id} not found`);
+    }
+  }
+
+  // Newsletter methods
+  async createNewsletterSubscription(subscription: InsertNewsletter): Promise<Newsletter> {
+    const [newSubscription] = await db.insert(newsletters).values({
+      ...subscription,
+      createdAt: new Date()
+    }).returning();
+    return newSubscription;
+  }
+}
+
+// Comment this line to use the database storage
+// export const storage = new MemStorage();
+
+// Uncomment this line to use the database storage
+export const storage = new DatabaseStorage();
