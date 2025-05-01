@@ -301,10 +301,10 @@ const Contact = () => {
             </div>
             
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-4 font-heading">Alternative Contact</h3>
+              <h3 className="text-xl font-bold mb-4 font-heading">Nairobi Office</h3>
               <p className="flex items-start mb-3">
                 <MapPin className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
-                <span>P.O. Box 2352, Kinamba, Naivasha, Kenya</span>
+                <span>Samcom House, Ngong Road, Nairobi, Kenya</span>
               </p>
               <p className="flex items-center mb-3">
                 <Phone className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
@@ -346,7 +346,7 @@ const Contact = () => {
             allowFullScreen={true} 
             loading="lazy" 
             referrerPolicy="no-referrer-when-downgrade"
-            title="SAMCOM PROPERTIES AGENCY location"
+            title="P.O. Box 2352, Kinamba, Naivasha, Kenya"
           ></iframe>
         </div>
       </section>
