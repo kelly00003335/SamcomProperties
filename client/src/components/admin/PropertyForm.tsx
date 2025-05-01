@@ -30,19 +30,28 @@ import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Save } from "lucide-react";
 
 // Extended schema with custom validation
-const propertyFormSchema = insertPropertySchema.extend({
+const propertyFormSchema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
   price: z.coerce.number().min(1, {
     message: "Price must be a positive number",
   }),
+  location: z.string().min(1, { message: "Location is required" }),
+  type: z.string().min(1, { message: "Property type is required" }),
+  status: z.string().min(1, { message: "Status is required" }),
   bedrooms: z.coerce.number().min(0, {
     message: "Bedrooms must be a positive number or zero",
   }),
   bathrooms: z.coerce.number().min(0, {
     message: "Bathrooms must be a positive number or zero",
   }),
-  squareFootage: z.coerce.number().min(1, {
-    message: "Square footage must be a positive number",
+  area: z.coerce.number().min(1, {
+    message: "Area must be a positive number",
   }),
+  featuresString: z.string(), // Will be converted to array
+  imagesString: z.string().min(1, { message: "At least one image URL is required" }), // Will be converted to array
+  isFeatured: z.boolean().default(false),
+  agentId: z.number().optional()
 });
 
 type PropertyFormValues = z.infer<typeof propertyFormSchema>;
@@ -68,12 +77,13 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
           location: property.location,
           type: property.type,
           status: property.status,
-          bedrooms: property.bedrooms,
-          bathrooms: property.bathrooms,
-          squareFootage: property.squareFootage,
-          features: property.features,
-          mainImage: property.mainImage,
-          images: property.images.join(","),
+          bedrooms: property.bedrooms || 0,
+          bathrooms: property.bathrooms || 0,
+          area: property.area || 0,
+          featuresString: property.features ? property.features.join(",") : "",
+          imagesString: property.images.join(","),
+          isFeatured: property.isFeatured || false,
+          agentId: property.agentId || undefined
         }
       : {
           title: "",
@@ -84,10 +94,11 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
           status: "for-sale",
           bedrooms: 0,
           bathrooms: 0,
-          squareFootage: 0,
-          features: "",
-          mainImage: "",
-          images: "",
+          area: 0,
+          featuresString: "",
+          imagesString: "",
+          isFeatured: false,
+          agentId: undefined
         },
   });
 
@@ -96,9 +107,21 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
     mutationFn: async (data: PropertyFormValues) => {
       // Process data to match schema
       const processedData = {
-        ...data,
-        features: data.features.split(",").map((f) => f.trim()),
-        images: data.images.split(",").map((img) => img.trim()),
+        title: data.title,
+        description: data.description,
+        price: data.price,
+        location: data.location,
+        type: data.type,
+        status: data.status,
+        bedrooms: data.bedrooms,
+        bathrooms: data.bathrooms,
+        area: data.area,
+        // Convert string to array
+        features: data.featuresString.split(",").filter(Boolean).map(f => f.trim()),
+        // Convert string to array
+        images: data.imagesString.split(",").filter(Boolean).map(img => img.trim()),
+        isFeatured: data.isFeatured,
+        agentId: data.agentId
       };
 
       if (property) {
@@ -312,13 +335,13 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
                 )}
               />
 
-              {/* Square Footage */}
+              {/* Area (square feet) */}
               <FormField
                 control={form.control}
-                name="squareFootage"
+                name="area"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Square Footage</FormLabel>
+                    <FormLabel>Area (Square Feet)</FormLabel>
                     <FormControl>
                       <Input type="number" {...field} />
                     </FormControl>
@@ -331,7 +354,7 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
             {/* Features */}
             <FormField
               control={form.control}
-              name="features"
+              name="featuresString"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Features</FormLabel>
@@ -353,39 +376,22 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
 
             <h3 className="text-lg font-semibold">Property Images</h3>
 
-            {/* Main Image */}
+            {/* Images */}
             <FormField
               control={form.control}
-              name="mainImage"
+              name="imagesString"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Main Image URL</FormLabel>
+                  <FormLabel>Image URLs</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="https://example.com/image.jpg"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* Additional Images */}
-            <FormField
-              control={form.control}
-              name="images"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Additional Image URLs</FormLabel>
-                  <FormControl>
-                    <Input
+                    <Textarea
                       placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
+                      className="min-h-[120px]"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Enter image URLs separated by commas
+                    Enter image URLs separated by commas. The first image will be used as the main image.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
