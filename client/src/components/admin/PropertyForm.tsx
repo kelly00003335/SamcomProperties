@@ -130,7 +130,7 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
         return apiRequest(`/api/properties/${property.id}`, "PATCH", processedData);
       } else {
         // Create new property
-        return apiRequest("/api/properties", "POST", processedData);
+        return apiRequest("/api/properties/create", "POST", processedData);
       }
     },
     onSuccess: () => {

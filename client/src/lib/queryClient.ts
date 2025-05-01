@@ -50,8 +50,10 @@ export async function apiRequest(
         return { json: async () => await PropertyAPI.getAllProperties() };
       }
     } else if (method === "POST") {
-      await PropertyAPI.createProperty(data);
-      return { json: async () => ({}) };
+      console.log('Creating property via API:', JSON.stringify(data, null, 2));
+      const newProperty = await PropertyAPI.createProperty(data);
+      console.log('Property created successfully:', newProperty);
+      return { json: async () => newProperty };
     } else if (method === "PATCH" && id) {
       await PropertyAPI.updateProperty(id[1], data);
       return { json: async () => ({}) };

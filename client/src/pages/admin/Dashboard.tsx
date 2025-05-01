@@ -33,7 +33,9 @@ const Dashboard = () => {
   // Fetch all properties
   const propertiesQuery = useQuery({
     queryKey: ["/api/properties"],
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true,
+    staleTime: 0, // Consider the data always stale
+    refetchInterval: 5000, // Refetch every 5 seconds
   });
 
   // Fetch all agents

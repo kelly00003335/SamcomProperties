@@ -136,20 +136,39 @@ export const propertyService = {
     console.log('Creating property with data:', JSON.stringify(property, null, 2));
     
     try {
-      const propertyWithTimestamp = {
+      // Make sure all required fields are present
+      const propertyWithDefaults = {
         ...property,
+        bedrooms: property.bedrooms || 0,
+        bathrooms: property.bathrooms || 0,
+        area: property.area || 0,
+        features: property.features || [],
+        agentId: property.agentId || null,
+        isFeatured: property.isFeatured || false,
         createdAt: serverTimestamp(),
       };
       
-      console.log('Adding document to Firestore collection:', COLLECTIONS.PROPERTIES);
+      console.log('Adding document to Firestore collection with processed data:', 
+        JSON.stringify(propertyWithDefaults, null, 2));
+      
       const docRef = await addDoc(
         collection(db, COLLECTIONS.PROPERTIES),
-        propertyWithTimestamp
+        propertyWithDefaults
       );
       
       console.log('Document created with ID:', docRef.id);
+      // We need to wait a moment for Firestore to complete the write
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Fetch the newly created document
       const newDoc = await getDoc(docRef);
-      return convertDocument<Property>(newDoc);
+      if (!newDoc.exists()) {
+        throw new Error(`Created document with ID ${docRef.id} not found`); 
+      }
+      
+      const result = convertDocument<Property>(newDoc);
+      console.log('Created property:', result);
+      return result;
     } catch (error) {
       console.error('Error creating property in Firestore:', error);
       throw error;
