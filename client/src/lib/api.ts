@@ -17,7 +17,11 @@ export const PropertyAPI = {
       return properties;
     } catch (error) {
       console.error('Error in PropertyAPI.getAllProperties:', error);
-      throw error;
+      // Add more descriptive error message
+      const enhancedError = new Error(`Failed to fetch properties: ${error.message || 'Unknown error'}`);
+      // Copy original error properties
+      Object.assign(enhancedError, error);
+      throw enhancedError;
     }
   },
   
