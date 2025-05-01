@@ -1,0 +1,176 @@
+API Request to /api/properties with method POST
+PropertyForm.tsx:147 Error: FirebaseError: Missing or insufficient permissions.
+onError @ PropertyForm.tsx:147
+execute @ @tanstack_react-query.js?v=d45c7cbd:1254
+await in execute
+mutate @ @tanstack_react-query.js?v=d45c7cbd:2630
+onSubmit @ PropertyForm.tsx:159
+(anonymous) @ chunk-4BFJKWC4.js?v=d45c7cbd:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=d45c7cbd:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=d45c7cbd:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=d45c7cbd:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=d45c7cbd:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=d45c7cbd:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=d45c7cbd:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=d45c7cbd:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=d45c7cbd:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=d45c7cbd:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=d45c7cbd:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=d45c7cbd:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=d45c7cbd:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=d45c7cbd:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=d45c7cbd:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=d45c7cbd:5449Understand this error
+PropertyForm.tsx:161 Submit error: FirebaseError: Missing or insufficient permissions.
+onSubmit @ PropertyForm.tsx:161
+await in onSubmit
+(anonymous) @ chunk-4BFJKWC4.js?v=d45c7cbd:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=d45c7cbd:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=d45c7cbd:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=d45c7cbd:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=d45c7cbd:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=d45c7cbd:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=d45c7cbd:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=d45c7cbd:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=d45c7cbd:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=d45c7cbd:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=d45c7cbd:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=d45c7cbd:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=d45c7cbd:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=d45c7cbd:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=d45c7cbd:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=d45c7cbd:5449Understand this error
+firestore-service.ts:141 
+            
+            
+           POST https://firestore.googleapis.com/google.firestore.v1.Firestore/Write/channel?VER=8&database=projects%2Fsamcom-properties%2Fdatabases%2F(default)&gsessionid=NhACdtoEQIbyBjUpva400JuPIaFgfNRzHRxULMUxRUg&SID=W325rch1N9WqWVwBg65Grg&RID=32452&TYPE=terminate&zx=49db0rn8t8fo 400 (Bad Request)
+gc @ firebase_firestore.js?v=d45c7cbd:2143
+Y2.close @ firebase_firestore.js?v=d45c7cbd:2487
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12568
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12532
+ab @ firebase_firestore.js?v=d45c7cbd:946
+F2 @ firebase_firestore.js?v=d45c7cbd:916
+Z2.ta @ firebase_firestore.js?v=d45c7cbd:2536
+Rb @ firebase_firestore.js?v=d45c7cbd:1415
+M2.Y @ firebase_firestore.js?v=d45c7cbd:1280
+M2.ca @ firebase_firestore.js?v=d45c7cbd:1211
+ab @ firebase_firestore.js?v=d45c7cbd:946
+F2 @ firebase_firestore.js?v=d45c7cbd:916
+Wc @ firebase_firestore.js?v=d45c7cbd:1950
+h.bb @ firebase_firestore.js?v=d45c7cbd:1945
+h.Ea @ firebase_firestore.js?v=d45c7cbd:1942
+Lc @ firebase_firestore.js?v=d45c7cbd:1842
+h.Pa @ firebase_firestore.js?v=d45c7cbd:1809
+Promise.then
+Nc @ firebase_firestore.js?v=d45c7cbd:1800
+h.Pa @ firebase_firestore.js?v=d45c7cbd:1810
+Promise.then
+Nc @ firebase_firestore.js?v=d45c7cbd:1800
+h.Sa @ firebase_firestore.js?v=d45c7cbd:1796
+Promise.then
+h.send @ firebase_firestore.js?v=d45c7cbd:1777
+h.ea @ firebase_firestore.js?v=d45c7cbd:1918
+Jb @ firebase_firestore.js?v=d45c7cbd:1204
+fd @ firebase_firestore.js?v=d45c7cbd:2337
+h.Fa @ firebase_firestore.js?v=d45c7cbd:2304
+Da @ firebase_firestore.js?v=d45c7cbd:665
+Promise.then
+x2 @ firebase_firestore.js?v=d45c7cbd:659
+ec @ firebase_firestore.js?v=d45c7cbd:2290
+Rb @ firebase_firestore.js?v=d45c7cbd:1412
+M2.Y @ firebase_firestore.js?v=d45c7cbd:1280
+M2.ca @ firebase_firestore.js?v=d45c7cbd:1211
+ab @ firebase_firestore.js?v=d45c7cbd:946
+F2 @ firebase_firestore.js?v=d45c7cbd:916
+Wc @ firebase_firestore.js?v=d45c7cbd:1950
+h.bb @ firebase_firestore.js?v=d45c7cbd:1945
+h.Ea @ firebase_firestore.js?v=d45c7cbd:1942
+Lc @ firebase_firestore.js?v=d45c7cbd:1842
+h.Pa @ firebase_firestore.js?v=d45c7cbd:1809
+Promise.then
+Nc @ firebase_firestore.js?v=d45c7cbd:1800
+h.Sa @ firebase_firestore.js?v=d45c7cbd:1796
+Promise.then
+h.send @ firebase_firestore.js?v=d45c7cbd:1777
+h.ea @ firebase_firestore.js?v=d45c7cbd:1918
+Jb @ firebase_firestore.js?v=d45c7cbd:1199
+Hb @ firebase_firestore.js?v=d45c7cbd:1174
+h.Ga @ firebase_firestore.js?v=d45c7cbd:2224
+Da @ firebase_firestore.js?v=d45c7cbd:665
+Promise.then
+x2 @ firebase_firestore.js?v=d45c7cbd:659
+fc @ firebase_firestore.js?v=d45c7cbd:2168
+h.connect @ firebase_firestore.js?v=d45c7cbd:2128
+Y2.m @ firebase_firestore.js?v=d45c7cbd:2484
+Go @ firebase_firestore.js?v=d45c7cbd:12526
+send @ firebase_firestore.js?v=d45c7cbd:12419
+F_ @ firebase_firestore.js?v=d45c7cbd:12714
+H_ @ firebase_firestore.js?v=d45c7cbd:12917
+__PRIVATE_onWriteStreamOpen @ firebase_firestore.js?v=d45c7cbd:13269
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12792
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12816
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:15854
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:15885
+Promise.then
+Yu @ firebase_firestore.js?v=d45c7cbd:15885
+enqueue @ firebase_firestore.js?v=d45c7cbd:15854
+enqueueAndForget @ firebase_firestore.js?v=d45c7cbd:15836
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12816
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12792
+n_ @ firebase_firestore.js?v=d45c7cbd:12425
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12574
+setTimeout
+a_ @ firebase_firestore.js?v=d45c7cbd:12573
+k_ @ firebase_firestore.js?v=d45c7cbd:12896
+B_ @ firebase_firestore.js?v=d45c7cbd:12789
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:12779
+Promise.then
+auth @ firebase_firestore.js?v=d45c7cbd:12775
+start @ firebase_firestore.js?v=d45c7cbd:12674
+start @ firebase_firestore.js?v=d45c7cbd:12890
+__PRIVATE_startWriteStream @ firebase_firestore.js?v=d45c7cbd:13266
+__PRIVATE_fillWritePipeline @ firebase_firestore.js?v=d45c7cbd:13252
+await in __PRIVATE_fillWritePipeline
+__PRIVATE_syncEngineWrite @ firebase_firestore.js?v=d45c7cbd:14254
+await in __PRIVATE_syncEngineWrite
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:17616
+await in (anonymous)
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:15854
+(anonymous) @ firebase_firestore.js?v=d45c7cbd:15885
+Promise.then
+Yu @ firebase_firestore.js?v=d45c7cbd:15885
+enqueue @ firebase_firestore.js?v=d45c7cbd:15854
+enqueueAndForget @ firebase_firestore.js?v=d45c7cbd:15836
+__PRIVATE_firestoreClientWrite @ firebase_firestore.js?v=d45c7cbd:17616
+executeWrite @ firebase_firestore.js?v=d45c7cbd:17617
+addDoc @ firebase_firestore.js?v=d45c7cbd:17563
+create @ firestore-service.ts:141
+createProperty @ api.ts:35
+apiRequest @ queryClient.ts:52
+mutationFn @ PropertyForm.tsx:133
+fn @ @tanstack_react-query.js?v=d45c7cbd:1189
+run @ @tanstack_react-query.js?v=d45c7cbd:494
+start @ @tanstack_react-query.js?v=d45c7cbd:536
+execute @ @tanstack_react-query.js?v=d45c7cbd:1225
+await in execute
+mutate @ @tanstack_react-query.js?v=d45c7cbd:2630
+onSubmit @ PropertyForm.tsx:159
+(anonymous) @ chunk-4BFJKWC4.js?v=d45c7cbd:1465
+await in (anonymous)
+callCallback2 @ chunk-RPCDYKBN.js?v=d45c7cbd:3674
+invokeGuardedCallbackDev @ chunk-RPCDYKBN.js?v=d45c7cbd:3699
+invokeGuardedCallback @ chunk-RPCDYKBN.js?v=d45c7cbd:3733
+invokeGuardedCallbackAndCatchFirstError @ chunk-RPCDYKBN.js?v=d45c7cbd:3736
+executeDispatch @ chunk-RPCDYKBN.js?v=d45c7cbd:7014
+processDispatchQueueItemsInOrder @ chunk-RPCDYKBN.js?v=d45c7cbd:7034
+processDispatchQueue @ chunk-RPCDYKBN.js?v=d45c7cbd:7043
+dispatchEventsForPlugins @ chunk-RPCDYKBN.js?v=d45c7cbd:7051
+(anonymous) @ chunk-RPCDYKBN.js?v=d45c7cbd:7174
+batchedUpdates$1 @ chunk-RPCDYKBN.js?v=d45c7cbd:18913
+batchedUpdates @ chunk-RPCDYKBN.js?v=d45c7cbd:3579
+dispatchEventForPluginEventSystem @ chunk-RPCDYKBN.js?v=d45c7cbd:7173
+dispatchEventWithEnableCapturePhaseSelectiveHydrationWithoutDiscreteEventReplay @ chunk-RPCDYKBN.js?v=d45c7cbd:5478
+dispatchEvent @ chunk-RPCDYKBN.js?v=d45c7cbd:5472
+dispatchDiscreteEvent @ chunk-RPCDYKBN.js?v=d45c7cbd:5449Understand this error
