@@ -167,10 +167,21 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
 
   const onSubmit = async (data: PropertyFormValues) => {
     try {
-      console.log('PropertyForm onSubmit with data:', data);
+      console.log('PropertyForm onSubmit with data:', JSON.stringify(data, null, 2));
       setIsSubmitting(true);
+      
+      // Add a property ID tracking log
+      console.log('Current property being edited:', property ? `ID: ${property.id}` : 'New property');
+      
       const result = await propertyMutation.mutateAsync(data);
-      console.log('Property mutation completed with result:', result);
+      console.log('Property mutation completed, result:', JSON.stringify(result, null, 2));
+      
+      // Log current cache state for debugging
+      const currentCache = queryClient.getQueryData(['/api/properties']);
+      console.log('Current properties cache before refresh:', 
+        Array.isArray(currentCache) ? 
+          `${currentCache.length} items` : 
+          'No cached data');
       
       // Only trigger a manual refetch after we've completely closed the form
       if (!property) {
@@ -180,6 +191,11 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
       
     } catch (error) {
       console.error("Submit error:", error);
+      toast({
+        variant: "destructive",
+        title: "Error Saving Property",
+        description: `There was a problem saving your property. Please try again.`,
+      });
     } finally {
       setIsSubmitting(false);
     }

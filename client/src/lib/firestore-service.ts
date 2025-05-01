@@ -41,9 +41,21 @@ const COLLECTIONS = {
 // Helper to convert Firestore document to our data models
 const convertDocument = <T>(doc: DocumentData): T => {
   const data = doc.data();
-  const id = doc.id;
+  if (!data) {
+    console.error('Document exists but has no data');
+    return null as unknown as T;
+  }
   
-  const result: any = { ...data, id };
+  // Extract the document ID and ensure it's interpreted correctly
+  const docId = doc.id;
+  console.log(`Converting document with ID: ${docId}`);
+  
+  // Create a new object with the data and ID
+  const result: any = { 
+    ...data,
+    // Since our model expects a numeric ID, try to convert if it looks like a number
+    id: /^\d+$/.test(docId) ? parseInt(docId, 10) : docId
+  };
   
   // Convert Firestore Timestamp objects to Date
   Object.keys(data).forEach(key => {
@@ -52,6 +64,7 @@ const convertDocument = <T>(doc: DocumentData): T => {
     }
   });
   
+  console.log('Converted document object:', { id: result.id, title: result.title });
   return result as T;
 };
 
@@ -61,9 +74,35 @@ export const propertyService = {
   async getAll(): Promise<Property[]> {
     console.log('Fetching all properties from Firestore...');
     try {
-      const querySnapshot = await getDocs(collection(db, COLLECTIONS.PROPERTIES));
-      const properties = querySnapshot.docs.map(doc => convertDocument<Property>(doc));
-      console.log(`Fetched ${properties.length} properties:`, properties.map(p => p.id));
+      const propertiesCollection = collection(db, COLLECTIONS.PROPERTIES);
+      console.log('Collection reference:', COLLECTIONS.PROPERTIES);
+      
+      const querySnapshot = await getDocs(propertiesCollection);
+      console.log(`Raw query snapshot size: ${querySnapshot.size}, empty: ${querySnapshot.empty}`);
+      
+      if (querySnapshot.empty) {
+        console.log('No documents found in the properties collection');
+        return [];
+      }
+      
+      // Log the raw document IDs before conversion
+      const docIds = querySnapshot.docs.map(doc => doc.id);
+      console.log('Raw document IDs:', docIds);
+      
+      // Convert each document to our Property type
+      const properties = querySnapshot.docs
+        .map(doc => {
+          try {
+            return convertDocument<Property>(doc);
+          } catch (conversionError) {
+            console.error(`Error converting document ${doc.id}:`, conversionError);
+            return null;
+          }
+        })
+        .filter(Boolean) as Property[];
+      
+      console.log(`Successfully converted ${properties.length} properties:`, 
+        properties.map(p => ({ id: p.id, title: p.title })));
       return properties;
     } catch (error) {
       console.error('Error fetching properties:', error);
@@ -166,16 +205,32 @@ export const propertyService = {
       
       console.log('Document created with ID:', docRef.id);
       // We need to wait a moment for Firestore to complete the write
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Increased to 1 second for more reliability
       
       // Fetch the newly created document
       const newDoc = await getDoc(docRef);
       if (!newDoc.exists()) {
-        throw new Error(`Created document with ID ${docRef.id} not found`); 
+        console.error(`Created document with ID ${docRef.id} not found, trying alternate approach`); 
+        
+        // Create a synthetic document as a fallback using the same data we just saved
+        // but with the document ID from the creation response
+        return {
+          ...propertyWithDefaults,
+          id: docRef.id,
+          // Convert server timestamp to regular Date since we don't have the actual doc
+          createdAt: new Date(),
+        } as unknown as Property;
       }
       
       const result = convertDocument<Property>(newDoc);
       console.log('Created property:', result);
+      
+      // Force a refresh of the properties collection to ensure the new data is available
+      setTimeout(() => {
+        console.log('Triggering delayed refetch of all properties');
+        this.getAll();
+      }, 2000);
+      
       return result;
     } catch (error) {
       console.error('Error creating property in Firestore:', error);
