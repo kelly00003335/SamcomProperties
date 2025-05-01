@@ -1,178 +1,200 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ContactMessage } from "@shared/schema";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-
+import { timeAgo } from "@/lib/utils";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, AlertTriangle, Mail, Phone } from "lucide-react";
+import { MoreHorizontal, Eye, Trash } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface MessageListProps {
   messages: ContactMessage[];
 }
 
 const MessageList = ({ messages }: MessageListProps) => {
+  const [deleteMessageId, setDeleteMessageId] = useState<number | null>(null);
+  const [viewMessage, setViewMessage] = useState<ContactMessage | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [messageToDelete, setMessageToDelete] = useState<ContactMessage | null>(null);
-  const [expandedMessage, setExpandedMessage] = useState<number | null>(null);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  // Delete message mutation
-  const deleteMessageMutation = useMutation({
+  const deleteMessage = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/contact/${id}`);
+      return await apiRequest(`/api/contact/${id}`, "DELETE");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/contact"] });
       toast({
         title: "Message deleted",
-        description: "The message has been deleted successfully.",
+        description: "The message has been successfully deleted.",
       });
-      setDeleteDialogOpen(false);
-      setMessageToDelete(null);
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "There was a problem deleting the message.",
-      });
+      queryClient.invalidateQueries({ queryKey: ["/api/contact/all"] });
+      setDeleteMessageId(null);
     },
   });
 
-  const handleDeleteClick = (message: ContactMessage) => {
-    setMessageToDelete(message);
-    setDeleteDialogOpen(true);
+  const handleDeleteClick = (id: number) => {
+    deleteMessage.mutate(id);
   };
-
-  const toggleExpand = (id: number) => {
-    setExpandedMessage(expandedMessage === id ? null : id);
-  };
-
-  const confirmDelete = () => {
-    if (messageToDelete) {
-      deleteMessageMutation.mutate(messageToDelete.id);
-    }
-  };
-
-  if (messages.length === 0) {
-    return (
-      <div className="text-center py-12 bg-white rounded-lg shadow-sm">
-        <Mail className="mx-auto h-12 w-12 text-gray-400" />
-        <h3 className="mt-2 text-lg font-medium text-gray-900">No messages</h3>
-        <p className="mt-1 text-sm text-gray-500">
-          There are no contact messages in your inbox.
-        </p>
-      </div>
-    );
-  }
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {messages.map((message) => (
-          <Card key={message.id} className="overflow-hidden">
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle>{message.name}</CardTitle>
-                  <CardDescription className="mt-1">{formatDate(message.createdAt)}</CardDescription>
-                </div>
-                <Badge>{message.subject}</Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3">
-                <div className="flex items-center">
-                  <Mail className="h-4 w-4 mr-1" />
-                  <span>{message.email}</span>
-                </div>
-                <div className="flex items-center">
-                  <Phone className="h-4 w-4 mr-1" />
-                  <span>{message.phone}</span>
-                </div>
-              </div>
-              <div className={`text-sm ${expandedMessage === message.id ? '' : 'line-clamp-3'}`}>
-                {message.message}
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between border-t pt-3">
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => toggleExpand(message.id)}
-              >
-                {expandedMessage === message.id ? "Show Less" : "Read More"}
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                onClick={() => handleDeleteClick(message)}
-              >
-                <Trash2 className="h-4 w-4 mr-1" /> Delete
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Subject</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {messages.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={5}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  No messages found
+                </TableCell>
+              </TableRow>
+            ) : (
+              messages.map((message) => (
+                <TableRow key={message.id}>
+                  <TableCell className="font-medium">{message.name}</TableCell>
+                  <TableCell>{message.email}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{message.subject}</Badge>
+                  </TableCell>
+                  <TableCell>{
+                    message.createdAt ? timeAgo(message.createdAt.toString()) : "Unknown"
+                  }</TableCell>
+                  <TableCell className="text-right">
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                          onClick={() => setViewMessage(message)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => setDeleteMessageId(message.id)}
+                        >
+                          <Trash className="mr-2 h-4 w-4" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
       </div>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
+      {/* Message View Dialog */}
+      <Dialog open={viewMessage !== null} onOpenChange={() => setViewMessage(null)}>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <AlertTriangle className="mr-2 h-5 w-5 text-red-500" /> Confirm Deletion
-            </DialogTitle>
+            <DialogTitle>Message from {viewMessage?.name}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this message from <strong>{messageToDelete?.name}</strong>?
-              This action cannot be undone.
+              Received{" "}
+              {viewMessage?.createdAt
+                ? timeAgo(viewMessage.createdAt.toString())
+                : "Unknown"}
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button 
-              variant="destructive" 
-              onClick={confirmDelete}
-              disabled={deleteMessageMutation.isPending}
-            >
-              {deleteMessageMutation.isPending ? "Deleting..." : "Delete Message"}
-            </Button>
-          </DialogFooter>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <p className="text-sm font-medium leading-none">Email</p>
+              <p className="text-sm text-muted-foreground">
+                {viewMessage?.email}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium leading-none">Subject</p>
+              <p className="text-sm text-muted-foreground">
+                {viewMessage?.subject}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <p className="text-sm font-medium leading-none">Message</p>
+              <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                {viewMessage?.message}
+              </p>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog
+        open={deleteMessageId !== null}
+        onOpenChange={(open) => !open && setDeleteMessageId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              message from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                deleteMessageId && handleDeleteClick(deleteMessageId)
+              }
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Property } from "@shared/schema";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 import { formatPriceDisplay } from "@/lib/utils";
-
 import {
   Table,
   TableBody,
@@ -18,20 +15,23 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { AlertTriangle, MoreVertical, Pencil, Trash2, Eye } from "lucide-react";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 interface PropertyListProps {
   properties: Property[];
@@ -39,43 +39,26 @@ interface PropertyListProps {
 }
 
 const PropertyList = ({ properties, onEditClick }: PropertyListProps) => {
+  const [deletePropertyId, setDeletePropertyId] = useState<number | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [propertyToDelete, setPropertyToDelete] = useState<Property | null>(null);
 
-  // Delete property mutation
-  const deletePropertyMutation = useMutation({
+  const deleteProperty = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/properties/${id}`);
+      return await apiRequest(`/api/properties/${id}`, "DELETE");
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
       toast({
         title: "Property deleted",
-        description: "The property has been deleted successfully.",
+        description: "The property has been successfully deleted.",
       });
-      setDeleteDialogOpen(false);
-      setPropertyToDelete(null);
-    },
-    onError: (error) => {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "There was a problem deleting the property.",
-      });
+      queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
+      setDeletePropertyId(null);
     },
   });
 
-  const handleDeleteClick = (property: Property) => {
-    setPropertyToDelete(property);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (propertyToDelete) {
-      deletePropertyMutation.mutate(propertyToDelete.id);
-    }
+  const handleDeleteProperty = (id: number) => {
+    deleteProperty.mutate(id);
   };
 
   return (
@@ -84,9 +67,9 @@ const PropertyList = ({ properties, onEditClick }: PropertyListProps) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Type</TableHead>
+              <TableHead>Property</TableHead>
               <TableHead>Location</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Price</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -95,56 +78,66 @@ const PropertyList = ({ properties, onEditClick }: PropertyListProps) => {
           <TableBody>
             {properties.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center">
-                  No properties found.
+                <TableCell
+                  colSpan={6}
+                  className="h-24 text-center text-muted-foreground"
+                >
+                  No properties found
                 </TableCell>
               </TableRow>
             ) : (
               properties.map((property) => (
                 <TableRow key={property.id}>
-                  <TableCell className="font-medium">{property.title}</TableCell>
-                  <TableCell>{property.type}</TableCell>
+                  <TableCell className="font-medium">
+                    <div className="font-semibold">{property.title}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {property.bedrooms}{" "}
+                      {property.bedrooms === 1 ? "Bedroom" : "Bedrooms"} •{" "}
+                      {property.bathrooms}{" "}
+                      {property.bathrooms === 1 ? "Bathroom" : "Bathrooms"}
+                    </div>
+                  </TableCell>
                   <TableCell>{property.location}</TableCell>
                   <TableCell>
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        property.status === "for-sale"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-blue-100 text-blue-800"
-                      }`}
-                    >
-                      {property.status === "for-sale" ? "For Sale" : "For Rent"}
-                    </span>
+                    <Badge variant="outline" className="capitalize">
+                      {property.type}
+                    </Badge>
                   </TableCell>
-                  <TableCell>{formatPriceDisplay(property.price, property.status)}</TableCell>
+                  <TableCell>
+                    <Badge
+                      className="capitalize"
+                      variant={property.status === "for-sale" ? "default" : "secondary"}
+                    >
+                      {property.status === "for-sale"
+                        ? "For Sale"
+                        : "For Rent"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {formatPriceDisplay(property.price, property.status)}
+                  </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" className="h-8 w-8 p-0">
                           <span className="sr-only">Open menu</span>
-                          <MoreVertical className="h-4 w-4" />
+                          <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem
-                          className="flex items-center" 
-                          onClick={() => window.open(`/properties/${property.id}`, "_blank")}
-                        >
-                          <Eye className="mr-2 h-4 w-4" /> View
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem 
-                          className="flex items-center" 
                           onClick={() => onEditClick(property)}
                         >
-                          <Pencil className="mr-2 h-4 w-4" /> Edit
+                          <Edit className="mr-2 h-4 w-4" />
+                          Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          className="flex items-center text-red-600" 
-                          onClick={() => handleDeleteClick(property)}
+                        <DropdownMenuItem
+                          className="text-destructive focus:text-destructive"
+                          onClick={() => setDeletePropertyId(property.id)}
                         >
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete
+                          <Trash className="mr-2 h-4 w-4" />
+                          Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -156,32 +149,30 @@ const PropertyList = ({ properties, onEditClick }: PropertyListProps) => {
         </Table>
       </div>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <AlertTriangle className="mr-2 h-5 w-5 text-red-500" /> Confirm Deletion
-            </DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete the property <strong>{propertyToDelete?.title}</strong>?
-              This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button 
-              variant="destructive" 
-              onClick={confirmDelete}
-              disabled={deletePropertyMutation.isPending}
+      <AlertDialog
+        open={deletePropertyId !== null}
+        onOpenChange={(open) => !open && setDeletePropertyId(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              property and remove it from our servers.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() =>
+                deletePropertyId && handleDeleteProperty(deletePropertyId)
+              }
             >
-              {deletePropertyMutation.isPending ? "Deleting..." : "Delete Property"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

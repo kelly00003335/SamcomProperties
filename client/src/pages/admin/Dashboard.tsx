@@ -1,181 +1,170 @@
 import { useState } from "react";
-import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Property, Agent, ContactMessage } from "@shared/schema";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Plus, Building, Users, MessageSquare, BarChart3 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Home, Plus, LayoutDashboard } from "lucide-react";
 
-// Property management components
 import PropertyList from "@/components/admin/PropertyList";
 import PropertyForm from "@/components/admin/PropertyForm";
 
-// Agent management components
 import AgentList from "@/components/admin/AgentList";
 import AgentForm from "@/components/admin/AgentForm";
 
-// Message management components
 import MessageList from "@/components/admin/MessageList";
 
-// Dashboard overview components
 import DashboardOverview from "@/components/admin/DashboardOverview";
 
-const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState("overview");
-  const [isAddingProperty, setIsAddingProperty] = useState(false);
-  const [isAddingAgent, setIsAddingAgent] = useState(false);
-  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
-  const [editingAgent, setEditingAgent] = useState<Agent | null>(null);
-  const [_, navigate] = useLocation();
-
-  // Fetch data
-  const { data: properties } = useQuery<Property[]>({ 
-    queryKey: ["/api/properties"] 
-  });
+const Dashboard = () => {
+  const [showPropertyForm, setShowPropertyForm] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   
-  const { data: agents } = useQuery<Agent[]>({ 
-    queryKey: ["/api/agents"] 
+  const [showAgentForm, setShowAgentForm] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+
+  // Fetch all properties
+  const propertiesQuery = useQuery({
+    queryKey: ["/api/properties"],
+    refetchOnWindowFocus: false,
   });
-  
-  const { data: messages } = useQuery<ContactMessage[]>({ 
-    queryKey: ["/api/contact"] 
+
+  // Fetch all agents
+  const agentsQuery = useQuery({
+    queryKey: ["/api/agents"],
+    refetchOnWindowFocus: false,
   });
 
-  const handlePropertyEditClick = (property: Property) => {
-    setEditingProperty(property);
-    setIsAddingProperty(true);
+  // Fetch all contact messages
+  const messagesQuery = useQuery({
+    queryKey: ["/api/contact/all"],
+    refetchOnWindowFocus: false,
+  });
+
+  const properties = propertiesQuery.data as Property[] || [];
+  const agents = agentsQuery.data as Agent[] || [];
+  const messages = messagesQuery.data as ContactMessage[] || [];
+
+  const handleAddProperty = () => {
+    setSelectedProperty(null);
+    setShowPropertyForm(true);
   };
 
-  const handleAgentEditClick = (agent: Agent) => {
-    setEditingAgent(agent);
-    setIsAddingAgent(true);
+  const handleEditProperty = (property: Property) => {
+    setSelectedProperty(property);
+    setShowPropertyForm(true);
   };
 
-  const handlePropertyFormClose = () => {
-    setIsAddingProperty(false);
-    setEditingProperty(null);
+  const handleAddAgent = () => {
+    setSelectedAgent(null);
+    setShowAgentForm(true);
   };
 
-  const handleAgentFormClose = () => {
-    setIsAddingAgent(false);
-    setEditingAgent(null);
+  const handleEditAgent = (agent: Agent) => {
+    setSelectedAgent(agent);
+    setShowAgentForm(true);
   };
+
+  const isLoading =
+    propertiesQuery.isLoading || agentsQuery.isLoading || messagesQuery.isLoading;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
+      </div>
+    );
+  }
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto py-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-          <p className="text-gray-500 mt-1">Manage your real estate listings and agents</p>
+          <p className="text-muted-foreground">Manage your real estate website</p>
         </div>
-        <Button 
-          variant="outline" 
-          onClick={() => navigate("/")}
-        >
-          View Website
-        </Button>
+        <Link href="/">
+          <Button variant="outline" className="flex items-center gap-2">
+            <Home className="h-4 w-4" /> Back to Website
+          </Button>
+        </Link>
       </div>
 
-      <Tabs 
-        defaultValue="overview" 
-        value={activeTab} 
-        onValueChange={setActiveTab}
-        className="w-full"
-      >
-        <TabsList className="grid grid-cols-4 mb-8">
-          <TabsTrigger value="overview" className="flex items-center">
-            <BarChart3 className="mr-2 h-4 w-4" />
-            Overview
-          </TabsTrigger>
-          <TabsTrigger value="properties" className="flex items-center">
-            <Building className="mr-2 h-4 w-4" />
+      <DashboardOverview
+        propertyCount={properties.length}
+        agentCount={agents.length}
+        messageCount={messages.length}
+      />
+
+      <Separator className="my-8" />
+
+      <Tabs defaultValue="properties">
+        <TabsList className="grid w-full md:w-auto grid-cols-3 h-auto mb-8">
+          <TabsTrigger value="properties" className="px-4 py-2">
             Properties
           </TabsTrigger>
-          <TabsTrigger value="agents" className="flex items-center">
-            <Users className="mr-2 h-4 w-4" />
+          <TabsTrigger value="agents" className="px-4 py-2">
             Agents
           </TabsTrigger>
-          <TabsTrigger value="messages" className="flex items-center">
-            <MessageSquare className="mr-2 h-4 w-4" />
+          <TabsTrigger value="messages" className="px-4 py-2">
             Messages
           </TabsTrigger>
         </TabsList>
 
-        {/* Overview Tab */}
-        <TabsContent value="overview">
-          <DashboardOverview 
-            propertyCount={properties?.length || 0}
-            agentCount={agents?.length || 0}
-            messageCount={messages?.length || 0}
-          />
-        </TabsContent>
-
-        {/* Properties Tab */}
-        <TabsContent value="properties">
-          {isAddingProperty ? (
-            <PropertyForm 
-              property={editingProperty}
-              onClose={handlePropertyFormClose}
+        <TabsContent value="properties" className="space-y-6">
+          {showPropertyForm ? (
+            <PropertyForm
+              property={selectedProperty}
+              onClose={() => setShowPropertyForm(false)}
             />
           ) : (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Properties</h2>
-                <Button 
-                  onClick={() => setIsAddingProperty(true)}
-                  className="flex items-center"
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Add Property
+                <h2 className="text-xl font-semibold">Property Management</h2>
+                <Button onClick={handleAddProperty} className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> Add Property
                 </Button>
               </div>
-              <PropertyList 
-                properties={properties || []} 
-                onEditClick={handlePropertyEditClick} 
+              <PropertyList
+                properties={properties}
+                onEditClick={handleEditProperty}
               />
             </div>
           )}
         </TabsContent>
 
-        {/* Agents Tab */}
-        <TabsContent value="agents">
-          {isAddingAgent ? (
-            <AgentForm 
-              agent={editingAgent}
-              onClose={handleAgentFormClose}
+        <TabsContent value="agents" className="space-y-6">
+          {showAgentForm ? (
+            <AgentForm
+              agent={selectedAgent}
+              onClose={() => setShowAgentForm(false)}
             />
           ) : (
             <div>
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Agents</h2>
-                <Button 
-                  onClick={() => setIsAddingAgent(true)}
-                  className="flex items-center"
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Add Agent
+                <h2 className="text-xl font-semibold">Agent Management</h2>
+                <Button onClick={handleAddAgent} className="flex items-center gap-2">
+                  <Plus className="h-4 w-4" /> Add Agent
                 </Button>
               </div>
-              <AgentList 
-                agents={agents || []} 
-                onEditClick={handleAgentEditClick} 
-              />
+              <AgentList agents={agents} onEditClick={handleEditAgent} />
             </div>
           )}
         </TabsContent>
 
-        {/* Messages Tab */}
-        <TabsContent value="messages">
+        <TabsContent value="messages" className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold mb-6">Contact Messages</h2>
-            <MessageList messages={messages || []} />
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold">Contact Messages</h2>
+            </div>
+            <MessageList messages={messages} />
           </div>
         </TabsContent>
       </Tabs>
@@ -183,4 +172,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default Dashboard;
