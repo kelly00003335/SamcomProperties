@@ -141,19 +141,20 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
           : "New property has been created successfully.",
       });
       
-      // First close the form
-      onClose();
+      // Immediately invalidate and refetch all property-related queries
+      queryClient.invalidateQueries();
       
-      // Then after a slight delay, refresh the property list
-      setTimeout(() => {
-        console.log('Form closed, now refreshing property list');
-        // Invalidate all property-related queries
-        queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
-        queryClient.invalidateQueries({ queryKey: ["/api/properties/featured"] });
-        
-        // Force refetch to ensure fresh data
-        queryClient.refetchQueries({ queryKey: ["/api/properties"] });
-      }, 500);
+      // Specifically target the property-related endpoints with explicit refetches
+      Promise.all([
+        queryClient.refetchQueries({ queryKey: ["/api/properties"] }),
+        queryClient.refetchQueries({ queryKey: ["/api/properties/featured"] }),
+        // Add any other property-related query keys that might be used
+        queryClient.refetchQueries({ queryKey: ["/api/properties/search"] })
+      ]).then(() => {
+        console.log('All property queries have been refreshed');
+        // Close the form after ensuring the data has been refreshed
+        onClose();
+      });
     },
     onError: (error) => {
       console.error("Error:", error);

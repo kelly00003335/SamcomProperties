@@ -49,13 +49,13 @@ const convertDocument = <T>(doc: DocumentData): T => {
   
   // Extract the document ID and ensure it's interpreted correctly
   const docId = doc.id;
-  console.log(`Converting document with ID: ${docId}`);
+  console.log(`Converting document with ID: ${docId}, type: ${typeof docId}`);
   
   // Create a new object with the data and ID
   const result: any = { 
     ...data,
-    // Since our model expects a numeric ID, try to convert if it looks like a number
-    id: /^\d+$/.test(docId) ? parseInt(docId, 10) : docId
+    // Always ensure the ID is properly set - keep as string to avoid conversion issues
+    id: docId
   };
   
   // Convert Firestore Timestamp objects to Date
@@ -65,7 +65,7 @@ const convertDocument = <T>(doc: DocumentData): T => {
     }
   });
   
-  console.log('Converted document object:', { id: result.id, title: result.title });
+  console.log('Converted document object:', { id: result.id, title: result.title || '(no title)' });
   return result as T;
 };
 

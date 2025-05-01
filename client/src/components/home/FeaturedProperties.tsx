@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 const FeaturedProperties = () => {
   const { data: properties, isLoading, error } = useQuery<Property[]>({
     queryKey: ['/api/properties/featured'],
+    refetchOnMount: true,
+    staleTime: 0, // Consider data always stale to ensure fresh data
   });
 
   // Loading state

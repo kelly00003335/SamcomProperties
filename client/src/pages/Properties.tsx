@@ -43,6 +43,8 @@ const Properties = () => {
 
   const { data: properties, isLoading, error } = useQuery<Property[]>({
     queryKey: [getQueryString()],
+    refetchOnMount: true,
+    staleTime: 0, // Consider data always stale to ensure fresh data
   });
 
   // Build page title based on search params
