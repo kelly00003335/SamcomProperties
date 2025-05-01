@@ -27,9 +27,7 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/admin">
         {() => (
-          <ProtectedRoute>
-            <AdminDashboard />
-          </ProtectedRoute>
+          <AdminDashboard />
         )}
       </Route>
       <Route component={NotFound} />

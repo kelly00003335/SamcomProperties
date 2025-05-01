@@ -8,6 +8,9 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children, adminOnly = true }: ProtectedRouteProps) => {
+  // Authentication temporarily disabled
+  // Will be re-enabled before going live
+  /*
   const { user, loading } = useAuth();
 
   // Set authorized admin emails here
@@ -40,6 +43,7 @@ const ProtectedRoute = ({ children, adminOnly = true }: ProtectedRouteProps) => 
       </div>
     );
   }
+  */
 
   return <>{children}</>;
 };
