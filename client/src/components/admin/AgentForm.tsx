@@ -29,6 +29,10 @@ const agentFormSchema = insertAgentSchema.extend({
   phone: z.string().min(10, {
     message: "Phone number must be at least 10 characters",
   }),
+  // Field for image URL
+  image: z.string().url({
+    message: "Please enter a valid URL for the image"
+  }),
 });
 
 type AgentFormValues = z.infer<typeof agentFormSchema>;
@@ -53,8 +57,9 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
           bio: agent.bio,
           email: agent.email,
           phone: agent.phone,
-          photo: agent.photo,
-          socialLinks: agent.socialLinks.join(","),
+          image: agent.image,
+          // Format social object to string for the form
+          social: agent.social ? JSON.stringify(agent.social) : "",
         }
       : {
           name: "",
@@ -62,8 +67,8 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
           bio: "",
           email: "",
           phone: "",
-          photo: "",
-          socialLinks: "",
+          image: "",
+          social: "",
         },
   });
 
@@ -73,7 +78,8 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
       // Process data to match schema
       const processedData = {
         ...data,
-        socialLinks: data.socialLinks.split(",").map((link) => link.trim()),
+        // Convert social from string to JSON object
+        social: data.social ? JSON.parse(data.social) : {},
       };
 
       if (agent) {
@@ -209,13 +215,13 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
               )}
             />
 
-            {/* Photo */}
+            {/* Image */}
             <FormField
               control={form.control}
-              name="photo"
+              name="image"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Photo URL</FormLabel>
+                  <FormLabel>Agent Photo URL</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="https://example.com/photo.jpg"
@@ -230,18 +236,19 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
             {/* Social Links */}
             <FormField
               control={form.control}
-              name="socialLinks"
+              name="social"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Social Media Links</FormLabel>
+                  <FormLabel>Social Media JSON</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="https://linkedin.com/in/username, https://twitter.com/username"
+                    <Textarea
+                      placeholder='{"email":"agent@example.com","phone":"+2547XXXXXXXX","twitter":"http://twitter.com/agent","linkedin":"http://linkedin.com/in/agent"}'
+                      className="min-h-[120px]"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    Enter social media URLs separated by commas
+                    Enter social media links as a JSON object
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
