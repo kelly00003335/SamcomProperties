@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Property } from "@shared/schema";
+import { FirebaseProperty } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -57,7 +57,7 @@ const propertyFormSchema = z.object({
 type PropertyFormValues = z.infer<typeof propertyFormSchema>;
 
 interface PropertyFormProps {
-  property: Property | null;
+  property: FirebaseProperty | null;
   onClose: () => void;
 }
 
