@@ -1,4 +1,5 @@
 import { db } from "./db";
+import { sql } from "drizzle-orm";
 import {
   properties, agents, testimonials,
   type InsertProperty, type InsertAgent, type InsertTestimonial
@@ -104,7 +105,7 @@ async function seed() {
       type: "house",
       status: "for-sale",
       bedrooms: 3,
-      bathrooms: 2.5,
+      bathrooms: 2,
       area: 2200,
       images: [
         "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
@@ -192,11 +193,19 @@ async function seed() {
 // Check if we need to seed the database
 async function run() {
   // Check if there are any agents in the database
-  const agentsCount = await db.select({ count: db.fn.count().as('count') }).from(agents);
-  if (Number(agentsCount[0].count) === 0) {
+  try {
+    const result = await db.execute(sql`SELECT COUNT(*) as count FROM ${agents}`);
+    console.log('Count result:', result.rows[0]);
+    
+    if (Number(result.rows[0].count) === 0) {
+      await seed();
+    } else {
+      console.log('Database already has data, skipping seed');
+    }
+  } catch (error) {
+    console.error('Error checking database:', error);
+    // If there's an error, try to seed anyway
     await seed();
-  } else {
-    console.log('Database already has data, skipping seed');
   }
 }
 
