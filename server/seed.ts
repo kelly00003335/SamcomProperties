@@ -168,19 +168,22 @@ async function seed() {
       name: "Sarah Kamau",
       role: "Homeowner, Nairobi",
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
-      text: "Samcom Properties helped me find my dream home in a competitive market. Their team was professional and genuinely cared about my needs. Highly recommended!"
+      content: "Samcom Properties helped me find my dream home in a competitive market. Their team was professional and genuinely cared about my needs. Highly recommended!",
+      rating: 5
     },
     {
       name: "James Omondi",
       role: "Property Investor",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
-      text: "I've worked with many real estate companies, but Samcom stands out for their market knowledge and honesty. They've helped me build a profitable property portfolio."
+      content: "I've worked with many real estate companies, but Samcom stands out for their market knowledge and honesty. They've helped me build a profitable property portfolio.",
+      rating: 5
     },
     {
       name: "Mary Wambui",
       role: "First-time Buyer",
       image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e",
-      text: "As a first-time buyer, I was nervous about the process. The team at Samcom guided me every step of the way. I couldn't be happier with my new apartment!"
+      content: "As a first-time buyer, I was nervous about the process. The team at Samcom guided me every step of the way. I couldn't be happier with my new apartment!",
+      rating: 4
     }
   ];
   
