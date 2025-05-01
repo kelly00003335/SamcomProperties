@@ -206,31 +206,40 @@ export const propertyService = {
       
       console.log('Document created with ID:', docRef.id);
       // We need to wait a moment for Firestore to complete the write
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Increased to 1 second for more reliability
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Increased to 1.5 seconds for more reliability
       
       // Fetch the newly created document
       const newDoc = await getDoc(docRef);
       if (!newDoc.exists()) {
-        console.error(`Created document with ID ${docRef.id} not found, trying alternate approach`); 
+        console.error(`Created document with ID ${docRef.id} not found, retrying with delay...`);
         
-        // Create a synthetic document as a fallback using the same data we just saved
-        // but with the document ID from the creation response
-        return {
-          ...propertyWithDefaults,
-          id: docRef.id,
-          // Convert server timestamp to regular Date since we don't have the actual doc
-          createdAt: new Date(),
-        } as unknown as FirebaseProperty;
+        // Retry after a delay since Firestore writes can be eventual consistent
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        const retryDoc = await getDoc(docRef);
+        
+        if (!retryDoc.exists()) {
+          console.error(`Document still not found after retry, using fallback approach`);
+          // Create a synthetic document as a fallback using the same data we just saved
+          // but with the document ID from the creation response
+          return {
+            ...propertyWithDefaults,
+            id: docRef.id,
+            // Convert server timestamp to regular Date since we don't have the actual doc
+            createdAt: new Date(),
+          } as unknown as FirebaseProperty;
+        }
+        
+        // If retry succeeded, convert the document
+        return convertDocument<FirebaseProperty>(retryDoc);
       }
       
       const result = convertDocument<FirebaseProperty>(newDoc);
       console.log('Created property:', result);
       
-      // Force a refresh of the properties collection to ensure the new data is available
-      setTimeout(() => {
-        console.log('Triggering delayed refetch of all properties');
-        this.getAll();
-      }, 2000);
+      // Force an immediate refresh of the properties collection
+      console.log('Triggering immediate refresh of all properties');
+      const allProperties = await this.getAll();
+      console.log(`Refresh complete, found ${allProperties.length} properties`);
       
       return result;
     } catch (error) {
@@ -241,8 +250,29 @@ export const propertyService = {
   
   // Update a property
   async update(id: string, property: Partial<InsertProperty>): Promise<void> {
-    const docRef = doc(db, COLLECTIONS.PROPERTIES, id);
-    await updateDoc(docRef, property);
+    console.log(`Updating property with ID: ${id}`, property);
+    try {
+      const docRef = doc(db, COLLECTIONS.PROPERTIES, id);
+      await updateDoc(docRef, property);
+      
+      // Wait a moment for Firestore to complete the update
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Force refresh the property collection
+      console.log('Triggering refresh after property update');
+      await this.getAll();
+      
+      // Verify the update
+      const updatedDoc = await getDoc(docRef);
+      if (updatedDoc.exists()) {
+        console.log('Property updated successfully with new data:', convertDocument(updatedDoc));
+      } else {
+        console.error('Property document no longer exists after update');
+      }
+    } catch (error) {
+      console.error(`Error updating property ${id}:`, error);
+      throw error;
+    }
   },
   
   // Delete a property

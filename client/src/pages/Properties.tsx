@@ -45,6 +45,8 @@ const Properties = () => {
     queryKey: [getQueryString()],
     refetchOnMount: true,
     staleTime: 0, // Consider data always stale to ensure fresh data
+    refetchOnWindowFocus: true, // Refetch when window regains focus
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 
   // Build page title based on search params

@@ -133,7 +133,11 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
         return apiRequest("/api/properties/create", "POST", processedData);
       }
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      // Log cache state before any operations
+      const beforeCache = queryClient.getQueryData(["/api/properties"]);
+      console.log('Cache before refresh:', beforeCache ? 'Has data' : 'No data');
+      
       toast({
         title: property ? "Property updated" : "Property created",
         description: property
@@ -141,20 +145,25 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
           : "New property has been created successfully.",
       });
       
-      // Immediately invalidate and refetch all property-related queries
-      queryClient.invalidateQueries();
+      // More specific invalidation instead of invalidating all queries
+      await queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
+      await queryClient.invalidateQueries({ queryKey: ["/api/properties/featured"] });
+      await queryClient.invalidateQueries({ queryKey: ["/api/properties/search"] });
       
-      // Specifically target the property-related endpoints with explicit refetches
-      Promise.all([
-        queryClient.refetchQueries({ queryKey: ["/api/properties"] }),
-        queryClient.refetchQueries({ queryKey: ["/api/properties/featured"] }),
-        // Add any other property-related query keys that might be used
-        queryClient.refetchQueries({ queryKey: ["/api/properties/search"] })
-      ]).then(() => {
-        console.log('All property queries have been refreshed');
-        // Close the form after ensuring the data has been refreshed
-        onClose();
-      });
+      // Force refetch with refetchQueries
+      console.log('Force refetching property queries...');
+      await queryClient.refetchQueries({ queryKey: ["/api/properties"], exact: false });
+      
+      // Add a slight delay to ensure Firebase has updated
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Log cache state after updates
+      const afterCache = queryClient.getQueryData(["/api/properties"]);
+      console.log('Cache after refresh:', 
+        afterCache ? `Has data: ${Array.isArray(afterCache) ? afterCache.length : 'unknown'} items` : 'No data');
+      
+      // Close the form after ensuring the data has been refreshed
+      onClose();
     },
     onError: (error) => {
       console.error("Error:", error);
