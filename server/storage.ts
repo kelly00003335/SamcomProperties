@@ -19,18 +19,24 @@ export interface IStorage {
     maxPrice?: number;
   }): Promise<Property[]>;
   createProperty(property: InsertProperty): Promise<Property>;
+  updateProperty(id: number, property: Partial<InsertProperty>): Promise<Property>;
+  deleteProperty(id: number): Promise<void>;
 
   // Agent methods
   getAllAgents(): Promise<Agent[]>;
   getAgentById(id: number): Promise<Agent | undefined>;
   createAgent(agent: InsertAgent): Promise<Agent>;
+  updateAgent(id: number, agent: Partial<InsertAgent>): Promise<Agent>;
+  deleteAgent(id: number): Promise<void>;
 
   // Testimonial methods
   getAllTestimonials(): Promise<Testimonial[]>;
   createTestimonial(testimonial: InsertTestimonial): Promise<Testimonial>;
 
   // Contact message methods
+  getAllContactMessages(): Promise<ContactMessage[]>;
   createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
+  deleteContactMessage(id: number): Promise<void>;
 
   // Newsletter methods
   createNewsletterSubscription(subscription: InsertNewsletter): Promise<Newsletter>;
@@ -116,6 +122,24 @@ export class MemStorage implements IStorage {
     return newProperty;
   }
 
+  async updateProperty(id: number, property: Partial<InsertProperty>): Promise<Property> {
+    const existingProperty = this.properties.get(id);
+    if (!existingProperty) {
+      throw new Error(`Property with ID ${id} not found`);
+    }
+    
+    const updatedProperty = { ...existingProperty, ...property };
+    this.properties.set(id, updatedProperty);
+    return updatedProperty;
+  }
+
+  async deleteProperty(id: number): Promise<void> {
+    if (!this.properties.has(id)) {
+      throw new Error(`Property with ID ${id} not found`);
+    }
+    this.properties.delete(id);
+  }
+
   // Agent methods
   async getAllAgents(): Promise<Agent[]> {
     return Array.from(this.agents.values());
@@ -132,6 +156,24 @@ export class MemStorage implements IStorage {
     return newAgent;
   }
 
+  async updateAgent(id: number, agent: Partial<InsertAgent>): Promise<Agent> {
+    const existingAgent = this.agents.get(id);
+    if (!existingAgent) {
+      throw new Error(`Agent with ID ${id} not found`);
+    }
+    
+    const updatedAgent = { ...existingAgent, ...agent };
+    this.agents.set(id, updatedAgent);
+    return updatedAgent;
+  }
+
+  async deleteAgent(id: number): Promise<void> {
+    if (!this.agents.has(id)) {
+      throw new Error(`Agent with ID ${id} not found`);
+    }
+    this.agents.delete(id);
+  }
+
   // Testimonial methods
   async getAllTestimonials(): Promise<Testimonial[]> {
     return Array.from(this.testimonials.values());
@@ -145,12 +187,23 @@ export class MemStorage implements IStorage {
   }
 
   // Contact message methods
+  async getAllContactMessages(): Promise<ContactMessage[]> {
+    return Array.from(this.contactMessages.values());
+  }
+  
   async createContactMessage(message: InsertContactMessage): Promise<ContactMessage> {
     const id = this.contactMessageId++;
     const createdAt = new Date();
     const newMessage: ContactMessage = { ...message, id, createdAt };
     this.contactMessages.set(id, newMessage);
     return newMessage;
+  }
+
+  async deleteContactMessage(id: number): Promise<void> {
+    if (!this.contactMessages.has(id)) {
+      throw new Error(`Contact message with ID ${id} not found`);
+    }
+    this.contactMessages.delete(id);
   }
 
   // Newsletter methods

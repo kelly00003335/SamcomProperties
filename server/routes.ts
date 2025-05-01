@@ -123,6 +123,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin API endpoints
+
+  // Get all contact messages
+  app.get('/api/contact/all', async (req: Request, res: Response) => {
+    try {
+      const messages = await storage.getAllContactMessages();
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to fetch contact messages', error });
+    }
+  });
+
+  // Delete a contact message by ID
+  app.delete('/api/contact/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteContactMessage(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to delete contact message', error });
+    }
+  });
+
+  // Create a new property
+  app.post('/api/properties/create', async (req: Request, res: Response) => {
+    try {
+      const property = await storage.createProperty(req.body);
+      res.status(201).json(property);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to create property', error });
+    }
+  });
+
+  // Update a property
+  app.patch('/api/properties/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const property = await storage.updateProperty(id, req.body);
+      res.json(property);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to update property', error });
+    }
+  });
+
+  // Delete a property
+  app.delete('/api/properties/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProperty(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to delete property', error });
+    }
+  });
+
+  // Create a new agent
+  app.post('/api/agents/create', async (req: Request, res: Response) => {
+    try {
+      const agent = await storage.createAgent(req.body);
+      res.status(201).json(agent);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to create agent', error });
+    }
+  });
+
+  // Update an agent
+  app.patch('/api/agents/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      const agent = await storage.updateAgent(id, req.body);
+      res.json(agent);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to update agent', error });
+    }
+  });
+
+  // Delete an agent
+  app.delete('/api/agents/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteAgent(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to delete agent', error });
+    }
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;
