@@ -19,6 +19,7 @@ import { db } from './firebase';
 import {
   Agent, 
   ContactMessage, 
+  FirebaseProperty,
   InsertAgent, 
   InsertContactMessage, 
   InsertNewsletter, 
@@ -71,7 +72,7 @@ const convertDocument = <T>(doc: DocumentData): T => {
 // Properties Collection
 export const propertyService = {
   // Get all properties
-  async getAll(): Promise<Property[]> {
+  async getAll(): Promise<FirebaseProperty[]> {
     console.log('Fetching all properties from Firestore...');
     try {
       const propertiesCollection = collection(db, COLLECTIONS.PROPERTIES);
@@ -111,7 +112,7 @@ export const propertyService = {
   },
   
   // Get a property by ID
-  async getById(id: string): Promise<Property | null> {
+  async getById(id: string): Promise<FirebaseProperty | null> {
     const docRef = doc(db, COLLECTIONS.PROPERTIES, id);
     const docSnap = await getDoc(docRef);
     
@@ -123,7 +124,7 @@ export const propertyService = {
   },
   
   // Get featured properties
-  async getFeatured(): Promise<Property[]> {
+  async getFeatured(): Promise<FirebaseProperty[]> {
     const q = query(
       collection(db, COLLECTIONS.PROPERTIES),
       where('isFeatured', '==', true),
@@ -141,7 +142,7 @@ export const propertyService = {
     minPrice?: number;
     maxPrice?: number;
     status?: string;
-  }): Promise<Property[]> {
+  }): Promise<FirebaseProperty[]> {
     let q = collection(db, COLLECTIONS.PROPERTIES);
     const filters = [];
     
@@ -179,7 +180,7 @@ export const propertyService = {
   },
   
   // Create a property
-  async create(property: InsertProperty): Promise<Property> {
+  async create(property: InsertProperty): Promise<FirebaseProperty> {
     console.log('Creating property with data:', JSON.stringify(property, null, 2));
     
     try {
@@ -219,10 +220,10 @@ export const propertyService = {
           id: docRef.id,
           // Convert server timestamp to regular Date since we don't have the actual doc
           createdAt: new Date(),
-        } as unknown as Property;
+        } as unknown as FirebaseProperty;
       }
       
-      const result = convertDocument<Property>(newDoc);
+      const result = convertDocument<FirebaseProperty>(newDoc);
       console.log('Created property:', result);
       
       // Force a refresh of the properties collection to ensure the new data is available
