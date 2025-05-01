@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Property, insertPropertySchema } from "@shared/schema";
+import { Property } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 
@@ -29,7 +29,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Save } from "lucide-react";
 
-// Extended schema with custom validation
+// Custom schema with validation
 const propertyFormSchema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
   description: z.string().min(1, { message: "Description is required" }),
@@ -143,6 +143,7 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
       onClose();
     },
     onError: (error) => {
+      console.error("Error:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -155,6 +156,8 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
     try {
       setIsSubmitting(true);
       await propertyMutation.mutateAsync(data);
+    } catch (error) {
+      console.error("Submit error:", error);
     } finally {
       setIsSubmitting(false);
     }
