@@ -5,11 +5,11 @@ import {
   contactService,
   newsletterService
 } from './firestore-service';
-import { Property, Agent, Testimonial, ContactMessage, Newsletter } from '@shared/schema';
+import { Property, FirebaseProperty, Agent, Testimonial, ContactMessage, Newsletter } from '@shared/schema';
 
 // API wrapper for Property-related operations
 export const PropertyAPI = {
-  getAllProperties: async (): Promise<Property[]> => {
+  getAllProperties: async (): Promise<FirebaseProperty[]> => {
     console.log('PropertyAPI.getAllProperties called');
     try {
       const properties = await propertyService.getAll();
@@ -21,11 +21,11 @@ export const PropertyAPI = {
     }
   },
   
-  getPropertyById: async (id: string): Promise<Property | null> => {
+  getPropertyById: async (id: string): Promise<FirebaseProperty | null> => {
     return await propertyService.getById(id);
   },
   
-  getFeaturedProperties: async (): Promise<Property[]> => {
+  getFeaturedProperties: async (): Promise<FirebaseProperty[]> => {
     return await propertyService.getFeatured();
   },
   
@@ -35,11 +35,11 @@ export const PropertyAPI = {
     minPrice?: number;
     maxPrice?: number;
     status?: string;
-  }): Promise<Property[]> => {
+  }): Promise<FirebaseProperty[]> => {
     return await propertyService.search(params);
   },
   
-  createProperty: async (property: any): Promise<Property> => {
+  createProperty: async (property: any): Promise<FirebaseProperty> => {
     console.log('PropertyAPI.createProperty called with:', JSON.stringify(property, null, 2));
     try {
       const newProperty = await propertyService.create(property);

@@ -90,17 +90,17 @@ export const propertyService = {
       const docIds = querySnapshot.docs.map(doc => doc.id);
       console.log('Raw document IDs:', docIds);
       
-      // Convert each document to our Property type
+      // Convert each document to our FirebaseProperty type
       const properties = querySnapshot.docs
         .map(doc => {
           try {
-            return convertDocument<Property>(doc);
+            return convertDocument<FirebaseProperty>(doc);
           } catch (conversionError) {
             console.error(`Error converting document ${doc.id}:`, conversionError);
             return null;
           }
         })
-        .filter(Boolean) as Property[];
+        .filter(Boolean) as FirebaseProperty[];
       
       console.log(`Successfully converted ${properties.length} properties:`, 
         properties.map(p => ({ id: p.id, title: p.title })));
@@ -117,7 +117,7 @@ export const propertyService = {
     const docSnap = await getDoc(docRef);
     
     if (docSnap.exists()) {
-      return convertDocument<Property>(docSnap);
+      return convertDocument<FirebaseProperty>(docSnap);
     }
     
     return null;
@@ -132,7 +132,7 @@ export const propertyService = {
     );
     
     const querySnapshot = await getDocs(q);
-    return querySnapshot.docs.map(doc => convertDocument<Property>(doc));
+    return querySnapshot.docs.map(doc => convertDocument<FirebaseProperty>(doc));
   },
   
   // Search properties
@@ -165,7 +165,7 @@ export const propertyService = {
       filters.length ? query(q, ...filters) : q
     );
     
-    let properties = querySnapshot.docs.map(doc => convertDocument<Property>(doc));
+    let properties = querySnapshot.docs.map(doc => convertDocument<FirebaseProperty>(doc));
     
     // Filter by price range client-side
     if (params.minPrice !== undefined) {
