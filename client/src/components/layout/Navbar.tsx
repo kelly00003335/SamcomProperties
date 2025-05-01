@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, Mail, LogIn, LogOut, User } from "lucide-react";
+import { Menu, X, Phone, Mail, User } from "lucide-react";
 import { 
   FaFacebookF, 
   FaTwitter, 
@@ -9,20 +9,12 @@ import {
   FaLinkedinIn 
 } from "react-icons/fa";
 import { useAuth } from "@/hooks/use-auth";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [location] = useLocation();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -96,36 +88,12 @@ const Navbar = () => {
               <NavLink href="/about" text="About Us" isActive={location === '/about'} />
               <NavLink href="/contact" text="Contact" isActive={location === '/contact'} />
               
-              {/* Auth Menu */}
-              {user ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative flex items-center gap-2">
-                      <User className="h-4 w-4" />
-                      <span className="hidden md:inline-block">
-                        {user.displayName || user.email?.split('@')[0]}
-                      </span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {user.email === 'samwelgithogori@gmail.com' && (
-                      <DropdownMenuItem asChild>
-                        <Link href="/admin">Dashboard</Link>
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem onClick={() => signOut()}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Link href="/login">
+              {/* Admin Link - Hidden for normal users */}
+              {user?.email === 'samwelgithogori@gmail.com' && (
+                <Link href="/admin">
                   <Button variant="ghost" className="flex items-center gap-2">
-                    <LogIn className="h-4 w-4" />
-                    Login
+                    <User className="h-4 w-4" />
+                    Dashboard
                   </Button>
                 </Link>
               )}
