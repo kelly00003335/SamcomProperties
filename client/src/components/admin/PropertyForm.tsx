@@ -134,20 +134,26 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
       }
     },
     onSuccess: () => {
-      // Invalidate all property-related queries
-      queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/properties/featured"] });
-      
-      // Force refetch to ensure fresh data
-      queryClient.refetchQueries({ queryKey: ["/api/properties"] });
-      
       toast({
         title: property ? "Property updated" : "Property created",
         description: property
           ? "The property has been updated successfully."
           : "New property has been created successfully.",
       });
+      
+      // First close the form
       onClose();
+      
+      // Then after a slight delay, refresh the property list
+      setTimeout(() => {
+        console.log('Form closed, now refreshing property list');
+        // Invalidate all property-related queries
+        queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
+        queryClient.invalidateQueries({ queryKey: ["/api/properties/featured"] });
+        
+        // Force refetch to ensure fresh data
+        queryClient.refetchQueries({ queryKey: ["/api/properties"] });
+      }, 500);
     },
     onError: (error) => {
       console.error("Error:", error);
@@ -166,10 +172,10 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
       const result = await propertyMutation.mutateAsync(data);
       console.log('Property mutation completed with result:', result);
       
-      // Force an immediate manual refetch after creation
+      // Only trigger a manual refetch after we've completely closed the form
       if (!property) {
-        console.log('Triggering manual refetch of properties');
-        await queryClient.refetchQueries({ queryKey: ["/api/properties"] });
+        console.log('Property created, will refetch list after form closes');
+        // We'll let onSuccess handler in the mutation handle this
       }
       
     } catch (error) {

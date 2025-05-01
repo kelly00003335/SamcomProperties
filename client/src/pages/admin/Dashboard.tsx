@@ -33,9 +33,9 @@ const Dashboard = () => {
   // Fetch all properties
   const propertiesQuery = useQuery({
     queryKey: ["/api/properties"],
-    refetchOnWindowFocus: true,
-    staleTime: 0, // Consider the data always stale
-    refetchInterval: 5000, // Refetch every 5 seconds
+    refetchOnWindowFocus: false, // Don't refetch on window focus
+    staleTime: 30000, // Consider the data stale after 30 seconds
+    refetchInterval: 60000, // Refetch only every 60 seconds (1 minute)
   });
 
   // Fetch all agents
