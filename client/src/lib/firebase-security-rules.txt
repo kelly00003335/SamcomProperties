@@ -1,0 +1,47 @@
+// Firestore Security Rules for Samcom Properties Agency
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow public read access to all collections
+    match /{document=**} {
+      allow read: if true;
+    }
+    
+    // Properties collection
+    match /properties/{propertyId} {
+      allow write: if true;  // During development, allow unrestricted write access
+      // For production: allow write: if request.auth != null && request.auth.uid == 'authorized-admin-uid';
+    }
+    
+    // Agents collection
+    match /agents/{agentId} {
+      allow write: if true;  // During development, allow unrestricted write access
+      // For production: allow write: if request.auth != null && request.auth.uid == 'authorized-admin-uid';
+    }
+    
+    // Testimonials collection
+    match /testimonials/{testimonialId} {
+      allow write: if true;  // During development, allow unrestricted write access
+      // For production: allow write: if request.auth != null && request.auth.uid == 'authorized-admin-uid';
+    }
+    
+    // Contact Messages collection
+    match /contactMessages/{messageId} {
+      // Anyone can create contact messages
+      allow create: if true;
+      // Only admin can read/update/delete
+      allow read, update, delete: if true;  // During development
+      // For production: allow read, update, delete: if request.auth != null && request.auth.uid == 'authorized-admin-uid';
+    }
+    
+    // Newsletter collection
+    match /newsletters/{subscriberId} {
+      // Anyone can subscribe to newsletter
+      allow create: if true;
+      // Only admin can read/update/delete
+      allow read, update, delete: if true;  // During development
+      // For production: allow read, update, delete: if request.auth != null && request.auth.uid == 'authorized-admin-uid';
+    }
+  }
+}

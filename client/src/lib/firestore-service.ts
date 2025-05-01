@@ -133,18 +133,27 @@ export const propertyService = {
   
   // Create a property
   async create(property: InsertProperty): Promise<Property> {
-    const propertyWithTimestamp = {
-      ...property,
-      createdAt: serverTimestamp(),
-    };
+    console.log('Creating property with data:', JSON.stringify(property, null, 2));
     
-    const docRef = await addDoc(
-      collection(db, COLLECTIONS.PROPERTIES),
-      propertyWithTimestamp
-    );
-    
-    const newDoc = await getDoc(docRef);
-    return convertDocument<Property>(newDoc);
+    try {
+      const propertyWithTimestamp = {
+        ...property,
+        createdAt: serverTimestamp(),
+      };
+      
+      console.log('Adding document to Firestore collection:', COLLECTIONS.PROPERTIES);
+      const docRef = await addDoc(
+        collection(db, COLLECTIONS.PROPERTIES),
+        propertyWithTimestamp
+      );
+      
+      console.log('Document created with ID:', docRef.id);
+      const newDoc = await getDoc(docRef);
+      return convertDocument<Property>(newDoc);
+    } catch (error) {
+      console.error('Error creating property in Firestore:', error);
+      throw error;
+    }
   },
   
   // Update a property
@@ -181,9 +190,17 @@ export const agentService = {
   
   // Create an agent
   async create(agent: InsertAgent): Promise<Agent> {
-    const docRef = await addDoc(collection(db, COLLECTIONS.AGENTS), agent);
-    const newDoc = await getDoc(docRef);
-    return convertDocument<Agent>(newDoc);
+    console.log('Creating agent with data:', JSON.stringify(agent, null, 2));
+    
+    try {
+      const docRef = await addDoc(collection(db, COLLECTIONS.AGENTS), agent);
+      console.log('Agent document created with ID:', docRef.id);
+      const newDoc = await getDoc(docRef);
+      return convertDocument<Agent>(newDoc);
+    } catch (error) {
+      console.error('Error creating agent in Firestore:', error);
+      throw error;
+    }
   },
   
   // Update an agent
