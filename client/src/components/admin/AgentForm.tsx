@@ -91,7 +91,12 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
       }
     },
     onSuccess: () => {
+      // Invalidate all agent-related queries
       queryClient.invalidateQueries({ queryKey: ["/api/agents"] });
+      
+      // Force refetch to ensure fresh data
+      queryClient.refetchQueries({ queryKey: ["/api/agents"] });
+      
       toast({
         title: agent ? "Agent updated" : "Agent created",
         description: agent

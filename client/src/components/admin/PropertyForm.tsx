@@ -134,7 +134,13 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
       }
     },
     onSuccess: () => {
+      // Invalidate all property-related queries
       queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/properties/featured"] });
+      
+      // Force refetch to ensure fresh data
+      queryClient.refetchQueries({ queryKey: ["/api/properties"] });
+      
       toast({
         title: property ? "Property updated" : "Property created",
         description: property

@@ -12,12 +12,13 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchInterval: false,
-      refetchOnWindowFocus: false,
-      staleTime: Infinity,
-      retry: false,
+      refetchOnWindowFocus: true,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+      gcTime: 10 * 60 * 1000, // 10 minutes
     },
     mutations: {
-      retry: false,
+      retry: 1,
     },
   },
 });

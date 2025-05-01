@@ -10,7 +10,10 @@ import { Property, Agent, Testimonial, ContactMessage, Newsletter } from '@share
 // API wrapper for Property-related operations
 export const PropertyAPI = {
   getAllProperties: async (): Promise<Property[]> => {
-    return await propertyService.getAll();
+    console.log('Fetching all properties...');
+    const properties = await propertyService.getAll();
+    console.log(`Fetched ${properties.length} properties`);
+    return properties;
   },
   
   getPropertyById: async (id: string): Promise<Property | null> => {
