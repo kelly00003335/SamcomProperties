@@ -87,17 +87,17 @@ const ContactSection = () => {
     {
       icon: <MapPin className="h-5 w-5" />,
       title: "Our Office",
-      content: "Samcom House, Ngong Road, Nairobi, Kenya",
+      content: "P.O. Box 2352, Kinamba, Naivasha, Kenya",
     },
     {
       icon: <Phone className="h-5 w-5" />,
       title: "Phone",
-      content: "+254 722 123 456 / +254 733 123 456",
+      content: "+254 723 204 783 / +254 778 249 550",
     },
     {
       icon: <Mail className="h-5 w-5" />,
       title: "Email",
-      content: "info@samcom.co.ke / sales@samcom.co.ke",
+      content: "samwelgithogori@gmail.com",
     },
     {
       icon: <Clock className="h-5 w-5" />,
@@ -109,7 +109,7 @@ const ContactSection = () => {
   const socialLinks = [
     { icon: <Facebook className="h-5 w-5" />, href: "#" },
     { icon: <Twitter className="h-5 w-5" />, href: "#" },
-    { icon: <Instagram className="h-5 w-5" />, href: "#" },
+    { icon: <Instagram className="h-5 w-5" />, href: "https://www.instagram.com/samcomproperties_/" },
     { icon: <Linkedin className="h-5 w-5" />, href: "#" },
   ];
 

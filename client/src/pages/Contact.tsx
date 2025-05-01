@@ -86,17 +86,17 @@ const Contact = () => {
     {
       icon: <MapPin className="h-5 w-5" />,
       title: "Our Office",
-      content: "Samcom House, Ngong Road, Nairobi, Kenya",
+      content: "P.O. Box 2352, Kinamba, Naivasha, Kenya",
     },
     {
       icon: <Phone className="h-5 w-5" />,
       title: "Phone",
-      content: "+254 722 123 456 / +254 733 123 456",
+      content: "+254 723 204 783 / +254 778 249 550",
     },
     {
       icon: <Mail className="h-5 w-5" />,
       title: "Email",
-      content: "info@samcom.co.ke / sales@samcom.co.ke",
+      content: "samwelgithogori@gmail.com",
     },
     {
       icon: <Clock className="h-5 w-5" />,
@@ -108,7 +108,7 @@ const Contact = () => {
   const socialLinks = [
     { icon: <Facebook className="h-5 w-5" />, href: "#", label: "Facebook" },
     { icon: <Twitter className="h-5 w-5" />, href: "#", label: "Twitter" },
-    { icon: <Instagram className="h-5 w-5" />, href: "#", label: "Instagram" },
+    { icon: <Instagram className="h-5 w-5" />, href: "https://www.instagram.com/samcomproperties_/", label: "Instagram" },
     { icon: <Linkedin className="h-5 w-5" />, href: "#", label: "LinkedIn" },
   ];
 
@@ -285,50 +285,50 @@ const Contact = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-4 font-heading">Nairobi (Headquarters)</h3>
+              <h3 className="text-xl font-bold mb-4 font-heading">Naivasha Branch</h3>
               <p className="flex items-start mb-3">
                 <MapPin className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
-                <span>Samcom House, Ngong Road, Nairobi, Kenya</span>
+                <span>P.O. Box 2352, Kinamba, Naivasha, Kenya</span>
               </p>
               <p className="flex items-center mb-3">
                 <Phone className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                <span>+254 722 123 456</span>
+                <span>+254 723 204 783</span>
               </p>
               <p className="flex items-center">
                 <Mail className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                <span>nairobi@samcom.co.ke</span>
+                <span>samwelgithogori@gmail.com</span>
               </p>
             </div>
             
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-4 font-heading">Mombasa</h3>
+              <h3 className="text-xl font-bold mb-4 font-heading">Alternative Contact</h3>
               <p className="flex items-start mb-3">
                 <MapPin className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
-                <span>Marina Plaza, Nyali Road, Mombasa, Kenya</span>
+                <span>P.O. Box 2352, Kinamba, Naivasha, Kenya</span>
               </p>
               <p className="flex items-center mb-3">
                 <Phone className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                <span>+254 733 123 456</span>
+                <span>+254 778 249 550</span>
               </p>
               <p className="flex items-center">
                 <Mail className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                <span>mombasa@samcom.co.ke</span>
+                <span>samwelgithogori@gmail.com</span>
               </p>
             </div>
             
             <div className="bg-white p-8 rounded-lg shadow-md">
-              <h3 className="text-xl font-bold mb-4 font-heading">Kisumu</h3>
+              <h3 className="text-xl font-bold mb-4 font-heading">Working Hours</h3>
               <p className="flex items-start mb-3">
-                <MapPin className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
-                <span>Lake Plaza, Oginga Odinga Street, Kisumu, Kenya</span>
+                <Clock className="h-5 w-5 text-primary mr-2 mt-1 flex-shrink-0" />
+                <span>Monday - Friday: 8:00 AM - 6:00 PM</span>
               </p>
               <p className="flex items-center mb-3">
-                <Phone className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                <span>+254 744 123 456</span>
+                <Clock className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
+                <span>Saturday: 9:00 AM - 1:00 PM</span>
               </p>
               <p className="flex items-center">
-                <Mail className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
-                <span>kisumu@samcom.co.ke</span>
+                <Clock className="h-5 w-5 text-primary mr-2 flex-shrink-0" />
+                <span>Sunday: Closed</span>
               </p>
             </div>
           </div>
@@ -337,16 +337,17 @@ const Contact = () => {
 
       {/* Map Section */}
       <section className="h-96 bg-neutral-light">
-        <div className="w-full h-full flex items-center justify-center bg-neutral">
-          <div className="text-center">
-            <MapPin className="h-16 w-16 text-primary mb-4 mx-auto" />
-            <h3 className="text-2xl font-bold mb-2 font-heading">Our Location</h3>
-            <p className="text-gray-600">Samcom House, Ngong Road, Nairobi, Kenya</p>
-            <p className="text-sm text-gray-500 mt-4">
-              {/* In a real implementation, this would be replaced with a Google Maps component */}
-              Interactive map would be displayed here
-            </p>
-          </div>
+        <div className="w-full h-full">
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d255.30394339246164!2d36.47327053329462!3d-0.7220038100288206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1829187b6e0229b9%3A0xa04b3f4dbdf5d581!2sSAMCOM%20PROPERTIES%20AGENCY!5e0!3m2!1sen!2sus!4v1683118712345!5m2!1sen!2sus" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            title="SAMCOM PROPERTIES AGENCY location"
+          ></iframe>
         </div>
       </section>
     </>

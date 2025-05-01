@@ -69,7 +69,7 @@ const Footer = () => {
               <a href="#" className="text-white hover:text-secondary">
                 <FaTwitter />
               </a>
-              <a href="#" className="text-white hover:text-secondary">
+              <a href="https://www.instagram.com/samcomproperties_/" className="text-white hover:text-secondary">
                 <FaInstagram />
               </a>
               <a href="#" className="text-white hover:text-secondary">

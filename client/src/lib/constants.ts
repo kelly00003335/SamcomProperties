@@ -87,15 +87,16 @@ export const OFFICE_LOCATIONS = [
 export const COMPANY_INFO = {
   name: "Samcom Properties Agency",
   shortName: "Samcom Properties",
-  phone: "+254 722 123 456",
-  email: "info@samcom.co.ke",
-  address: "Samcom House, Ngong Road, Nairobi, Kenya",
+  phone: "+254 723 204 783 / +254 778 249 550",
+  email: "samwelgithogori@gmail.com",
+  address: "P.O. Box 2352, Kinamba, Naivasha, Kenya",
   workingHours: "Monday - Friday: 8:00 AM - 6:00 PM\nSaturday: 9:00 AM - 1:00 PM",
   social: {
     facebook: "#",
     twitter: "#",
-    instagram: "#",
+    instagram: "https://www.instagram.com/samcomproperties_/",
     linkedin: "#",
   },
+  googleMapsLink: "https://www.google.com/maps/place/SAMCOM+PROPERTIES+AGENCY/@-0.7220481,36.4731475,51m/data=!3m1!1e3!4m6!3m5!1s0x1829187b6e0229b9:0xa04b3f4dbdf5d581!8m2!3d-0.7220037!4d36.4732865!16s%2Fg%2F11v9_33_lx?entry=ttu",
   yearFounded: 2010,
 };
