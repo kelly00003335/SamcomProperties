@@ -126,10 +126,10 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
 
       if (property) {
         // Update existing property
-        return apiRequest("PATCH", `/api/properties/${property.id}`, processedData);
+        return apiRequest(`/api/properties/${property.id}`, "PATCH", processedData);
       } else {
         // Create new property
-        return apiRequest("POST", "/api/properties", processedData);
+        return apiRequest("/api/properties", "POST", processedData);
       }
     },
     onSuccess: () => {

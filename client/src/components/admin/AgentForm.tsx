@@ -84,10 +84,10 @@ const AgentForm = ({ agent, onClose }: AgentFormProps) => {
 
       if (agent) {
         // Update existing agent
-        return apiRequest("PATCH", `/api/agents/${agent.id}`, processedData);
+        return apiRequest(`/api/agents/${agent.id}`, "PATCH", processedData);
       } else {
         // Create new agent
-        return apiRequest("POST", "/api/agents", processedData);
+        return apiRequest("/api/agents", "POST", processedData);
       }
     },
     onSuccess: () => {
