@@ -1,0 +1,277 @@
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Agent, insertAgentSchema } from "@shared/schema";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
+
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Save } from "lucide-react";
+
+// Extended schema with custom validation
+const agentFormSchema = insertAgentSchema.extend({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+  phone: z.string().min(10, {
+    message: "Phone number must be at least 10 characters",
+  }),
+});
+
+type AgentFormValues = z.infer<typeof agentFormSchema>;
+
+interface AgentFormProps {
+  agent: Agent | null;
+  onClose: () => void;
+}
+
+const AgentForm = ({ agent, onClose }: AgentFormProps) => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Initialize form with default values or existing agent data
+  const form = useForm<AgentFormValues>({
+    resolver: zodResolver(agentFormSchema),
+    defaultValues: agent
+      ? {
+          name: agent.name,
+          title: agent.title,
+          bio: agent.bio,
+          email: agent.email,
+          phone: agent.phone,
+          photo: agent.photo,
+          socialLinks: agent.socialLinks.join(","),
+        }
+      : {
+          name: "",
+          title: "",
+          bio: "",
+          email: "",
+          phone: "",
+          photo: "",
+          socialLinks: "",
+        },
+  });
+
+  // Create or update agent mutation
+  const agentMutation = useMutation({
+    mutationFn: async (data: AgentFormValues) => {
+      // Process data to match schema
+      const processedData = {
+        ...data,
+        socialLinks: data.socialLinks.split(",").map((link) => link.trim()),
+      };
+
+      if (agent) {
+        // Update existing agent
+        return apiRequest("PATCH", `/api/agents/${agent.id}`, processedData);
+      } else {
+        // Create new agent
+        return apiRequest("POST", "/api/agents", processedData);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/agents"] });
+      toast({
+        title: agent ? "Agent updated" : "Agent created",
+        description: agent
+          ? "The agent has been updated successfully."
+          : "New agent has been created successfully.",
+      });
+      onClose();
+    },
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: `There was a problem ${agent ? "updating" : "creating"} the agent.`,
+      });
+    },
+  });
+
+  const onSubmit = async (data: AgentFormValues) => {
+    try {
+      setIsSubmitting(true);
+      await agentMutation.mutateAsync(data);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex items-center mb-6">
+        <Button variant="ghost" onClick={onClose} className="mr-4" size="icon">
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <h2 className="text-2xl font-bold">
+          {agent ? "Edit Agent" : "Add New Agent"}
+        </h2>
+      </div>
+
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <div className="space-y-6 bg-white p-6 rounded-lg border">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Name */}
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Title */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Senior Property Consultant" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input placeholder="john@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Phone */}
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+254 7XX XXX XXX" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            {/* Bio */}
+            <FormField
+              control={form.control}
+              name="bio"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Biography</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Brief description of the agent..."
+                      className="min-h-[120px]"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Photo */}
+            <FormField
+              control={form.control}
+              name="photo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Photo URL</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://example.com/photo.jpg"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Social Links */}
+            <FormField
+              control={form.control}
+              name="socialLinks"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Social Media Links</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://linkedin.com/in/username, https://twitter.com/username"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Enter social media URLs separated by commas
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex justify-end space-x-4">
+            <Button variant="outline" onClick={onClose} type="button">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex items-center"
+            >
+              <Save className="mr-2 h-4 w-4" />
+              {isSubmitting
+                ? agent
+                  ? "Updating..."
+                  : "Creating..."
+                : agent
+                ? "Update Agent"
+                : "Create Agent"}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+};
+
+export default AgentForm;
