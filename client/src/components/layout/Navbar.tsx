@@ -75,6 +75,11 @@ const Navbar = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center">
             <Link href="/" className="flex items-center">
+              <img 
+                src="https://i.imgur.com/JJGNaA1.png" 
+                alt="Samcom Properties Logo" 
+                className="h-10 w-auto mr-2" 
+              />
               <div className="text-2xl font-bold font-heading">
                 <span className="text-[#1A237E]">SAMCOM</span>
                 <span className="text-[#FFD700] ml-1">PROPERTIES</span>
