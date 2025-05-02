@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import { Property, FirebaseProperty } from "@shared/schema";
 import { Button } from "@/components/ui/button";
+import { PropertyAPI, AgentAPI } from "@/lib/api";
 import PropertyGallery from "@/components/properties/PropertyGallery";
 import PropertyFeatures from "@/components/properties/PropertyFeatures";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,12 +23,20 @@ const PropertyDetail = () => {
   const propertyId = match ? params.id : null;
 
   const { data: property, isLoading, error } = useQuery<FirebaseProperty>({
-    queryKey: [`/api/properties/${propertyId}`],
+    queryKey: ['property', propertyId],
+    queryFn: async () => {
+      console.log(`Fetching property with ID: ${propertyId}`);
+      return await PropertyAPI.getPropertyById(propertyId || '');
+    },
     enabled: !!propertyId,
   });
 
   const { data: agent } = useQuery<any>({
-    queryKey: [`/api/agents/${property?.agentId}`],
+    queryKey: ['agent', property?.agentId],
+    queryFn: async () => {
+      console.log(`Fetching agent with ID: ${property?.agentId}`);
+      return await AgentAPI.getAgentById(property?.agentId || '');
+    },
     enabled: !!property?.agentId,
   });
 
