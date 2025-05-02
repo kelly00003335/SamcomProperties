@@ -1,18 +1,18 @@
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import PropertyCard from "@/components/properties/PropertyCard";
-import { Property } from "@shared/schema";
+import { FirebaseProperty } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFirestoreCollection } from "@/hooks/use-firestore-collection";
+import { where } from "firebase/firestore";
 
 const FeaturedProperties = () => {
-  const { data: properties, isLoading, error } = useQuery<Property[]>({
-    queryKey: ['/api/properties/featured'],
-    refetchOnMount: true,
-    staleTime: 0, // Consider data always stale to ensure fresh data
-    refetchOnWindowFocus: true, // Refetch when window regains focus
-    refetchInterval: 30000, // Refetch every 30 seconds
-  });
+  // Use real-time listener instead of React Query
+  const { documents: properties, loading: isLoading, error } = 
+    useFirestoreCollection<FirebaseProperty>('properties', [
+      where('isFeatured', '==', true)
+    ]);
+
 
   // Loading state
   if (isLoading) {
