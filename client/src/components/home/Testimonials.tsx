@@ -1,13 +1,78 @@
-import { useQuery } from "@tanstack/react-query";
+
+import { useEffect, useState } from "react";
 import { Testimonial } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, StarHalf } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { testimonialService } from "@/lib/firestore-service";
 
 const Testimonials = () => {
-  const { data: testimonials, isLoading, error } = useQuery<Testimonial[]>({
-    queryKey: ['/api/testimonials'],
-  });
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setIsLoading(true);
+        const data = await testimonialService.getAll();
+        
+        // If no testimonials are found, use default ones
+        if (data.length === 0) {
+          // These are fallback testimonials that will display if none are in the database
+          const defaultTestimonials: Testimonial[] = [
+            {
+              id: "1",
+              name: "Sarah Kamau",
+              role: "Homeowner, Nairobi",
+              image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              content: "Samcom Properties helped me find my dream home in a competitive market. Their team was professional and genuinely cared about my needs. Highly recommended!",
+              rating: 5,
+              createdAt: new Date()
+            },
+            {
+              id: "2",
+              name: "James Omondi",
+              role: "Property Investor",
+              image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              content: "I've worked with many real estate companies, but Samcom stands out for their market knowledge and honesty. They've helped me build a profitable property portfolio.",
+              rating: 5,
+              createdAt: new Date()
+            },
+            {
+              id: "3",
+              name: "Mary Wambui",
+              role: "First-time Buyer",
+              image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              content: "As a first-time buyer, I was nervous about the process. The team at Samcom guided me every step of the way. I couldn't be happier with my new apartment!",
+              rating: 4,
+              createdAt: new Date()
+            },
+            {
+              id: "4",
+              name: "Peter Maina",
+              role: "Commercial Property Owner",
+              image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              content: "Samcom's commercial real estate team is exceptional. They found tenants for my office space within weeks and at a great rate. Their market knowledge is unparalleled.",
+              rating: 4.5,
+              createdAt: new Date()
+            }
+          ];
+          setTestimonials(defaultTestimonials);
+        } else {
+          setTestimonials(data);
+        }
+        
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching testimonials:", err);
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+        setIsLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
 
   // Loading state
   if (isLoading) {
@@ -81,7 +146,7 @@ const Testimonials = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {testimonials?.map((testimonial) => (
+          {testimonials.map((testimonial) => (
             <Card key={testimonial.id} className="bg-white shadow-md">
               <CardContent className="p-8">
                 {renderRating(testimonial.rating)}
@@ -92,6 +157,10 @@ const Testimonials = () => {
                       src={testimonial.image} 
                       alt={testimonial.name} 
                       className="w-full h-full object-cover" 
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                      }}
                     />
                   </div>
                   <div>
