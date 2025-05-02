@@ -67,25 +67,25 @@ const AboutUs = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
               <img 
-                src={images[0].src} 
-                alt={images[0].alt} 
+                src="/attached_assets/image_1746189767238.png" 
+                alt="Kenyan Property" 
                 className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
               <img 
-                src={images[1].src} 
-                alt={images[1].alt} 
+                src="/attached_assets/image_1746189808502.png" 
+                alt="Kenyan Landscape" 
                 className="rounded-lg shadow-md w-full h-48 object-cover" 
               />
             </div>
             <div className="space-y-4 mt-6">
               <img 
-                src={images[2].src} 
-                alt={images[2].alt} 
+                src="/attached_assets/Ruiru-Mugutha-Plots-For-Sale-along-thika-road-2.jpg" 
+                alt="Plots for sale" 
                 className="rounded-lg shadow-md w-full h-48 object-cover" 
               />
               <img 
-                src={images[3].src} 
-                alt={images[3].alt}
+                src="/attached_assets/springfield-by-fanaka-web-banner.jpg"
+                alt="Premium Properties"
                 className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
             </div>
