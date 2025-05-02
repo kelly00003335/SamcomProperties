@@ -58,21 +58,31 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-xl font-bold mb-6 font-heading">Samcom Properties</h3>
-            <p className="mb-6">
+            <p className="mb-4">
               Your trusted partner in finding the perfect property across Kenya. 
               We provide professional real estate services tailored to your needs.
             </p>
+            <p className="mb-4">
+              P.O. Box 2352
+              <br />Kinamba Naivasha,
+              <br />Kenya
+            </p>
+            <p className="mb-6">
+              <a href="tel:+254723204783" className="hover:text-secondary block">+254 723 204 783</a>
+              <a href="tel:+254778249550" className="hover:text-secondary block">+254 778 249 550</a>
+              <a href="mailto:samwelgithogori@gmail.com" className="hover:text-secondary block">samwelgithogori@gmail.com</a>
+            </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-white hover:text-secondary">
+              <a href="#" className="text-white hover:text-secondary text-lg">
                 <FaFacebookF />
               </a>
-              <a href="#" className="text-white hover:text-secondary">
+              <a href="#" className="text-white hover:text-secondary text-lg">
                 <FaTwitter />
               </a>
-              <a href="https://www.instagram.com/samcomproperties_/" className="text-white hover:text-secondary">
+              <a href="https://www.instagram.com/samcomproperties_/" className="text-white hover:text-secondary text-lg">
                 <FaInstagram />
               </a>
-              <a href="#" className="text-white hover:text-secondary">
+              <a href="#" className="text-white hover:text-secondary text-lg">
                 <FaLinkedinIn />
               </a>
             </div>
@@ -100,11 +110,23 @@ const Footer = () => {
             </ul>
           </div>
           
+          {/* Our Services */}
+          <div>
+            <h3 className="text-xl font-bold mb-6 font-heading">Our Services</h3>
+            <ul className="space-y-3">
+              <li><Link href="/properties?status=for-sale" className="hover:text-secondary">Property Sales</Link></li>
+              <li><Link href="/properties?status=for-rent" className="hover:text-secondary">Property Rentals</Link></li>
+              <li><Link href="/about" className="hover:text-secondary">Land Surveying</Link></li>
+              <li><Link href="/about" className="hover:text-secondary">Title Deed Processing</Link></li>
+              <li><Link href="/about" className="hover:text-secondary">Legal Services</Link></li>
+            </ul>
+          </div>
+          
           {/* Newsletter */}
           <div>
             <h3 className="text-xl font-bold mb-6 font-heading">Newsletter</h3>
             <p className="mb-4">
-              Subscribe to our newsletter to receive the latest property updates and market insights.
+              Subscribe to our newsletter to receive the latest property updates, market insights, and exclusive listings before they hit the market.
             </p>
             <form className="mb-4" onSubmit={handleNewsletterSubmit}>
               <div className="flex">
@@ -132,7 +154,10 @@ const Footer = () => {
         
         <div className="border-t border-gray-700 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p>© {new Date().getFullYear()} Samcom Properties Agency. All rights reserved.</p>
+            <div>
+              <p>© {new Date().getFullYear()} Samcom Properties Agency. All rights reserved.</p>
+              <p className="text-sm mt-2">Licensed Real Estate Agency - Registration #KE2010/378</p>
+            </div>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a href="#" className="hover:text-secondary text-sm">Privacy Policy</a>
               <a href="#" className="hover:text-secondary text-sm">Terms & Conditions</a>
