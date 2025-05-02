@@ -1,53 +1,39 @@
 import { useState } from "react";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
-import { 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Clock,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin
-} from "lucide-react";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Mail, MapPin, Phone, Loader2, CheckCircle } from "lucide-react";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
-// Form validation schema
 const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  phone: z.string().min(10, "Please enter a valid phone number"),
-  subject: z.string().min(1, "Please select a subject"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  subject: z.string().min(5, {
+    message: "Subject must be at least 5 characters.",
+  }),
+  message: z.string().min(20, {
+    message: "Message must be at least 20 characters.",
+  }),
+  phone: z.string().min(10, {
+    message: "Phone number must be at least 10 characters.",
+  }),
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
 const ContactSection = () => {
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -60,202 +46,193 @@ const ContactSection = () => {
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
-    try {
-      setIsSubmitting(true);
-      
-      await apiRequest("POST", "/api/contact", values);
-      
+  const contactMutation = useMutation({
+    mutationFn: async (data: FormValues) => {
+      return await apiRequest("/api/contact", "POST", data);
+    },
+    onSuccess: () => {
       toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
+        title: "Message sent",
+        description: "Thank you for your message. We'll get back to you soon!",
       });
-      
       form.reset();
-    } catch (error) {
+      setFormSubmitted(true);
+    },
+    onError: (error) => {
+      console.error("Error sending message:", error);
       toast({
         variant: "destructive",
         title: "Error",
         description: "There was a problem sending your message. Please try again.",
       });
-    } finally {
-      setIsSubmitting(false);
     }
+  });
+
+  const onSubmit = (data: FormValues) => {
+    contactMutation.mutate(data);
   };
 
-  const contactInfo = [
-    {
-      icon: <MapPin className="h-5 w-5" />,
-      title: "Our Office",
-      content: "P.O. Box 2352, Kinamba, Naivasha, Kenya",
-    },
-    {
-      icon: <Phone className="h-5 w-5" />,
-      title: "Phone",
-      content: "+254 723 204 783 / +254 778 249 550",
-    },
-    {
-      icon: <Mail className="h-5 w-5" />,
-      title: "Email",
-      content: "samwelgithogori@gmail.com",
-    },
-    {
-      icon: <Clock className="h-5 w-5" />,
-      title: "Working Hours",
-      content: "Monday - Friday: 8:00 AM - 6:00 PM\nSaturday: 9:00 AM - 1:00 PM",
-    },
-  ];
-
-  const socialLinks = [
-    { icon: <Facebook className="h-5 w-5" />, href: "#" },
-    { icon: <Twitter className="h-5 w-5" />, href: "#" },
-    { icon: <Instagram className="h-5 w-5" />, href: "https://www.instagram.com/samcomproperties_/" },
-    { icon: <Linkedin className="h-5 w-5" />, href: "#" },
-  ];
+  const resetForm = () => {
+    setFormSubmitted(false);
+  };
 
   return (
-    <section className="py-16">
+    <section className="py-16 bg-neutral-light">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 font-heading">Get In Touch</h2>
-            <p className="text-gray-600 mb-8">
-              Have questions about our properties or services? Reach out to us and our team will get back to you as soon as possible.
-            </p>
-            
-            <div className="space-y-6">
-              {contactInfo.map((item, index) => (
-                <div key={index} className="flex items-start">
-                  <div className="bg-primary-light p-3 rounded-full text-primary mr-4">
-                    {item.icon}
-                  </div>
-                  <div>
-                    <h4 className="font-bold mb-1">{item.title}</h4>
-                    <p className="text-gray-600 whitespace-pre-line">{item.content}</p>
-                  </div>
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading">Get In Touch</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Have questions or need more information? Contact us anytime and our team will be happy to assist you.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-start">
+                <MapPin className="w-5 h-5 text-primary mr-4 mt-1" />
+                <div>
+                  <h3 className="font-bold">Our Location</h3>
+                  <p className="text-gray-600">123 Business Avenue, Westlands, Nairobi</p>
                 </div>
-              ))}
+              </div>
             </div>
-            
-            <div className="mt-8">
-              <h4 className="font-bold mb-4">Follow Us</h4>
-              <div className="flex space-x-4">
-                {socialLinks.map((social, index) => (
-                  <a 
-                    key={index} 
-                    href={social.href} 
-                    className="bg-primary text-white p-3 rounded-full hover:bg-primary-dark transition duration-300"
-                  >
-                    {social.icon}
-                  </a>
-                ))}
+
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-start">
+                <Mail className="w-5 h-5 text-primary mr-4 mt-1" />
+                <div>
+                  <h3 className="font-bold">Email Us</h3>
+                  <p className="text-gray-600">info@samcomproperty.com</p>
+                  <p className="text-gray-600">support@samcomproperty.com</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <div className="flex items-start">
+                <Phone className="w-5 h-5 text-primary mr-4 mt-1" />
+                <div>
+                  <h3 className="font-bold">Call Us</h3>
+                  <p className="text-gray-600">+254 7XX XXX XXX</p>
+                  <p className="text-gray-600">+254 7XX XXX XXX</p>
+                </div>
               </div>
             </div>
           </div>
-          
-          <div>
-            <Card className="shadow-md">
-              <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-6 font-heading">Send Us a Message</h3>
-                <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          <div className="lg:col-span-2">
+            <div className="bg-white p-8 rounded-lg shadow-sm">
+              {formSubmitted ? (
+                <div className="text-center py-8">
+                  <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold mb-2 font-heading">Message Sent Successfully!</h3>
+                  <p className="text-gray-600 mb-6">
+                    Thank you for reaching out. Our team will contact you shortly.
+                  </p>
+                  <Button onClick={resetForm} className="bg-primary hover:bg-primary-dark">
+                    Send Another Message
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  <h3 className="text-xl font-bold mb-6 font-heading">Send Us a Message</h3>
+
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="name"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="John Doe" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <Input placeholder="john@example.com" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="phone"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Phone</FormLabel>
+                              <FormControl>
+                                <Input placeholder="+254 7XX XXX XXX" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="subject"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Subject</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Property Inquiry" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
                       <FormField
                         control={form.control}
-                        name="name"
+                        name="message"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Your Name</FormLabel>
+                            <FormLabel>Message</FormLabel>
                             <FormControl>
-                              <Input placeholder="John Doe" {...field} />
+                              <Textarea placeholder="Your message..." className="min-h-[120px]" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email Address</FormLabel>
-                            <FormControl>
-                              <Input type="email" placeholder="john@example.com" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
+
+                      <Button 
+                        type="submit" 
+                        className="w-full md:w-auto bg-primary hover:bg-primary-dark"
+                        disabled={contactMutation.isPending}
+                      >
+                        {contactMutation.isPending ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          "Send Message"
                         )}
-                      />
-                    </div>
-                    
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Phone Number</FormLabel>
-                          <FormControl>
-                            <Input placeholder="+254 7XX XXX XXX" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="subject"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subject</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value || "property-inquiry"}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a subject" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="property-inquiry">Property Inquiry</SelectItem>
-                              <SelectItem value="viewing-request">Viewing Request</SelectItem>
-                              <SelectItem value="valuation">Property Valuation</SelectItem>
-                              <SelectItem value="selling">Selling Property</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="message"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Your Message</FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder="How can we help you?" 
-                              rows={5} 
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-primary hover:bg-primary-dark text-white"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? "Sending..." : "Send Message"}
-                    </Button>
-                  </form>
-                </Form>
-              </CardContent>
-            </Card>
+                      </Button>
+                    </form>
+                  </Form>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

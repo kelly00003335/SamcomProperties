@@ -39,7 +39,7 @@ const PropertyDetail = () => {
             <Skeleton className="h-8 w-48 mb-2" />
             <Skeleton className="h-5 w-64" />
           </div>
-          
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <Skeleton className="h-[500px] w-full rounded-lg mb-8" />
@@ -47,7 +47,7 @@ const PropertyDetail = () => {
               <Skeleton className="h-5 w-full mb-2" />
               <Skeleton className="h-5 w-full mb-2" />
               <Skeleton className="h-5 w-full mb-8" />
-              
+
               <Skeleton className="h-6 w-48 mb-4" />
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {[...Array(6)].map((_, i) => (
@@ -55,7 +55,7 @@ const PropertyDetail = () => {
                 ))}
               </div>
             </div>
-            
+
             <div>
               <Skeleton className="h-64 w-full rounded-lg mb-6" />
               <Skeleton className="h-6 w-32 mb-3" />
@@ -99,7 +99,7 @@ const PropertyDetail = () => {
             </Button>
           </Link>
         </div>
-        
+
         {/* Property Title */}
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center">
@@ -116,14 +116,14 @@ const PropertyDetail = () => {
             </div>
           </div>
         </div>
-        
+
         {/* Property Content */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column */}
           <div className="lg:col-span-2">
             {/* Property Gallery */}
             <PropertyGallery images={property.images} title={property.title} />
-            
+
             {/* Property Details */}
             <div className="mt-8 bg-white p-6 rounded-lg shadow-sm">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -134,7 +134,7 @@ const PropertyDetail = () => {
                     <span className="text-gray-500 text-sm">Bedrooms</span>
                   </div>
                 )}
-                
+
                 {property.bathrooms !== null && (
                   <div className="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
                     <Bath className="h-6 w-6 text-primary mb-2" />
@@ -142,7 +142,7 @@ const PropertyDetail = () => {
                     <span className="text-gray-500 text-sm">Bathrooms</span>
                   </div>
                 )}
-                
+
                 {property.area !== null && (
                   <div className="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
                     <Square className="h-6 w-6 text-primary mb-2" />
@@ -150,7 +150,7 @@ const PropertyDetail = () => {
                     <span className="text-gray-500 text-sm">Square Feet</span>
                   </div>
                 )}
-                
+
                 <div className="flex flex-col items-center p-4 bg-gray-50 rounded-lg">
                   <Calendar className="h-6 w-6 text-primary mb-2" />
                   <span className="text-lg font-semibold">
@@ -159,20 +159,20 @@ const PropertyDetail = () => {
                   <span className="text-gray-500 text-sm">Listed</span>
                 </div>
               </div>
-              
+
               <h3 className="text-xl font-bold mb-4 font-heading">Description</h3>
               <p className="text-gray-600 mb-4">{property.description}</p>
-              
+
               {/* Property Features */}
               <PropertyFeatures features={property.features || []} />
             </div>
           </div>
-          
+
           {/* Right Column */}
           <div>
             {/* Agent Card */}
             {agent && (
-              <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="text-xl font-bold mb-4 font-heading">Property Agent</h3>
                 <div className="flex items-center mb-4">
                   <div className="w-16 h-16 rounded-full overflow-hidden mr-4">
@@ -183,8 +183,8 @@ const PropertyDetail = () => {
                     />
                   </div>
                   <div>
-                    <h4 className="font-bold text-lg">{agent.name}</h4>
-                    <p className="text-primary">{agent.title}</p>
+                    <h4 className="font-bold">{agent.name}</h4>
+                    <p className="text-gray-600">{agent.title}</p>
                   </div>
                 </div>
                 <p className="text-gray-600 mb-4">{agent.bio}</p>
@@ -198,21 +198,21 @@ const PropertyDetail = () => {
                   <Button 
                     variant="outline" 
                     className="w-full border-primary text-primary hover:bg-primary-light"
-                    onClick={() => window.location.href = `mailto:${agent.email}`}
+                    onClick={() => window.location.href = `mailto:${agent.email}?subject=Inquiry about ${property?.title || 'property'}`}
                   >
                     <Mail className="mr-2 h-4 w-4" /> Email Agent
                   </Button>
                 </div>
               </div>
             )}
-            
+
             {/* Schedule Viewing Button */}
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-xl font-bold mb-4 font-heading">Interested in this property?</h3>
               <p className="text-gray-600 mb-4">
                 Schedule a viewing or request more information about this property.
               </p>
-              <Link href="/contact">
+              <Link href={`/contact?subject=Inquiry for ${property?.title || 'Property'} (ID: ${propertyId})`}>
                 <Button className="w-full bg-primary hover:bg-primary-dark text-white">
                   Request Information
                 </Button>

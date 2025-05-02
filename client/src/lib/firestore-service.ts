@@ -285,20 +285,55 @@ export const propertyService = {
 export const agentService = {
   // Get all agents
   async getAll(): Promise<Agent[]> {
-    const querySnapshot = await getDocs(collection(db, COLLECTIONS.AGENTS));
-    return querySnapshot.docs.map(doc => convertDocument<Agent>(doc));
+    console.log('Fetching all agents from Firestore...');
+    try {
+      const agentsCollection = collection(db, COLLECTIONS.AGENTS);
+      const querySnapshot = await getDocs(agentsCollection);
+      console.log(`Found ${querySnapshot.size} agents in Firestore`);
+      
+      if (querySnapshot.empty) {
+        console.log('No agents found in Firestore');
+        return [];
+      }
+      
+      const agents = querySnapshot.docs
+        .map(doc => {
+          try {
+            return convertDocument<Agent>(doc);
+          } catch (conversionError) {
+            console.error(`Error converting agent document ${doc.id}:`, conversionError);
+            return null;
+          }
+        })
+        .filter(Boolean) as Agent[];
+      
+      console.log(`Successfully converted ${agents.length} agents`);
+      return agents;
+    } catch (error) {
+      console.error('Error fetching agents:', error);
+      return [];
+    }
   },
   
   // Get agent by ID
   async getById(id: string): Promise<Agent | null> {
-    const docRef = doc(db, COLLECTIONS.AGENTS, id);
-    const docSnap = await getDoc(docRef);
-    
-    if (docSnap.exists()) {
-      return convertDocument<Agent>(docSnap);
+    console.log(`Fetching agent with ID: ${id}`);
+    try {
+      const docRef = doc(db, COLLECTIONS.AGENTS, id);
+      const docSnap = await getDoc(docRef);
+      
+      if (docSnap.exists()) {
+        const agent = convertDocument<Agent>(docSnap);
+        console.log('Agent found:', agent);
+        return agent;
+      }
+      
+      console.log(`No agent found with ID: ${id}`);
+      return null;
+    } catch (error) {
+      console.error(`Error fetching agent with ID ${id}:`, error);
+      return null;
     }
-    
-    return null;
   },
   
   // Create an agent
@@ -306,10 +341,47 @@ export const agentService = {
     console.log('Creating agent with data:', JSON.stringify(agent, null, 2));
     
     try {
-      const docRef = await addDoc(collection(db, COLLECTIONS.AGENTS), agent);
+      // Add timestamp for consistency
+      const agentWithTimestamp = {
+        ...agent,
+        createdAt: serverTimestamp(),
+      };
+      
+      const docRef = await addDoc(collection(db, COLLECTIONS.AGENTS), agentWithTimestamp);
       console.log('Agent document created with ID:', docRef.id);
+      
+      // Wait a moment for Firestore to complete the write
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       const newDoc = await getDoc(docRef);
-      return convertDocument<Agent>(newDoc);
+      if (!newDoc.exists()) {
+        console.error(`Created agent document with ID ${docRef.id} not found, retrying...`);
+        
+        // Retry after a delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        const retryDoc = await getDoc(docRef);
+        
+        if (!retryDoc.exists()) {
+          console.error(`Agent document still not found after retry, using fallback approach`);
+          return {
+            ...agentWithTimestamp,
+            id: docRef.id,
+            createdAt: new Date(),
+          } as unknown as Agent;
+        }
+        
+        return convertDocument<Agent>(retryDoc);
+      }
+      
+      const result = convertDocument<Agent>(newDoc);
+      console.log('Created agent successfully:', result);
+      
+      // Force an immediate refresh
+      console.log('Triggering immediate refresh of all agents');
+      const allAgents = await this.getAll();
+      console.log(`Refresh complete, found ${allAgents.length} agents`);
+      
+      return result;
     } catch (error) {
       console.error('Error creating agent in Firestore:', error);
       throw error;
@@ -318,13 +390,37 @@ export const agentService = {
   
   // Update an agent
   async update(id: string, agent: Partial<InsertAgent>): Promise<void> {
-    const docRef = doc(db, COLLECTIONS.AGENTS, id);
-    await updateDoc(docRef, agent);
+    console.log(`Updating agent with ID: ${id}`, agent);
+    try {
+      const docRef = doc(db, COLLECTIONS.AGENTS, id);
+      await updateDoc(docRef, agent);
+      
+      // Wait a moment for Firestore to complete the update
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Verify the update
+      const updatedDoc = await getDoc(docRef);
+      if (updatedDoc.exists()) {
+        console.log('Agent updated successfully with new data:', convertDocument(updatedDoc));
+      } else {
+        console.error('Agent document no longer exists after update');
+      }
+    } catch (error) {
+      console.error(`Error updating agent ${id}:`, error);
+      throw error;
+    }
   },
   
   // Delete an agent
   async delete(id: string): Promise<void> {
-    await deleteDoc(doc(db, COLLECTIONS.AGENTS, id));
+    console.log(`Deleting agent with ID: ${id}`);
+    try {
+      await deleteDoc(doc(db, COLLECTIONS.AGENTS, id));
+      console.log(`Agent with ID ${id} successfully deleted`);
+    } catch (error) {
+      console.error(`Error deleting agent ${id}:`, error);
+      throw error;
+    }
   },
 };
 
@@ -348,34 +444,92 @@ export const testimonialService = {
 export const contactService = {
   // Get all contact messages
   async getAll(): Promise<ContactMessage[]> {
-    const querySnapshot = await getDocs(
-      query(
-        collection(db, COLLECTIONS.CONTACT_MESSAGES),
-        orderBy('createdAt', 'desc')
-      )
-    );
-    return querySnapshot.docs.map(doc => convertDocument<ContactMessage>(doc));
+    console.log('Fetching all contact messages...');
+    try {
+      const messagesCollection = collection(db, COLLECTIONS.CONTACT_MESSAGES);
+      const querySnapshot = await getDocs(
+        query(
+          messagesCollection,
+          orderBy('createdAt', 'desc')
+        )
+      );
+      
+      console.log(`Found ${querySnapshot.size} contact messages`);
+      
+      const messages = querySnapshot.docs
+        .map(doc => {
+          try {
+            return convertDocument<ContactMessage>(doc);
+          } catch (conversionError) {
+            console.error(`Error converting message document ${doc.id}:`, conversionError);
+            return null;
+          }
+        })
+        .filter(Boolean) as ContactMessage[];
+      
+      return messages;
+    } catch (error) {
+      console.error('Error fetching contact messages:', error);
+      return [];
+    }
   },
   
   // Create a contact message
   async create(message: InsertContactMessage): Promise<ContactMessage> {
-    const messageWithTimestamp = {
-      ...message,
-      createdAt: serverTimestamp(),
-    };
-    
-    const docRef = await addDoc(
-      collection(db, COLLECTIONS.CONTACT_MESSAGES),
-      messageWithTimestamp
-    );
-    
-    const newDoc = await getDoc(docRef);
-    return convertDocument<ContactMessage>(newDoc);
+    console.log('Creating contact message:', message);
+    try {
+      const messageWithTimestamp = {
+        ...message,
+        createdAt: serverTimestamp(),
+      };
+      
+      const docRef = await addDoc(
+        collection(db, COLLECTIONS.CONTACT_MESSAGES),
+        messageWithTimestamp
+      );
+      
+      console.log('Contact message created with ID:', docRef.id);
+      
+      // Wait for Firestore to complete the write
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const newDoc = await getDoc(docRef);
+      if (!newDoc.exists()) {
+        console.log('Message document not found immediately, retrying...');
+        
+        // Retry after a delay
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        const retryDoc = await getDoc(docRef);
+        
+        if (!retryDoc.exists()) {
+          console.error('Message document still not found after retry, using fallback approach');
+          return {
+            ...messageWithTimestamp,
+            id: docRef.id,
+            createdAt: new Date(),
+          } as unknown as ContactMessage;
+        }
+        
+        return convertDocument<ContactMessage>(retryDoc);
+      }
+      
+      return convertDocument<ContactMessage>(newDoc);
+    } catch (error) {
+      console.error('Error creating contact message:', error);
+      throw error;
+    }
   },
   
   // Delete a contact message
   async delete(id: string): Promise<void> {
-    await deleteDoc(doc(db, COLLECTIONS.CONTACT_MESSAGES, id));
+    console.log(`Deleting contact message with ID: ${id}`);
+    try {
+      await deleteDoc(doc(db, COLLECTIONS.CONTACT_MESSAGES, id));
+      console.log(`Contact message with ID ${id} successfully deleted`);
+    } catch (error) {
+      console.error(`Error deleting contact message ${id}:`, error);
+      throw error;
+    }
   },
 };
 
