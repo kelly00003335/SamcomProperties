@@ -62,6 +62,16 @@ const Properties = () => {
         return false;
       }
       
+      // Filter by location if present in URL but not in Firestore query
+      if (searchParams.location && property.location.toLowerCase() !== searchParams.location.toLowerCase()) {
+        return false;
+      }
+      
+      // Filter by property type if present in URL but not in Firestore query
+      if (searchParams.type && property.type.toLowerCase() !== searchParams.type.toLowerCase()) {
+        return false;
+      }
+      
       return true;
     });
   }, [properties, searchParams]);

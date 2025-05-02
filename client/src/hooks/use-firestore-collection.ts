@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect, useRef } from "react";
 import { collection, query, onSnapshot, where, Query, DocumentData, QueryConstraint, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -22,10 +22,21 @@ export function useFirestoreCollection<T extends CommonFields>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
+  // Use a ref to track the stringified constraints for dependency array
+  const constraintsRef = useRef<string>(JSON.stringify(constraints));
+
+  useEffect(() => {
+    // Update the ref when constraints change
+    constraintsRef.current = JSON.stringify(constraints);
+  }, [constraints]);
+
   useEffect(() => {
     setLoading(true);
     console.log(`Setting up real-time listener for ${collectionName} collection`);
-    
+    if (constraints.length > 0) {
+      console.log(`With query constraints:`, constraints);
+    }
+
     // Create a query reference with optional constraints
     let q: Query<DocumentData>;
     if (constraints.length > 0) {
@@ -45,25 +56,25 @@ export function useFirestoreCollection<T extends CommonFields>(
           console.log('First doc ID:', firstDoc.id, 'type:', typeof firstDoc.id);
           console.log('First doc data sample:', JSON.stringify(firstDoc.data(), null, 2).substring(0, 500));
         }
-        
+
         // Convert and store the documents
         const docs = snapshot.docs.map((doc) => {
           const data = doc.data();
           console.log(`Doc ID: ${doc.id}, raw data sample:`, JSON.stringify(data).substring(0, 100));
-          
+
           // Basic conversion: ensure ID is set correctly
           const converted: any = { 
             ...data, 
             id: doc.id // Always use Firestore doc ID
           };
-          
+
           // Convert all timestamp fields to Date objects
-          for (const key in data) {
-            if (data[key] instanceof Timestamp) {
-              converted[key] = data[key].toDate();
+          Object.keys(converted).forEach(key => {
+            if (converted[key] && typeof converted[key] === 'object' && converted[key].seconds) {
+              converted[key] = new Date(converted[key].seconds * 1000);
             }
-          }
-          
+          });
+
           // Collection-specific handling
           if (collectionName === 'properties') {
             // Properties collection needs special handling for arrays and defaults
@@ -83,7 +94,7 @@ export function useFirestoreCollection<T extends CommonFields>(
             // Message-specific defaults if needed
             converted.createdAt = converted.createdAt || new Date();
           }
-          
+
           // Log what we created for debugging
           const logSample = { 
             id: converted.id, 
@@ -92,7 +103,7 @@ export function useFirestoreCollection<T extends CommonFields>(
           console.log(`Processed ${collectionName} doc:`, logSample);
           return converted as T;
         });
-        
+
         setDocuments(docs);
         setLoading(false);
         setError(null);
@@ -109,7 +120,7 @@ export function useFirestoreCollection<T extends CommonFields>(
       console.log(`Unsubscribing from ${collectionName} listener`);
       unsubscribe();
     };
-  }, [collectionName, JSON.stringify(constraints)]);
+  }, [collectionName, constraintsRef.current]);
 
   return { documents, loading, error };
 }

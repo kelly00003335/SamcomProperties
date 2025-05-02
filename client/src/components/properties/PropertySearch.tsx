@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,10 +12,35 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 const PropertySearch = () => {
-  const [_, setLocationPath] = useLocation();
+  const [location, setLocationPath] = useLocation();
   const [locationFilter, setLocationFilter] = useState("all-locations");
   const [propertyType, setPropertyType] = useState("all-types");
   const [priceRange, setPriceRange] = useState("any-price");
+
+  // Extract search params from URL when component mounts or URL changes
+  useEffect(() => {
+    if (location.includes('?')) {
+      const params = new URLSearchParams(location.split('?')[1]);
+      
+      // Set form values based on URL parameters
+      if (params.has('location')) {
+        setLocationFilter(params.get('location') || 'all-locations');
+      }
+      
+      if (params.has('type')) {
+        setPropertyType(params.get('type') || 'all-types');
+      }
+      
+      if (params.has('minPrice') || params.has('maxPrice')) {
+        const min = params.get('minPrice') || '';
+        const max = params.get('maxPrice') || '';
+        const range = min && max ? `${min}-${max}` : 
+                     min ? `${min}-` : 
+                     max ? `0-${max}` : 'any-price';
+        setPriceRange(range);
+      }
+    }
+  }, [location]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,6 +59,12 @@ const PropertySearch = () => {
 
     // Navigate to properties page with search parameters
     setLocationPath(`/properties?${params.toString()}`);
+    
+    console.log('Search parameters:', {
+      location: locationFilter,
+      type: propertyType,
+      priceRange
+    });
   };
 
   return (
