@@ -52,7 +52,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-neutral-dark text-white pt-16">
+    <footer className="bg-primary text-white pt-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Company Info */}
@@ -68,9 +68,9 @@ const Footer = () => {
               <br />Kenya
             </p>
             <p className="mb-6">
-              <a href="tel:+254723204783" className="hover:text-secondary block">+254 723 204 783</a>
-              <a href="tel:+254778249550" className="hover:text-secondary block">+254 778 249 550</a>
-              <a href="mailto:samwelgithogori@gmail.com" className="hover:text-secondary block">samwelgithogori@gmail.com</a>
+              <a href="tel:+254723204783" className="text-white hover:text-secondary block">+254 723 204 783</a>
+              <a href="tel:+254778249550" className="text-white hover:text-secondary block">+254 778 249 550</a>
+              <a href="mailto:samwelgithogori@gmail.com" className="text-white hover:text-secondary block">samwelgithogori@gmail.com</a>
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-white hover:text-secondary text-lg">
@@ -92,10 +92,10 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-6 font-heading">Quick Links</h3>
             <ul className="space-y-3">
-              <li><Link href="/" className="hover:text-secondary">Home</Link></li>
-              <li><Link href="/properties" className="hover:text-secondary">Properties</Link></li>
-              <li><Link href="/about" className="hover:text-secondary">About Us</Link></li>
-              <li><Link href="/contact" className="hover:text-secondary">Contact Us</Link></li>
+              <li><Link href="/" className="text-white hover:text-secondary">Home</Link></li>
+              <li><Link href="/properties" className="text-white hover:text-secondary">Properties</Link></li>
+              <li><Link href="/about" className="text-white hover:text-secondary">About Us</Link></li>
+              <li><Link href="/contact" className="text-white hover:text-secondary">Contact Us</Link></li>
             </ul>
           </div>
           
@@ -103,10 +103,10 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-6 font-heading">Property Types</h3>
             <ul className="space-y-3">
-              <li><Link href="/properties?type=apartment" className="hover:text-secondary">Apartments</Link></li>
-              <li><Link href="/properties?type=house" className="hover:text-secondary">Houses</Link></li>
-              <li><Link href="/properties?type=commercial" className="hover:text-secondary">Commercial Properties</Link></li>
-              <li><Link href="/properties?type=land" className="hover:text-secondary">Land & Plots</Link></li>
+              <li><Link href="/properties?type=apartment" className="text-white hover:text-secondary">Apartments</Link></li>
+              <li><Link href="/properties?type=house" className="text-white hover:text-secondary">Houses</Link></li>
+              <li><Link href="/properties?type=commercial" className="text-white hover:text-secondary">Commercial Properties</Link></li>
+              <li><Link href="/properties?type=land" className="text-white hover:text-secondary">Land & Plots</Link></li>
             </ul>
           </div>
           
@@ -114,11 +114,11 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-bold mb-6 font-heading">Our Services</h3>
             <ul className="space-y-3">
-              <li><Link href="/properties?status=for-sale" className="hover:text-secondary">Property Sales</Link></li>
-              <li><Link href="/properties?status=for-rent" className="hover:text-secondary">Property Rentals</Link></li>
-              <li><Link href="/about" className="hover:text-secondary">Land Surveying</Link></li>
-              <li><Link href="/about" className="hover:text-secondary">Title Deed Processing</Link></li>
-              <li><Link href="/about" className="hover:text-secondary">Legal Services</Link></li>
+              <li><Link href="/properties?status=for-sale" className="text-white hover:text-secondary">Property Sales</Link></li>
+              <li><Link href="/properties?status=for-rent" className="text-white hover:text-secondary">Property Rentals</Link></li>
+              <li><Link href="/about" className="text-white hover:text-secondary">Land Surveying</Link></li>
+              <li><Link href="/about" className="text-white hover:text-secondary">Title Deed Processing</Link></li>
+              <li><Link href="/about" className="text-white hover:text-secondary">Legal Services</Link></li>
             </ul>
           </div>
           
@@ -146,7 +146,7 @@ const Footer = () => {
                 </Button>
               </div>
             </form>
-            <p className="text-sm">
+            <p className="text-sm text-white">
               By subscribing, you agree to our privacy policy and consent to receive updates from our company.
             </p>
           </div>
@@ -159,9 +159,9 @@ const Footer = () => {
               <p className="text-sm mt-2">Licensed Real Estate Agency - Registration #KE2010/378</p>
             </div>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-secondary text-sm">Privacy Policy</a>
-              <a href="#" className="hover:text-secondary text-sm">Terms & Conditions</a>
-              <a href="#" className="hover:text-secondary text-sm">Sitemap</a>
+              <a href="#" className="text-white hover:text-secondary text-sm">Privacy Policy</a>
+              <a href="#" className="text-white hover:text-secondary text-sm">Terms & Conditions</a>
+              <a href="#" className="text-white hover:text-secondary text-sm">Sitemap</a>
             </div>
           </div>
         </div>
