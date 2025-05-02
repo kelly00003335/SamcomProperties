@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
-import { Property } from "@shared/schema";
+import { Property, FirebaseProperty } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import PropertyGallery from "@/components/properties/PropertyGallery";
 import PropertyFeatures from "@/components/properties/PropertyFeatures";
@@ -19,9 +19,9 @@ import {
 
 const PropertyDetail = () => {
   const [match, params] = useRoute<{ id: string }>('/properties/:id');
-  const propertyId = match ? parseInt(params.id) : null;
+  const propertyId = match ? params.id : null;
 
-  const { data: property, isLoading, error } = useQuery<Property>({
+  const { data: property, isLoading, error } = useQuery<FirebaseProperty>({
     queryKey: [`/api/properties/${propertyId}`],
     enabled: !!propertyId,
   });

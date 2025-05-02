@@ -90,7 +90,6 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           >
             View Details
           </Button>
-          {/* Adjusted text size */}
         </Link>
       </CardContent>
     </Card>
