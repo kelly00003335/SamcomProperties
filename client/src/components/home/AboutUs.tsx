@@ -67,25 +67,25 @@ const AboutUs = () => {
           <div className="grid grid-cols-2 gap-3 md:gap-4 mt-6 lg:mt-0">
             <div className="space-y-3 md:space-y-4">
               <img 
-                src="https://i.imgur.com/IX11M27.jpeg" 
-                alt="Kenyan Property" 
+                src="https://images.unsplash.com/photo-1560184897-ae75f418493e" 
+                alt="Kenyan Land Investment" 
                 className="rounded-lg shadow-md w-full h-32 sm:h-48 md:h-64 object-cover" 
               />
               <img 
-                src="./attached_assets/image_1746189808502.png" 
-                alt="Kenyan Landscape" 
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" 
+                alt="Modern Kenyan Home" 
                 className="rounded-lg shadow-md w-full h-24 sm:h-32 md:h-48 object-cover" 
               />
             </div>
             <div className="space-y-3 md:space-y-4 mt-3 md:mt-6">
               <img 
-                src="https://i.imgur.com/82H7kON.jpeg" 
-                alt="Kenyan Property" 
+                src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde" 
+                alt="Luxury Kenyan Property" 
                 className="rounded-lg shadow-md w-full h-24 sm:h-32 md:h-48 object-cover" 
               />
               <img 
-                src="https://i.imgur.com/FgBZ1io.jpeg"
-                alt="Beautiful Kenyan Landscape"
+                src="https://images.unsplash.com/photo-1500382017468-9049fed747ef"
+                alt="Beautiful Land Investment Opportunity"
                 className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
             </div>
