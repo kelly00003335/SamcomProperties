@@ -35,8 +35,9 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
           src={images[0]} 
           alt={title} 
           className="w-full h-full object-cover" 
-          loading="lazy" {/* Added lazy loading for performance */}
+          loading="lazy"
         />
+        {/* Added lazy loading for performance */}
         <span 
           className={`
             absolute top-2 left-2 text-white text-xs sm:text-sm px-2 py-1 rounded
