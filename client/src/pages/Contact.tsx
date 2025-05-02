@@ -22,6 +22,7 @@ import {
 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { contactService } from "@/lib/firestore-service";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -65,8 +66,7 @@ const Contact = () => {
         const apiResult = await apiRequest("/api/contact", "POST", data);
         
         // As a fallback, also directly create in Firestore using the service
-        // Import needed at top of file
-        const { contactService } = await import('@/lib/firestore-service');
+        // Using the service directly from static import
         await contactService.create({
           name: data.name,
           email: data.email,
