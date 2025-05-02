@@ -34,15 +34,9 @@ export default defineConfig({
           vendor: [
             'react', 
             'react-dom', 
-            'firebase', 
             '@tanstack/react-query',
             'lucide-react',
             'wouter'
-          ],
-          firebase: [
-            'firebase/firestore',
-            'firebase/auth',
-            'firebase/storage'
           ],
           ui: [
             '@/components/ui'
