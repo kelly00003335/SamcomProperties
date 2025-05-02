@@ -13,32 +13,38 @@ const Services = () => {
     {
       icon: <Home className="h-8 w-8 text-[#1A237E]" />,
       title: "Property Sales",
-      description: "We help you find the perfect property or sell your current one at the best market price."
+      description: "We help you find the perfect property or sell your current one at the best market price.",
+      link: "/services/property-sales"
     },
     {
       icon: <Key className="h-8 w-8 text-[#1A237E]" />,
       title: "Rental Services",
-      description: "Find your ideal rental property or let us manage your investment property for maximum returns."
+      description: "Find your ideal rental property or let us manage your investment property for maximum returns.",
+      link: "/services/property-rentals"
     },
     {
       icon: <TrendingUp className="h-8 w-8 text-[#1A237E]" />,
       title: "Land Sales",
-      description: "Specializing in buying and selling plots and land across Kenya with secure transactions and fair market prices."
+      description: "Specializing in buying and selling plots and land across Kenya with secure transactions and fair market prices.",
+      link: "/services/property-sales"
     },
     {
       icon: <FileText className="h-8 w-8 text-[#1A237E]" />,
       title: "Title Deed Processing",
-      description: "Professional assistance with title deed processing, transfers, and all legal documentation for your property."
+      description: "Professional assistance with title deed processing, transfers, and all legal documentation for your property.",
+      link: "/services/title-deed-processing"
     },
     {
       icon: <MapPin className="h-8 w-8 text-[#1A237E]" />,
       title: "Land Surveying",
-      description: "Expert land surveying services to determine property boundaries and prepare detailed site plans for development."
+      description: "Expert land surveying services to determine property boundaries and prepare detailed site plans for development.",
+      link: "/services/land-surveying"
     },
     {
       icon: <TrendingUp className="h-8 w-8 text-[#1A237E]" />,
-      title: "Investment Advisory",
-      description: "Expert guidance on real estate investments to help you build and grow your property portfolio."
+      title: "Legal Services",
+      description: "Expert legal guidance for all aspects of real estate transactions and property ownership.",
+      link: "/services/legal-services"
     }
   ];
 
@@ -54,16 +60,18 @@ const Services = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 border-t-4 border-[#1A237E]">
-              <div className="text-[#1A237E] mb-4">{service.icon}</div>
-              <h3 className="text-xl font-bold mb-2 text-[#1A237E]">{service.title}</h3>
-              <p className="text-[#212121]">{service.description}</p>
-            </div>
+            <Link href={service.link} key={index}>
+              <div className="bg-white p-6 rounded-lg shadow-md transition-transform hover:scale-105 border-t-4 border-[#1A237E] cursor-pointer">
+                <div className="text-[#1A237E] mb-4">{service.icon}</div>
+                <h3 className="text-xl font-bold mb-2 text-[#1A237E]">{service.title}</h3>
+                <p className="text-[#212121]">{service.description}</p>
+              </div>
+            </Link>
           ))}
         </div>
 
         <div className="text-center mt-12">
-          <Link href="/about">
+          <Link href="/services">
             <Button className="bg-[#1A237E] hover:bg-[#12195E] text-white">
               Learn More About Our Services
             </Button>

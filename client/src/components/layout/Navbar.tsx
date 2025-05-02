@@ -90,6 +90,7 @@ const Navbar = () => {
             <div className="hidden md:flex items-center space-x-8">
               <NavLink href="/" text="Home" isActive={location === '/'} />
               <NavLink href="/properties" text="Properties" isActive={location.startsWith('/properties')} />
+              <NavLink href="/services" text="Services" isActive={location === '/services'} />
               <NavLink href="/about" text="About Us" isActive={location === '/about'} />
               <NavLink href="/contact" text="Contact" isActive={location === '/contact'} />
 
@@ -131,6 +132,7 @@ const Navbar = () => {
               <div className="flex flex-col space-y-3">
                 <NavLink href="/" text="Home" isActive={location === '/'} isMobile />
                 <NavLink href="/properties" text="Properties" isActive={location.startsWith('/properties')} isMobile />
+                <NavLink href="/services" text="Services" isActive={location === '/services'} isMobile/>
                 <NavLink href="/about" text="About Us" isActive={location === '/about'} isMobile />
                 <NavLink href="/contact" text="Contact" isActive={location === '/contact'} isMobile />
                 <Link href="/contact">

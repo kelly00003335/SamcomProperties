@@ -15,6 +15,14 @@ import NotFound from "@/pages/not-found";
 import Login from "@/components/auth/Login";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { AuthProvider } from "@/hooks/use-auth";
+// Service pages
+import Services from "@/pages/services";
+import PropertySales from "@/pages/services/PropertySales";
+import PropertyRentals from "@/pages/services/PropertyRentals";
+import LandSurveying from "@/pages/services/LandSurveying";
+import TitleDeedProcessing from "@/pages/services/TitleDeedProcessing";
+import LegalServices from "@/pages/services/LegalServices";
+
 
 function Router() {
   return (
@@ -30,6 +38,12 @@ function Router() {
           <AdminDashboard />
         )}
       </Route>
+      <Route path="/services" component={Services} />
+      <Route path="/services/property-sales" component={PropertySales} />
+      <Route path="/services/property-rentals" component={PropertyRentals} />
+      <Route path="/services/land-surveying" component={LandSurveying} />
+      <Route path="/services/title-deed-processing" component={TitleDeedProcessing} />
+      <Route path="/services/legal-services" component={LegalServices} />
       <Route component={NotFound} />
     </Switch>
   );

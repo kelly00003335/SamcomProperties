@@ -114,11 +114,11 @@ const Footer = () => {
           <div>
             <h3 className="text-lg md:text-xl font-bold mb-3 md:mb-6 font-heading">Our Services</h3>
             <ul className="space-y-2 md:space-y-3">
-              <li><Link href="/properties?status=for-sale" className="text-white hover:text-secondary text-sm md:text-base">Property Sales</Link></li>
-              <li><Link href="/properties?status=for-rent" className="text-white hover:text-secondary text-sm md:text-base">Property Rentals</Link></li>
-              <li><Link href="/about" className="text-white hover:text-secondary text-sm md:text-base">Land Surveying</Link></li>
-              <li><Link href="/about" className="text-white hover:text-secondary text-sm md:text-base">Title Deed Processing</Link></li>
-              <li><Link href="/about" className="text-white hover:text-secondary text-sm md:text-base">Legal Services</Link></li>
+              <li><Link href="/services/property-sales" className="text-white hover:text-secondary text-sm md:text-base">Property Sales</Link></li>
+              <li><Link href="/services/property-rentals" className="text-white hover:text-secondary text-sm md:text-base">Property Rentals</Link></li>
+              <li><Link href="/services/land-surveying" className="text-white hover:text-secondary text-sm md:text-base">Land Surveying</Link></li>
+              <li><Link href="/services/title-deed-processing" className="text-white hover:text-secondary text-sm md:text-base">Title Deed Processing</Link></li>
+              <li><Link href="/services/legal-services" className="text-white hover:text-secondary text-sm md:text-base">Legal Services</Link></li>
             </ul>
           </div>
 
