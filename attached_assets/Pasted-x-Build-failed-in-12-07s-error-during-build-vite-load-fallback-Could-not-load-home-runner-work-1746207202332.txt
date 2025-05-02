@@ -1,0 +1,87 @@
+x Build failed in 12.07s
+error during build:
+[vite:load-fallback] Could not load /home/runner/workspace/client/src/components/ui: EISDIR: illegal operation on a directory, read
+    at async readFileHandle (node:internal/fs/promises:553:24)
+    at async Object.load (file:///home/runner/workspace/node_modules/vite/dist/node/chunks/dep-CHZK6zbr.js:65249:25)
+    at async PluginDriver.hookFirstAndGetPlugin (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:20689:28)
+    at async file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:19809:33
+    at async Queue.work (file:///home/runner/workspace/node_modules/rollup/dist/es/shared/node-entry.js:20899:32)
+
+
+ChatGPT said:
+🔥 Boom — that EISDIR error means Vite is trying to import a directory like it’s a file. Classic "oops" moment in file structure or import path.
+
+Here’s what’s going on and how to fix it:
+
+⚠️ What the error says:
+swift
+Copy
+Edit
+Could not load /client/src/components/ui: EISDIR
+EISDIR = “Error, Is a Directory.”
+You're telling Vite: "Hey, load this path!" and it replies: “Bro, that’s a whole directory — not a file.”
+
+🔍 Why it happens:
+You probably have an import like this somewhere:
+
+ts
+Copy
+Edit
+import Button from '@/components/ui'
+But /ui is a folder — not a file.
+
+If you're using something like:
+
+css
+Copy
+Edit
+src/
+  components/
+    ui/
+      button.tsx
+Then Vite expects either:
+
+an index.tsx inside ui/, or
+
+a direct path like @/components/ui/button
+
+✅ Fix It:
+Direct Import Fix:
+
+ts
+Copy
+Edit
+// BAD ❌
+import Button from '@/components/ui'
+
+// GOOD ✅
+import Button from '@/components/ui/button' // or whatever file you're trying to import
+If You Want to Keep /ui Importable, make sure ui/index.tsx (or .js, .ts, etc.) exists and re-exports stuff:
+
+ts
+Copy
+Edit
+// ui/index.ts
+export { default as Button } from './button'
+Now you can safely do:
+
+ts
+Copy
+Edit
+import { Button } from '@/components/ui'
+🤖 Vercel + Vite Tips:
+Make sure your vite.config.ts supports aliasing like @/components:
+
+ts
+Copy
+Edit
+import { defineConfig } from 'vite'
+import path from 'path'
+
+export default defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
+})
