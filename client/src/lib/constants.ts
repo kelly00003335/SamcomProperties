@@ -64,23 +64,11 @@ export const CONTACT_SUBJECTS = [
 // Office locations
 export const OFFICE_LOCATIONS = [
   {
-    name: "Nairobi (Headquarters)",
-    address: "Samcom House, Ngong Road, Nairobi, Kenya",
-    phone: "+254 722 123 456",
-    email: "nairobi@samcom.co.ke",
-  },
-  {
-    name: "Mombasa",
-    address: "Marina Plaza, Nyali Road, Mombasa, Kenya",
-    phone: "+254 733 123 456",
-    email: "mombasa@samcom.co.ke",
-  },
-  {
-    name: "Kisumu",
-    address: "Lake Plaza, Oginga Odinga Street, Kisumu, Kenya",
-    phone: "+254 744 123 456",
-    email: "kisumu@samcom.co.ke",
-  },
+    name: "Kinamba, Naivasha",
+    address: "P.O. Box 2352, Kinamba Naivasha, Kenya",
+    phone: "+254 723 204 783 / +254 778 249 550",
+    email: "samwelgithogori@gmail.com",
+  }
 ];
 
 // Company information

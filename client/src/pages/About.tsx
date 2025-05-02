@@ -220,56 +220,28 @@ const About = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4 font-heading">Our Office</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Visit us at our main office in Nairobi. We also have satellite offices in Mombasa and Kisumu.
+              Visit us at our office in Kinamba Naivasha, Kenya.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 max-w-md mx-auto">
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="bg-primary-light inline-flex p-4 rounded-full text-primary mb-6">
                 <MapPin className="h-8 w-8" />
               </div>
-              <h3 className="text-xl font-bold mb-3 font-heading">Nairobi (Main Office)</h3>
-              <p className="text-gray-600 mb-4">Samcom House, Ngong Road, Nairobi, Kenya</p>
+              <h3 className="text-xl font-bold mb-3 font-heading">Our Location</h3>
+              <p className="text-gray-600 mb-4">P.O. Box 2352, Kinamba Naivasha, Kenya</p>
               <div className="flex items-center mb-2">
                 <Phone className="h-5 w-5 text-primary mr-2" />
-                <p>+254 722 123 456</p>
+                <p>+254 723 204 783</p>
+              </div>
+              <div className="flex items-center mb-2">
+                <Phone className="h-5 w-5 text-primary mr-2" />
+                <p>+254 778 249 550</p>
               </div>
               <div className="flex items-center">
                 <Mail className="h-5 w-5 text-primary mr-2" />
-                <p>nairobi@samcom.co.ke</p>
-              </div>
-            </div>
-            
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <div className="bg-primary-light inline-flex p-4 rounded-full text-primary mb-6">
-                <MapPin className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 font-heading">Mombasa Office</h3>
-              <p className="text-gray-600 mb-4">Marina Plaza, Nyali Road, Mombasa, Kenya</p>
-              <div className="flex items-center mb-2">
-                <Phone className="h-5 w-5 text-primary mr-2" />
-                <p>+254 733 123 456</p>
-              </div>
-              <div className="flex items-center">
-                <Mail className="h-5 w-5 text-primary mr-2" />
-                <p>mombasa@samcom.co.ke</p>
-              </div>
-            </div>
-            
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <div className="bg-primary-light inline-flex p-4 rounded-full text-primary mb-6">
-                <MapPin className="h-8 w-8" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 font-heading">Kisumu Office</h3>
-              <p className="text-gray-600 mb-4">Lake Plaza, Oginga Odinga Street, Kisumu, Kenya</p>
-              <div className="flex items-center mb-2">
-                <Phone className="h-5 w-5 text-primary mr-2" />
-                <p>+254 744 123 456</p>
-              </div>
-              <div className="flex items-center">
-                <Mail className="h-5 w-5 text-primary mr-2" />
-                <p>kisumu@samcom.co.ke</p>
+                <p>samwelgithogori@gmail.com</p>
               </div>
             </div>
           </div>
