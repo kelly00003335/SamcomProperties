@@ -78,7 +78,7 @@ const Navbar = () => {
               <img 
                 src="https://i.imgur.com/JJGNaA1.png" 
                 alt="Samcom Properties Logo" 
-                className="h-10 w-auto mr-2" 
+                className="h-16 w-auto mr-2" 
               />
               <div className="text-2xl font-bold font-heading">
                 <span className="text-[#1A237E]">SAMCOM</span>
