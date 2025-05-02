@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Responsive base styles */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Ensure all images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Better tap targets for mobile */
+button, a, input, select, textarea {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/50;
+}
+
+/* Ensure the website is mobile-friendly */
+.container {
+  width: 100%;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 :root {
   /* Main colors from the provided color scheme */
   --background: 210 20% 98%; /* Light Grey #F8F9FA */

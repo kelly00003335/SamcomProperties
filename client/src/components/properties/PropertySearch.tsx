@@ -37,14 +37,14 @@ const PropertySearch = () => {
   };
 
   return (
-    <Card className="bg-[#F8F9FA] rounded-lg shadow-lg"> {/* Background color update */}
-      <CardContent className="p-6">
-        <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <Card className="bg-[#F8F9FA] rounded-lg shadow-lg">
+      <CardContent className="p-4 sm:p-6"> {/* Added padding for smaller screens */}
+        <form onSubmit={handleSearch} className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4"> {/* Responsive grid */}
           <div>
-            <Label htmlFor="location" className="block text-sm font-medium text-[#212121] mb-1"> {/* Text color update */}
+            <Label htmlFor="location" className="block text-sm sm:text-base font-medium text-[#212121] mb-1">
               Location
             </Label>
-            <Select value={locationFilter} onValueChange={setLocationFilter} className="text-[#212121]"> {/* Text color update */}
+            <Select value={locationFilter} onValueChange={setLocationFilter} className="text-[#212121] w-full"> {/* Added w-full for full width */}
               <SelectTrigger id="location">
                 <SelectValue placeholder="All Locations" />
               </SelectTrigger>
@@ -59,10 +59,10 @@ const PropertySearch = () => {
           </div>
 
           <div>
-            <Label htmlFor="property-type" className="block text-sm font-medium text-[#212121] mb-1"> {/* Text color update */}
+            <Label htmlFor="property-type" className="block text-sm sm:text-base font-medium text-[#212121] mb-1">
               Property Type
             </Label>
-            <Select value={propertyType} onValueChange={setPropertyType} className="text-[#212121]"> {/* Text color update */}
+            <Select value={propertyType} onValueChange={setPropertyType} className="text-[#212121] w-full">
               <SelectTrigger id="property-type">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
@@ -77,10 +77,10 @@ const PropertySearch = () => {
           </div>
 
           <div>
-            <Label htmlFor="price-range" className="block text-sm font-medium text-[#212121] mb-1"> {/* Text color update */}
+            <Label htmlFor="price-range" className="block text-sm sm:text-base font-medium text-[#212121] mb-1">
               Price Range
             </Label>
-            <Select value={priceRange} onValueChange={setPriceRange} className="text-[#212121]"> {/* Text color update */}
+            <Select value={priceRange} onValueChange={setPriceRange} className="text-[#212121] w-full">
               <SelectTrigger id="price-range">
                 <SelectValue placeholder="Any Price" />
               </SelectTrigger>
@@ -94,10 +94,7 @@ const PropertySearch = () => {
             </Select>
           </div>
 
-          <div>
-            <Label className="block text-sm font-medium text-[#212121] mb-1 opacity-0"> {/* Text color update */}
-              Search
-            </Label>
+          <div className="sm:mt-6 md:mt-0"> {/* Added spacing for better mobile layout */}
             <Button
               type="submit"
               className="w-full bg-[#1A237E] hover:bg-[#0D1642] text-white"

@@ -30,7 +30,7 @@ const Navbar = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
@@ -78,21 +78,21 @@ const Navbar = () => {
               <img 
                 src="https://i.imgur.com/JJGNaA1.png" 
                 alt="Samcom Properties Logo" 
-                className="h-16 w-auto mr-2" 
+                className="h-12 sm:h-16 w-auto mr-2" 
               />
-              <div className="text-2xl font-bold font-heading">
+              <div className="text-xl sm:text-2xl font-bold font-heading">
                 <span className="text-[#1A237E]">SAMCOM</span>
                 <span className="text-[#FFD700] ml-1">PROPERTIES</span>
               </div>
             </Link>
-            
+
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center space-x-8">
               <NavLink href="/" text="Home" isActive={location === '/'} />
               <NavLink href="/properties" text="Properties" isActive={location.startsWith('/properties')} />
               <NavLink href="/about" text="About Us" isActive={location === '/about'} />
               <NavLink href="/contact" text="Contact" isActive={location === '/contact'} />
-              
+
               {/* Admin Link - Hidden for normal users */}
               {user?.email === 'samwelgithogori@gmail.com' && (
                 <Link href="/admin">
@@ -102,7 +102,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
               )}
-              
+
               <Link href="/contact">
                 <Button 
                   className="bg-primary hover:bg-primary-dark text-white"
@@ -111,7 +111,7 @@ const Navbar = () => {
                 </Button>
               </Link>
             </div>
-            
+
             {/* Mobile Menu Button */}
             <div className="md:hidden">
               <Button 
@@ -124,7 +124,7 @@ const Navbar = () => {
               </Button>
             </div>
           </div>
-          
+
           {/* Mobile Menu */}
           {isOpen && (
             <div className="md:hidden mt-4 pb-4">

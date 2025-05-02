@@ -36,20 +36,20 @@ const Hero = () => {
               <div className="absolute inset-0 flex items-center">
                 <div className="container mx-auto px-4">
                   <div className="max-w-xl">
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 font-heading">
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-3 md:mb-4 font-heading leading-tight">
                       {slide.title}
                     </h1>
-                    <p className="text-lg md:text-xl text-white mb-6">
+                    <p className="text-base md:text-xl text-white mb-4 md:mb-6 max-w-md">
                       {slide.description}
                     </p>
-                    <div className="flex flex-col sm:flex-row gap-4">
-                      <Link href={slide.primaryLink}>
-                        <Button size="lg" className="bg-[#1A237E] hover:bg-[#0D1642] text-white transition duration-300">
+                    <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                      <Link href={slide.primaryLink} className="w-full sm:w-auto">
+                        <Button size="lg" className="bg-[#1A237E] hover:bg-[#0D1642] text-white transition duration-300 w-full sm:w-auto">
                           {slide.primaryText}
                         </Button>
                       </Link>
-                      <Link href={slide.secondaryLink}>
-                        <Button size="lg" variant="outline" className="border-[#1A237E] text-[#1A237E] hover:bg-[#1A237E] hover:text-white transition duration-300">
+                      <Link href={slide.secondaryLink} className="w-full sm:w-auto">
+                        <Button size="lg" variant="outline" className="border-[#1A237E] text-white hover:bg-[#1A237E] hover:text-white transition duration-300 w-full sm:w-auto">
                           {slide.secondaryText}
                         </Button>
                       </Link>
