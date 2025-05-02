@@ -127,3 +127,33 @@ const AgentProfiles = () => {
 };
 
 export default AgentProfiles;
+
+const PLACEHOLDER_AGENTS = [
+  {
+    id: '1',
+    name: 'Jane Wanjiku',
+    title: 'Senior Agent',
+    image: 'https://images.unsplash.com/photo-1589156280159-27698a70f29e',
+    bio: 'Jane specializes in luxury properties across Nairobi and Mombasa.',
+    email: 'jane@samcomproperty.com',
+    phone: '+254 7XX XXX XXX',
+  },
+  {
+    id: '2',
+    name: 'John Kamau',
+    title: 'Property Consultant',
+    image: 'https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f',
+    bio: 'John has over 15 years of experience in commercial real estate and land sales.',
+    email: 'john@samcomproperty.com',
+    phone: '+254 7XX XXX XXX',
+  },
+  {
+    id: '3',
+    name: 'Alice Otieno',
+    title: 'Residential Specialist',
+    image: 'https://images.unsplash.com/photo-1507152832244-10d45c7eda57',
+    bio: 'Alice helps families find their perfect homes in Kenya with specialized knowledge in Naivasha.',
+    email: 'alice@samcomproperty.com',
+    phone: '+254 7XX XXX XXX',
+  },
+];

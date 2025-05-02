@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Testimonial } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
@@ -16,7 +15,7 @@ const Testimonials = () => {
       try {
         setIsLoading(true);
         const data = await testimonialService.getAll();
-        
+
         // If no testimonials are found, use default ones
         if (data.length === 0) {
           // These are fallback testimonials that will display if none are in the database
@@ -25,7 +24,7 @@ const Testimonials = () => {
               id: "1",
               name: "Sarah Kamau",
               role: "Homeowner, Nairobi",
-              image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              image: "https://images.unsplash.com/photo-1589156229687-496a31ad1d1f",
               content: "Samcom Properties helped me find my dream home in a competitive market. Their team was professional and genuinely cared about my needs. Highly recommended!",
               rating: 5,
               createdAt: new Date()
@@ -34,7 +33,7 @@ const Testimonials = () => {
               id: "2",
               name: "James Omondi",
               role: "Property Investor",
-              image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              image: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
               content: "I've worked with many real estate companies, but Samcom stands out for their market knowledge and honesty. They've helped me build a profitable property portfolio.",
               rating: 5,
               createdAt: new Date()
@@ -43,18 +42,18 @@ const Testimonials = () => {
               id: "3",
               name: "Mary Wambui",
               role: "First-time Buyer",
-              image: "https://images.unsplash.com/photo-1589156280159-27698a70f29e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+              image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce",
               content: "As a first-time buyer, I was nervous about the process. The team at Samcom guided me every step of the way. I couldn't be happier with my new apartment!",
               rating: 4,
               createdAt: new Date()
             },
             {
               id: "4",
-              name: "Peter Maina",
-              role: "Commercial Property Owner",
-              image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-              content: "Samcom's commercial real estate team is exceptional. They found tenants for my office space within weeks and at a great rate. Their market knowledge is unparalleled.",
-              rating: 4.5,
+              name: "Joseph Njoroge",
+              role: "Land Investor, Naivasha",
+              image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6",
+              content: "Samcom's expertise in land surveying and title deed processing made my investment process seamless. Their knowledge of the local market is unmatched.",
+              rating: 5,
               createdAt: new Date()
             }
           ];
@@ -62,7 +61,7 @@ const Testimonials = () => {
         } else {
           setTestimonials(data);
         }
-        
+
         setIsLoading(false);
       } catch (err) {
         console.error("Error fetching testimonials:", err);
@@ -83,7 +82,7 @@ const Testimonials = () => {
             <Skeleton className="h-10 w-64 mx-auto mb-4" />
             <Skeleton className="h-6 w-full max-w-2xl mx-auto" />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, index) => (
               <Card key={index}>
@@ -124,7 +123,7 @@ const Testimonials = () => {
   const renderRating = (rating: number) => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-    
+
     return (
       <div className="flex items-center mb-4 text-secondary">
         {[...Array(fullStars)].map((_, i) => (
@@ -144,7 +143,7 @@ const Testimonials = () => {
             Hear from our satisfied clients about their experience working with Samcom Properties Agency.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
             <Card key={testimonial.id} className="bg-white shadow-md">

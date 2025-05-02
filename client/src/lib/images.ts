@@ -13,8 +13,8 @@ export interface HeroSlide {
 export const getHeroImages = (): HeroSlide[] => {
   return [
     {
-      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      alt: "Modern House Exterior",
+      image: "https://images.unsplash.com/photo-1566159196982-6d26d42f5bcb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+      alt: "Nairobi Skyline",
       title: "Find Your Dream Home",
       description: "Samcom Properties Agency helps you find the perfect property that fits your lifestyle and budget.",
       primaryText: "View Properties",
@@ -23,8 +23,8 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/contact"
     },
     {
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      alt: "Modern House Exterior",
+      image: "https://images.unsplash.com/photo-1611348524140-63c9d5827e39?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+      alt: "Kenyan Residential Area",
       title: "Premium Properties",
       description: "Discover exceptional homes with top-tier amenities and prime locations.",
       primaryText: "Explore Premium Listings",
@@ -33,10 +33,10 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/about"
     },
     {
-      image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-      alt: "Modern House Exterior",
-      title: "Invest In Real Estate",
-      description: "Grow your wealth with strategic property investments guided by our experts.",
+      image: "https://images.unsplash.com/photo-1574236170880-78841035f7fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+      alt: "Beautiful Kenyan Landscape",
+      title: "Invest In Land",
+      description: "Grow your wealth with strategic property and land investments guided by our experts.",
       primaryText: "Investment Properties",
       primaryLink: "/properties",
       secondaryText: "Free Consultation",
@@ -49,30 +49,30 @@ export const getHeroImages = (): HeroSlide[] => {
 export const getAboutPageImages = () => {
   return [
     {
-      src: "https://images.unsplash.com/photo-1560518883-ce09059eeffa",
-      alt: "Property Handover"
+      src: "https://images.unsplash.com/photo-1543236311-719e37bc83e3",
+      alt: "Kenyan Real Estate Transaction"
     },
     {
-      src: "https://images.unsplash.com/photo-1582407947304-fd86f028f716",
-      alt: "Real Estate Agent"
+      src: "https://images.unsplash.com/photo-1580902394836-21e0d429b7f4",
+      alt: "Kenyan Real Estate Professional"
     },
     {
-      src: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9",
-      alt: "Modern House"
+      src: "https://images.unsplash.com/photo-1613090459-a003e960523f",
+      alt: "Modern Kenyan Home"
     },
     {
-      src: "https://images.unsplash.com/photo-1556912172-45b7abe8b7e1",
-      alt: "Real Estate Agents Meeting"
+      src: "https://images.unsplash.com/photo-1581539250439-c96689b516dd",
+      alt: "Kenyan Property Development"
     }
   ];
 };
 
 // Property placeholder image
 export const getPropertyPlaceholderImage = () => {
-  return "https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+  return "https://images.unsplash.com/photo-1613090459-a003e960523f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
 };
 
 // Agent placeholder image
 export const getAgentPlaceholderImage = () => {
-  return "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+  return "https://images.unsplash.com/photo-1580902394724-b08ff9ba7e8a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
 };
