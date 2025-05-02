@@ -9,8 +9,7 @@ import {
   Mail, 
   Phone 
 } from "lucide-react";
-// Assuming useFirestoreCollection is available from a library like Firebase
-import { useFirestoreCollection } from 'firebase/firestore';
+import { useFirestoreCollection } from '@/hooks/use-firestore-collection';
 
 
 const AgentProfiles = () => {
@@ -59,7 +58,7 @@ const AgentProfiles = () => {
   }
 
   // Error state
-  if (error) {
+  if (firestoreLoading && error) {
     return (
       <section className="py-16">
         <div className="container mx-auto px-4">
