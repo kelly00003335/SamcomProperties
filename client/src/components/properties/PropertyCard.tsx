@@ -86,10 +86,11 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         <Link href={`/properties/${id}`}>
           <Button 
             variant="outline" 
-            className="w-full bg-[#F8F9FA] hover:bg-[#F5F5DC] text-[#1A237E] text-sm sm:text-base" {/* Adjusted text size */}
+            className="w-full bg-[#F8F9FA] hover:bg-[#F5F5DC] text-[#1A237E] text-sm sm:text-base"
           >
             View Details
           </Button>
+          {/* Adjusted text size */}
         </Link>
       </CardContent>
     </Card>
