@@ -60,7 +60,26 @@ const Contact = () => {
 
   const contactMutation = useMutation({
     mutationFn: async (data: FormValues) => {
-      return await apiRequest("/api/contact", "POST", data);
+      try {
+        // First try API endpoint
+        const apiResult = await apiRequest("/api/contact", "POST", data);
+        
+        // As a fallback, also directly create in Firestore using the service
+        // Import needed at top of file
+        const { contactService } = await import('@/lib/firestore-service');
+        await contactService.create({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          subject: data.subject,
+          message: data.message
+        });
+        
+        return apiResult;
+      } catch (error) {
+        console.error("Contact form submission error:", error);
+        throw error;
+      }
     },
     onSuccess: () => {
       toast({

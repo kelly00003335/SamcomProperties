@@ -51,15 +51,28 @@ const Dashboard = () => {
   
   console.log('Admin dashboard agents:', agentsData?.length || 0);
 
-  // Use real-time Firestore collection for contact messages
+  // Use real-time Firestore collection for contact messages - try multiple collection names
   const { 
     documents: messagesData, 
     loading: messagesLoading,
     error: messagesError 
+  } = useFirestoreCollection<ContactMessage>("contactMessages");
+  
+  // Try alternative collection name if needed
+  const { 
+    documents: backupMessagesData, 
+    loading: backupMessagesLoading
   } = useFirestoreCollection<ContactMessage>("contact_messages");
 
   const agents = agentsData || [];
-  const messages = messagesData || [];
+  // Combine both possible sources of messages
+  const messages = messagesData?.length ? messagesData : (backupMessagesData || []);
+  
+  console.log('Admin dashboard messages sources:', {
+    primary: messagesData?.length || 0,
+    backup: backupMessagesData?.length || 0,
+    combined: messages.length
+  });
   
   console.log('Admin dashboard messages:', messages.length);
 

@@ -35,8 +35,18 @@ const COLLECTIONS = {
   PROPERTIES: 'properties',
   AGENTS: 'agents',
   TESTIMONIALS: 'testimonials',
-  CONTACT_MESSAGES: 'contactMessages',
+  CONTACT_MESSAGES: 'contactMessages', // This is the correct collection name in Firestore
   NEWSLETTERS: 'newsletters',
+};
+
+// Create aliases for consistent collection names 
+const COLLECTION_ALIASES = {
+  agents: COLLECTIONS.AGENTS,
+  properties: COLLECTIONS.PROPERTIES,
+  testimonials: COLLECTIONS.TESTIMONIALS,
+  contactMessages: COLLECTIONS.CONTACT_MESSAGES,
+  contact_messages: COLLECTIONS.CONTACT_MESSAGES, // Alias for backward compatibility
+  newsletters: COLLECTIONS.NEWSLETTERS,
 };
 
 // Helper to convert Firestore document to our data models

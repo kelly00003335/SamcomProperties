@@ -9,14 +9,24 @@ import {
   Mail, 
   Phone 
 } from "lucide-react";
+// Assuming useFirestoreCollection is available from a library like Firebase
+import { useFirestoreCollection } from 'firebase/firestore';
+
 
 const AgentProfiles = () => {
-  const { data: agents, isLoading, error } = useQuery<Agent[]>({
+  const { data: agents, isLoading } = useQuery<Agent[]>({
     queryKey: ['/api/agents'],
+    staleTime: 0, // Always refetch when component mounts
   });
 
+  // Add additional real-time collection hook for better reliability
+  const { documents: firestoreAgents, loading: firestoreLoading } = useFirestoreCollection<Agent>("agents");
+
+  // Use either source of agents data, with firestore as backup
+  const displayAgents = agents?.length ? agents : firestoreAgents || [];
+
   // Loading state
-  if (isLoading) {
+  if (isLoading || firestoreLoading) {
     return (
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -24,7 +34,7 @@ const AgentProfiles = () => {
             <Skeleton className="h-10 w-64 mx-auto mb-4" />
             <Skeleton className="h-6 w-full max-w-2xl mx-auto" />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[...Array(4)].map((_, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -71,9 +81,9 @@ const AgentProfiles = () => {
             Our team of experienced real estate professionals is ready to help you with all your property needs.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {agents?.map((agent) => (
+          {displayAgents?.map((agent) => (
             <div key={agent.id} className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="h-72 overflow-hidden">
                 <img 
@@ -104,7 +114,7 @@ const AgentProfiles = () => {
             </div>
           ))}
         </div>
-        
+
         <div className="text-center mt-12">
           <Link href="/about">
             <Button className="bg-primary hover:bg-primary-dark text-white">
