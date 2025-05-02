@@ -33,19 +33,41 @@ export function useFirestoreCollection<T>(
       q,
       (snapshot) => {
         console.log(`Received snapshot update for ${collectionName} with ${snapshot.docs.length} docs`);
+        // Debug the first document structure
+        if (snapshot.docs.length > 0) {
+          const firstDoc = snapshot.docs[0];
+          console.log('First doc ID:', firstDoc.id, 'type:', typeof firstDoc.id);
+          console.log('First doc data sample:', JSON.stringify(firstDoc.data(), null, 2).substring(0, 500));
+        }
         
         // Convert and store the documents
         const docs = snapshot.docs.map((doc) => {
           const data = doc.data();
+          console.log(`Doc ID: ${doc.id}, raw data sample:`, JSON.stringify(data).substring(0, 100));
           
-          // Convert timestamps to dates
-          const converted: any = { ...data, id: doc.id };
+          // Convert timestamps to dates and ensure data is correctly structured
+          const converted: any = { 
+            ...data, 
+            id: doc.id, // Ensure ID is set explicitly from Firestore doc ID
+            // Ensure critical fields have default values if missing
+            images: Array.isArray(data.images) ? data.images : [],
+            features: Array.isArray(data.features) ? data.features : null,
+            bedrooms: data.bedrooms ?? null,
+            bathrooms: data.bathrooms ?? null,
+            area: data.area ?? null,
+            agentId: data.agentId ?? null,
+            isFeatured: data.isFeatured ?? false,
+            createdAt: data.createdAt ? data.createdAt.toDate() : new Date()
+          };
+          
+          // Convert any other timestamp fields
           for (const key in data) {
-            if (data[key]?.toDate) {
+            if (data[key]?.toDate && key !== 'createdAt') { // Skip createdAt since we handled it above
               converted[key] = data[key].toDate();
             }
           }
           
+          console.log('Converted doc:', { id: converted.id, title: converted.title });
           return converted as T;
         });
         
