@@ -1,0 +1,554 @@
+var __defProp = Object.defineProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+
+// server/index.ts
+import express2 from "express";
+
+// server/routes.ts
+import { createServer } from "http";
+
+// shared/schema.ts
+var schema_exports = {};
+__export(schema_exports, {
+  agents: () => agents,
+  contactMessages: () => contactMessages,
+  insertAgentSchema: () => insertAgentSchema,
+  insertContactMessageSchema: () => insertContactMessageSchema,
+  insertNewsletterSchema: () => insertNewsletterSchema,
+  insertPropertySchema: () => insertPropertySchema,
+  insertTestimonialSchema: () => insertTestimonialSchema,
+  newsletters: () => newsletters,
+  properties: () => properties,
+  testimonials: () => testimonials
+});
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp } from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+var properties = pgTable("properties", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  price: integer("price").notNull(),
+  location: text("location").notNull(),
+  type: text("type").notNull(),
+  // apartment, house, land, commercial
+  status: text("status").notNull(),
+  // for sale, for rent
+  bedrooms: integer("bedrooms"),
+  bathrooms: integer("bathrooms"),
+  area: integer("area"),
+  // in square feet
+  images: text("images").array().notNull(),
+  features: text("features").array(),
+  agentId: integer("agent_id"),
+  isFeatured: boolean("is_featured").default(false),
+  createdAt: timestamp("created_at").defaultNow()
+});
+var agents = pgTable("agents", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  title: text("title").notNull(),
+  bio: text("bio").notNull(),
+  image: text("image").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  social: jsonb("social")
+  // contains links to social profiles
+});
+var testimonials = pgTable("testimonials", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  role: text("role").notNull(),
+  image: text("image").notNull(),
+  content: text("content").notNull(),
+  rating: integer("rating").notNull()
+  // 1-5
+});
+var contactMessages = pgTable("contact_messages", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone").notNull(),
+  subject: text("subject").notNull(),
+  message: text("message").notNull(),
+  createdAt: timestamp("created_at").defaultNow()
+});
+var newsletters = pgTable("newsletters", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow()
+});
+var insertPropertySchema = createInsertSchema(properties).omit({ id: true, createdAt: true });
+var insertAgentSchema = createInsertSchema(agents).omit({ id: true });
+var insertTestimonialSchema = createInsertSchema(testimonials).omit({ id: true });
+var insertContactMessageSchema = createInsertSchema(contactMessages).omit({ id: true, createdAt: true });
+var insertNewsletterSchema = createInsertSchema(newsletters).omit({ id: true, createdAt: true });
+
+// server/db.ts
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-serverless";
+import ws from "ws";
+neonConfig.webSocketConstructor = ws;
+if (!process.env.DATABASE_URL) {
+  throw new Error(
+    "DATABASE_URL must be set. Did you forget to provision a database?"
+  );
+}
+var pool = new Pool({ connectionString: process.env.DATABASE_URL });
+var db = drizzle({ client: pool, schema: schema_exports });
+
+// server/storage.ts
+import { eq, and, like, desc, sql } from "drizzle-orm";
+var DatabaseStorage = class {
+  async getAllProperties() {
+    return await db.select().from(properties);
+  }
+  async getPropertyById(id) {
+    const [property] = await db.select().from(properties).where(eq(properties.id, id));
+    return property || void 0;
+  }
+  async getFeaturedProperties() {
+    return await db.select().from(properties).where(eq(properties.isFeatured, true));
+  }
+  async searchProperties(options) {
+    let query = db.select().from(properties);
+    const conditions = [];
+    if (options.location && options.location !== "") {
+      conditions.push(like(properties.location, `%${options.location}%`));
+    }
+    if (options.type && options.type !== "") {
+      conditions.push(eq(properties.type, options.type));
+    }
+    if (options.minPrice !== void 0) {
+      conditions.push(sql`${properties.price} >= ${options.minPrice}`);
+    }
+    if (options.maxPrice !== void 0) {
+      conditions.push(sql`${properties.price} <= ${options.maxPrice}`);
+    }
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+    return await query;
+  }
+  async createProperty(property) {
+    const [newProperty] = await db.insert(properties).values({
+      ...property,
+      createdAt: /* @__PURE__ */ new Date()
+    }).returning();
+    return newProperty;
+  }
+  async updateProperty(id, property) {
+    const [updatedProperty] = await db.update(properties).set(property).where(eq(properties.id, id)).returning();
+    if (!updatedProperty) {
+      throw new Error(`Property with ID ${id} not found`);
+    }
+    return updatedProperty;
+  }
+  async deleteProperty(id) {
+    const result = await db.delete(properties).where(eq(properties.id, id));
+    if (result.rowCount === 0) {
+      throw new Error(`Property with ID ${id} not found`);
+    }
+  }
+  // Agent methods
+  async getAllAgents() {
+    return await db.select().from(agents);
+  }
+  async getAgentById(id) {
+    const [agent] = await db.select().from(agents).where(eq(agents.id, id));
+    return agent || void 0;
+  }
+  async createAgent(agent) {
+    const [newAgent] = await db.insert(agents).values(agent).returning();
+    return newAgent;
+  }
+  async updateAgent(id, agent) {
+    const [updatedAgent] = await db.update(agents).set(agent).where(eq(agents.id, id)).returning();
+    if (!updatedAgent) {
+      throw new Error(`Agent with ID ${id} not found`);
+    }
+    return updatedAgent;
+  }
+  async deleteAgent(id) {
+    const result = await db.delete(agents).where(eq(agents.id, id));
+    if (result.rowCount === 0) {
+      throw new Error(`Agent with ID ${id} not found`);
+    }
+  }
+  // Testimonial methods
+  async getAllTestimonials() {
+    return await db.select().from(testimonials);
+  }
+  async createTestimonial(testimonial) {
+    const [newTestimonial] = await db.insert(testimonials).values(testimonial).returning();
+    return newTestimonial;
+  }
+  // Contact message methods
+  async getAllContactMessages() {
+    return await db.select().from(contactMessages).orderBy(desc(contactMessages.createdAt));
+  }
+  async createContactMessage(message) {
+    const [newMessage] = await db.insert(contactMessages).values({
+      ...message,
+      createdAt: /* @__PURE__ */ new Date()
+    }).returning();
+    return newMessage;
+  }
+  async deleteContactMessage(id) {
+    const result = await db.delete(contactMessages).where(eq(contactMessages.id, id));
+    if (result.rowCount === 0) {
+      throw new Error(`Contact message with ID ${id} not found`);
+    }
+  }
+  // Newsletter methods
+  async createNewsletterSubscription(subscription) {
+    const [newSubscription] = await db.insert(newsletters).values({
+      ...subscription,
+      createdAt: /* @__PURE__ */ new Date()
+    }).returning();
+    return newSubscription;
+  }
+};
+var storage = new DatabaseStorage();
+
+// server/routes.ts
+async function registerRoutes(app2) {
+  app2.get("/api/properties", async (req, res) => {
+    try {
+      const properties2 = await storage.getAllProperties();
+      res.json(properties2);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch properties", error });
+    }
+  });
+  app2.get("/api/properties/featured", async (req, res) => {
+    try {
+      const properties2 = await storage.getFeaturedProperties();
+      res.json(properties2);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch featured properties", error });
+    }
+  });
+  app2.get("/api/properties/search", async (req, res) => {
+    try {
+      const { location, type, minPrice, maxPrice } = req.query;
+      const options = {
+        location,
+        type,
+        minPrice: minPrice ? parseInt(minPrice) : void 0,
+        maxPrice: maxPrice ? parseInt(maxPrice) : void 0
+      };
+      const properties2 = await storage.searchProperties(options);
+      res.json(properties2);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to search properties", error });
+    }
+  });
+  app2.get("/api/properties/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const property = await storage.getPropertyById(id);
+      if (!property) {
+        return res.status(404).json({ message: "Property not found" });
+      }
+      res.json(property);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch property", error });
+    }
+  });
+  app2.get("/api/agents", async (req, res) => {
+    try {
+      const agents2 = await storage.getAllAgents();
+      res.json(agents2);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch agents", error });
+    }
+  });
+  app2.get("/api/agents/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const agent = await storage.getAgentById(id);
+      if (!agent) {
+        return res.status(404).json({ message: "Agent not found" });
+      }
+      res.json(agent);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch agent", error });
+    }
+  });
+  app2.get("/api/testimonials", async (req, res) => {
+    try {
+      const testimonials2 = await storage.getAllTestimonials();
+      res.json(testimonials2);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch testimonials", error });
+    }
+  });
+  app2.post("/api/contact", async (req, res) => {
+    try {
+      const validatedData = insertContactMessageSchema.parse(req.body);
+      const newMessage = await storage.createContactMessage(validatedData);
+      res.status(201).json({
+        message: "Message sent successfully",
+        contact: newMessage
+      });
+    } catch (error) {
+      res.status(400).json({ message: "Invalid contact form data", error });
+    }
+  });
+  app2.post("/api/newsletter", async (req, res) => {
+    try {
+      const validatedData = insertNewsletterSchema.parse(req.body);
+      const subscription = await storage.createNewsletterSubscription(validatedData);
+      res.status(201).json({
+        message: "Subscribed to newsletter successfully",
+        subscription
+      });
+    } catch (error) {
+      res.status(400).json({ message: "Invalid newsletter subscription data", error });
+    }
+  });
+  app2.get("/api/contact/all", async (req, res) => {
+    try {
+      const messages = await storage.getAllContactMessages();
+      res.json(messages);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch contact messages", error });
+    }
+  });
+  app2.delete("/api/contact/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteContactMessage(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete contact message", error });
+    }
+  });
+  app2.post("/api/properties/create", async (req, res) => {
+    try {
+      const property = await storage.createProperty(req.body);
+      res.status(201).json(property);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create property", error });
+    }
+  });
+  app2.patch("/api/properties/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const property = await storage.updateProperty(id, req.body);
+      res.json(property);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update property", error });
+    }
+  });
+  app2.delete("/api/properties/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProperty(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete property", error });
+    }
+  });
+  app2.post("/api/agents/create", async (req, res) => {
+    try {
+      const agent = await storage.createAgent(req.body);
+      res.status(201).json(agent);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create agent", error });
+    }
+  });
+  app2.patch("/api/agents/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const agent = await storage.updateAgent(id, req.body);
+      res.json(agent);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update agent", error });
+    }
+  });
+  app2.delete("/api/agents/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteAgent(id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete agent", error });
+    }
+  });
+  const httpServer = createServer(app2);
+  return httpServer;
+}
+
+// server/vite.ts
+import express from "express";
+import fs from "fs";
+import path2 from "path";
+import { createServer as createViteServer, createLogger } from "vite";
+
+// vite.config.ts
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import path from "path";
+import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+var vite_config_default = defineConfig({
+  plugins: [
+    react(),
+    runtimeErrorOverlay(),
+    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== void 0 ? [
+      await import("@replit/vite-plugin-cartographer").then(
+        (m) => m.cartographer()
+      )
+    ] : []
+  ],
+  resolve: {
+    alias: {
+      "@": path.resolve(import.meta.dirname, "client", "src"),
+      "@shared": path.resolve(import.meta.dirname, "shared"),
+      "@assets": path.resolve(import.meta.dirname, "attached_assets")
+    }
+  },
+  root: path.resolve(import.meta.dirname, "client"),
+  build: {
+    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    emptyOutDir: true,
+    chunkSizeWarningLimit: 800,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: [
+            "react",
+            "react-dom",
+            "@tanstack/react-query",
+            "lucide-react",
+            "wouter"
+          ],
+          ui: [
+            "@/components/ui"
+          ]
+        }
+      }
+    }
+  }
+});
+
+// server/vite.ts
+import { nanoid } from "nanoid";
+var viteLogger = createLogger();
+function log(message, source = "express") {
+  const formattedTime = (/* @__PURE__ */ new Date()).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true
+  });
+  console.log(`${formattedTime} [${source}] ${message}`);
+}
+async function setupVite(app2, server) {
+  const serverOptions = {
+    middlewareMode: true,
+    hmr: { server },
+    allowedHosts: true
+  };
+  const vite = await createViteServer({
+    ...vite_config_default,
+    configFile: false,
+    customLogger: {
+      ...viteLogger,
+      error: (msg, options) => {
+        viteLogger.error(msg, options);
+        process.exit(1);
+      }
+    },
+    server: serverOptions,
+    appType: "custom"
+  });
+  app2.use(vite.middlewares);
+  app2.use("*", async (req, res, next) => {
+    const url = req.originalUrl;
+    try {
+      const clientTemplate = path2.resolve(
+        import.meta.dirname,
+        "..",
+        "client",
+        "index.html"
+      );
+      let template = await fs.promises.readFile(clientTemplate, "utf-8");
+      template = template.replace(
+        `src="/src/main.tsx"`,
+        `src="/src/main.tsx?v=${nanoid()}"`
+      );
+      const page = await vite.transformIndexHtml(url, template);
+      res.status(200).set({ "Content-Type": "text/html" }).end(page);
+    } catch (e) {
+      vite.ssrFixStacktrace(e);
+      next(e);
+    }
+  });
+}
+function serveStatic(app2) {
+  const distPath = path2.resolve(import.meta.dirname, "public");
+  if (!fs.existsSync(distPath)) {
+    throw new Error(
+      `Could not find the build directory: ${distPath}, make sure to build the client first`
+    );
+  }
+  app2.use(express.static(distPath));
+  app2.use("*", (_req, res) => {
+    res.sendFile(path2.resolve(distPath, "index.html"));
+  });
+}
+
+// server/index.ts
+var app = express2();
+app.use(express2.json());
+app.use(express2.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  const start = Date.now();
+  const path3 = req.path;
+  let capturedJsonResponse = void 0;
+  const originalResJson = res.json;
+  res.json = function(bodyJson, ...args) {
+    capturedJsonResponse = bodyJson;
+    return originalResJson.apply(res, [bodyJson, ...args]);
+  };
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    if (path3.startsWith("/api")) {
+      let logLine = `${req.method} ${path3} ${res.statusCode} in ${duration}ms`;
+      if (capturedJsonResponse) {
+        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
+      }
+      if (logLine.length > 80) {
+        logLine = logLine.slice(0, 79) + "\u2026";
+      }
+      log(logLine);
+    }
+  });
+  next();
+});
+(async () => {
+  const server = await registerRoutes(app);
+  app.use((err, _req, res, _next) => {
+    const status = err.status || err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
+    res.status(status).json({ message });
+    throw err;
+  });
+  if (app.get("env") === "development") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
+  }
+  const port = 5e3;
+  server.listen({
+    port,
+    host: "0.0.0.0",
+    reusePort: true
+  }, () => {
+    log(`serving on port ${port}`);
+  });
+})();
