@@ -44,7 +44,7 @@ const AgentList = ({ agents, onEditClick }: AgentListProps) => {
   const queryClient = useQueryClient();
 
   const deleteAgent = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string | number) => {
       return await apiRequest(`/api/agents/${id}`, "DELETE");
     },
     onSuccess: () => {
@@ -57,7 +57,7 @@ const AgentList = ({ agents, onEditClick }: AgentListProps) => {
     },
   });
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string | number) => {
     deleteAgent.mutate(id);
   };
 
