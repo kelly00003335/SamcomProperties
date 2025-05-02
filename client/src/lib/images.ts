@@ -14,7 +14,7 @@ export interface HeroSlide {
 export const getHeroImages = (): HeroSlide[] => {
   return [
     {
-      image: "/attached_assets/springfield-by-fanaka-web-banner.jpg",
+      image: "./attached_assets/springfield-by-fanaka-web-banner.jpg",
       alt: "Nairobi Skyline",
       title: "Find Your Dream Home",
       description: "Samcom Properties Agency helps you find the perfect property that fits your lifestyle and budget.",
@@ -24,7 +24,7 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/contact"
     },
     {
-      image: "/attached_assets/image_1746189808502.png",
+      image: "./attached_assets/image_1746189808502.png",
       alt: "Kenyan Residential Area",
       title: "Premium Properties",
       description: "Discover exceptional homes with top-tier amenities and prime locations.",
@@ -34,7 +34,7 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/about"
     },
     {
-      image: "/attached_assets/image_1746189767238.png",
+      image: "./attached_assets/image_1746189767238.png",
       alt: "Beautiful Kenyan Landscape",
       title: "Invest In Land",
       description: "Grow your wealth with strategic property and land investments guided by our experts.",
@@ -70,10 +70,10 @@ export const getAboutPageImages = () => {
 
 // Property placeholder image
 export const getPropertyPlaceholderImage = () => {
-  return "/attached_assets/image_1746189767238.png";
+  return "./attached_assets/image_1746189767238.png";
 };
 
 // Agent placeholder image
 export const getAgentPlaceholderImage = () => {
-  return "/attached_assets/image_1746193223567.png";
+  return "./attached_assets/image_1746193223567.png";
 };

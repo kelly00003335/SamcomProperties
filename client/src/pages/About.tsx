@@ -60,12 +60,12 @@ const About = () => {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <img 
-                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa" 
+                src="./attached_assets/image_1746189767238.png" 
                 alt="Samcom Office" 
                 className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
               <img 
-                src="https://images.unsplash.com/photo-1582407947304-fd86f028f716" 
+                src="./attached_assets/image_1746189808502.png" 
                 alt="Team Meeting" 
                 className="rounded-lg shadow-md w-full h-64 object-cover mt-8" 
               />
