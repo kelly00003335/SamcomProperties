@@ -4,7 +4,8 @@ import {
   Home, 
   Key, 
   TrendingUp, 
-  FileText 
+  FileText,
+  MapPin
 } from "lucide-react";
 
 const Services = () => {
@@ -21,13 +22,23 @@ const Services = () => {
     },
     {
       icon: <TrendingUp className="h-8 w-8" />,
-      title: "Investment Advisory",
-      description: "Expert guidance on real estate investments to help you build and grow your property portfolio."
+      title: "Land Sales",
+      description: "Specializing in buying and selling plots and land across Kenya with secure transactions and fair market prices."
     },
     {
       icon: <FileText className="h-8 w-8" />,
-      title: "Legal Services",
-      description: "Professional assistance with documentation, contracts, and legal compliance for property transactions."
+      title: "Title Deed Processing",
+      description: "Professional assistance with title deed processing, transfers, and all legal documentation for your property."
+    },
+    {
+      icon: <MapPin className="h-8 w-8" />,
+      title: "Land Surveying",
+      description: "Expert land surveying services to determine property boundaries and prepare detailed site plans for development."
+    },
+    {
+      icon: <TrendingUp className="h-8 w-8" />,
+      title: "Investment Advisory",
+      description: "Expert guidance on real estate investments to help you build and grow your property portfolio."
     }
   ];
 

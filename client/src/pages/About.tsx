@@ -49,6 +49,9 @@ const About = () => {
                 Samcom Properties was founded in 2010 with a simple mission: to make the process of buying, selling, and renting properties as smooth and transparent as possible. What started as a small office with just three agents has grown into one of Kenya's most trusted real estate agencies.
               </p>
               <p className="text-gray-600 mb-4">
+                We have expanded our services to include land and plot sales, title deed processing, transfers, and professional land surveying to provide a complete solution for all your real estate needs in Kenya.
+              </p>
+              <p className="text-gray-600 mb-4">
                 Our founder, Samuel Mwangi, started the company after noticing a gap in the market for customer-centric real estate services. He believed that clients deserved honest advice, personalized attention, and access to the best properties in the market.
               </p>
               <p className="text-gray-600 mb-6">

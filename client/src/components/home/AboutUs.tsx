@@ -39,6 +39,10 @@ const AboutUs = () => {
               Samcom Properties Agency is a leading real estate company in Kenya providing exceptional property services since 2010. 
               We specialize in residential, commercial, and land sales and rentals across major cities in Kenya.
             </p>
+            <p className="text-gray-600 mb-4">
+              We offer comprehensive land services including buying and selling of plots, title deed processing, 
+              transfers, and professional surveying to ensure your investment is secure and legally compliant.
+            </p>
             <p className="text-gray-600 mb-6">
               Our mission is to help clients find their dream properties while providing transparent, professional service every step of the way. 
               With a team of experienced agents, we ensure that your property journey is smooth and successful.
