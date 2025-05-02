@@ -14,8 +14,8 @@ export interface HeroSlide {
 export const getHeroImages = (): HeroSlide[] => {
   return [
     {
-      image: "./attached_assets/springfield-by-fanaka-web-banner.jpg",
-      alt: "Nairobi Skyline",
+      image: "https://i.imgur.com/IX11M27.jpeg",
+      alt: "Kenyan Property",
       title: "Find Your Dream Home",
       description: "Samcom Properties Agency helps you find the perfect property that fits your lifestyle and budget.",
       primaryText: "View Properties",
@@ -24,7 +24,7 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/contact"
     },
     {
-      image: "./attached_assets/image_1746189808502.png",
+      image: "https://i.imgur.com/82H7kON.jpeg",
       alt: "Kenyan Residential Area",
       title: "Premium Properties",
       description: "Discover exceptional homes with top-tier amenities and prime locations.",

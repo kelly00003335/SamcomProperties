@@ -67,7 +67,7 @@ const AboutUs = () => {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
               <img 
-                src="./attached_assets/image_1746189767238.png" 
+                src="https://i.imgur.com/IX11M27.jpeg" 
                 alt="Kenyan Property" 
                 className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
@@ -79,8 +79,8 @@ const AboutUs = () => {
             </div>
             <div className="space-y-4 mt-6">
               <img 
-                src="./attached_assets/Ruiru-Mugutha-Plots-For-Sale-along-thika-road-2.jpg" 
-                alt="Plots for sale" 
+                src="https://i.imgur.com/82H7kON.jpeg" 
+                alt="Kenyan Property" 
                 className="rounded-lg shadow-md w-full h-48 object-cover" 
               />
               <img 
