@@ -51,29 +51,45 @@ export function useFirestoreCollection<T extends CommonFields>(
           const data = doc.data();
           console.log(`Doc ID: ${doc.id}, raw data sample:`, JSON.stringify(data).substring(0, 100));
           
-          // Convert timestamps to dates and ensure data is correctly structured
+          // Basic conversion: ensure ID is set correctly
           const converted: any = { 
             ...data, 
-            id: doc.id, // Ensure ID is set explicitly from Firestore doc ID
-            // Ensure critical fields have default values if missing
-            images: Array.isArray(data.images) ? data.images : [],
-            features: Array.isArray(data.features) ? data.features : null,
-            bedrooms: data.bedrooms ?? null,
-            bathrooms: data.bathrooms ?? null,
-            area: data.area ?? null,
-            agentId: data.agentId ?? null,
-            isFeatured: data.isFeatured ?? false,
-            createdAt: data.createdAt ? data.createdAt.toDate() : new Date()
+            id: doc.id // Always use Firestore doc ID
           };
           
-          // Convert any other timestamp fields
+          // Convert all timestamp fields to Date objects
           for (const key in data) {
-            if (data[key]?.toDate && key !== 'createdAt') { // Skip createdAt since we handled it above
+            if (data[key] instanceof Timestamp) {
               converted[key] = data[key].toDate();
             }
           }
           
-          console.log('Converted doc:', { id: converted.id, title: converted.title });
+          // Collection-specific handling
+          if (collectionName === 'properties') {
+            // Properties collection needs special handling for arrays and defaults
+            converted.images = Array.isArray(data.images) ? data.images : [];
+            converted.features = Array.isArray(data.features) ? data.features : null;
+            converted.bedrooms = data.bedrooms ?? null;
+            converted.bathrooms = data.bathrooms ?? null;
+            converted.area = data.area ?? null;
+            converted.agentId = data.agentId ?? null;
+            converted.isFeatured = data.isFeatured ?? false;
+            // Ensure createdAt is a Date object (either from converted Timestamp or new Date)
+            converted.createdAt = converted.createdAt || new Date();
+          } else if (collectionName === 'agents') {
+            // Agent-specific defaults if needed
+            converted.social = data.social || {};
+          } else if (collectionName === 'contact_messages') {
+            // Message-specific defaults if needed
+            converted.createdAt = converted.createdAt || new Date();
+          }
+          
+          // Log what we created for debugging
+          const logSample = { 
+            id: converted.id, 
+            title: converted.title || converted.name || '(no title/name)' 
+          };
+          console.log(`Processed ${collectionName} doc:`, logSample);
           return converted as T;
         });
         

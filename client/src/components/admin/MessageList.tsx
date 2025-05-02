@@ -45,13 +45,13 @@ interface MessageListProps {
 }
 
 const MessageList = ({ messages }: MessageListProps) => {
-  const [deleteMessageId, setDeleteMessageId] = useState<number | null>(null);
+  const [deleteMessageId, setDeleteMessageId] = useState<string | number | null>(null);
   const [viewMessage, setViewMessage] = useState<ContactMessage | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const deleteMessage = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string | number) => {
       return await apiRequest(`/api/contact/${id}`, "DELETE");
     },
     onSuccess: () => {
@@ -64,7 +64,7 @@ const MessageList = ({ messages }: MessageListProps) => {
     },
   });
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string | number) => {
     deleteMessage.mutate(id);
   };
 

@@ -42,20 +42,26 @@ const Dashboard = () => {
   const properties = propertiesData as unknown as Property[] || [];
   console.log('Admin dashboard properties:', properties.length, properties.map(p => p.title));
 
-  // Fetch all agents
-  const agentsQuery = useQuery({
-    queryKey: ["/api/agents"],
-    refetchOnWindowFocus: false,
-  });
+  // Use real-time Firestore collection for agents
+  const { 
+    documents: agentsData, 
+    loading: agentsLoading,
+    error: agentsError 
+  } = useFirestoreCollection<Agent>("agents");
+  
+  console.log('Admin dashboard agents:', agentsData?.length || 0);
 
-  // Fetch all contact messages
-  const messagesQuery = useQuery({
-    queryKey: ["/api/contact/all"],
-    refetchOnWindowFocus: false,
-  });
+  // Use real-time Firestore collection for contact messages
+  const { 
+    documents: messagesData, 
+    loading: messagesLoading,
+    error: messagesError 
+  } = useFirestoreCollection<ContactMessage>("contact_messages");
 
-  const agents = agentsQuery.data as Agent[] || [];
-  const messages = messagesQuery.data as ContactMessage[] || [];
+  const agents = agentsData || [];
+  const messages = messagesData || [];
+  
+  console.log('Admin dashboard messages:', messages.length);
 
   const handleAddProperty = () => {
     setSelectedProperty(null);
@@ -78,7 +84,7 @@ const Dashboard = () => {
   };
 
   const isLoading =
-    propertiesLoading || agentsQuery.isLoading || messagesQuery.isLoading;
+    propertiesLoading || agentsLoading || messagesLoading;
 
   if (isLoading) {
     return (

@@ -39,7 +39,7 @@ interface AgentListProps {
 }
 
 const AgentList = ({ agents, onEditClick }: AgentListProps) => {
-  const [deleteAgentId, setDeleteAgentId] = useState<number | null>(null);
+  const [deleteAgentId, setDeleteAgentId] = useState<string | number | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
