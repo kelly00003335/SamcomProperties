@@ -39,13 +39,13 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         <span 
           className={`
             absolute top-4 left-4 text-white text-sm px-3 py-1 rounded
-            ${status === 'for-sale' ? 'bg-primary' : 'bg-secondary'}
+            ${status === 'for-sale' ? 'bg-[#1A237E]' : 'bg-[#2E7D32]'}
           `}
         >
           {status === 'for-sale' ? 'For Sale' : 'For Rent'}
         </span>
         <button 
-          className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md text-primary hover:text-secondary"
+          className="absolute top-4 right-4 bg-white p-2 rounded-full shadow-md text-[#1A237E] hover:text-[#F5F5DC]"
           aria-label="Add to favorites"
         >
           <Heart className="h-5 w-5" />
@@ -54,29 +54,29 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
       <CardContent className="p-6">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-xl font-bold font-heading">{title}</h3>
-          <p className="text-primary text-xl font-bold">
+          <p className="text-[#1A237E] text-xl font-bold">
             {formatPriceDisplay(price, status)}
           </p>
         </div>
-        <p className="text-gray-500 mb-4 flex items-center">
-          <MapPin className="h-4 w-4 text-primary mr-2" /> {location}
+        <p className="text-[#212121] mb-4 flex items-center">
+          <MapPin className="h-4 w-4 text-[#1A237E] mr-2" /> {location}
         </p>
         <div className="flex justify-between mb-6">
           {bedrooms !== null && (
             <div className="flex items-center">
-              <Bed className="text-primary h-5 w-5 mr-2" />
+              <Bed className="text-[#1A237E] h-5 w-5 mr-2" />
               <span>{bedrooms} {bedrooms === 1 ? 'Bed' : 'Beds'}</span>
             </div>
           )}
           {bathrooms !== null && (
             <div className="flex items-center">
-              <Bath className="text-primary h-5 w-5 mr-2" />
+              <Bath className="text-[#1A237E] h-5 w-5 mr-2" />
               <span>{bathrooms} {bathrooms === 1 ? 'Bath' : 'Baths'}</span>
             </div>
           )}
           {area !== null && (
             <div className="flex items-center">
-              <Square className="text-primary h-5 w-5 mr-2" />
+              <Square className="text-[#1A237E] h-5 w-5 mr-2" />
               <span>{area} sqft</span>
             </div>
           )}
@@ -84,7 +84,7 @@ const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {
         <Link href={`/properties/${id}`}>
           <Button 
             variant="outline" 
-            className="w-full bg-neutral-light hover:bg-gray-200 text-primary"
+            className="w-full bg-[#F8F9FA] hover:bg-[#F5F5DC] text-[#1A237E]"
           >
             View Details
           </Button>

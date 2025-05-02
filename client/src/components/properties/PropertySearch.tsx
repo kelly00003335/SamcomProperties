@@ -19,32 +19,32 @@ const PropertySearch = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Build query string
     const params = new URLSearchParams();
-    
+
     if (locationFilter && locationFilter !== 'all-locations') params.append("location", locationFilter);
     if (propertyType && propertyType !== 'all-types') params.append("type", propertyType);
-    
+
     if (priceRange && priceRange !== 'any-price') {
       const [min, max] = priceRange.split("-");
       if (min) params.append("minPrice", min);
       if (max) params.append("maxPrice", max);
     }
-    
+
     // Navigate to properties page with search parameters
     setLocationPath(`/properties?${params.toString()}`);
   };
 
   return (
-    <Card className="bg-white rounded-lg shadow-lg">
+    <Card className="bg-[#F8F9FA] rounded-lg shadow-lg"> {/* Background color update */}
       <CardContent className="p-6">
         <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
-            <Label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+            <Label htmlFor="location" className="block text-sm font-medium text-[#212121] mb-1"> {/* Text color update */}
               Location
             </Label>
-            <Select value={locationFilter} onValueChange={setLocationFilter}>
+            <Select value={locationFilter} onValueChange={setLocationFilter} className="text-[#212121]"> {/* Text color update */}
               <SelectTrigger id="location">
                 <SelectValue placeholder="All Locations" />
               </SelectTrigger>
@@ -57,12 +57,12 @@ const PropertySearch = () => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
-            <Label htmlFor="property-type" className="block text-sm font-medium text-gray-700 mb-1">
+            <Label htmlFor="property-type" className="block text-sm font-medium text-[#212121] mb-1"> {/* Text color update */}
               Property Type
             </Label>
-            <Select value={propertyType} onValueChange={setPropertyType}>
+            <Select value={propertyType} onValueChange={setPropertyType} className="text-[#212121]"> {/* Text color update */}
               <SelectTrigger id="property-type">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
@@ -75,12 +75,12 @@ const PropertySearch = () => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
-            <Label htmlFor="price-range" className="block text-sm font-medium text-gray-700 mb-1">
+            <Label htmlFor="price-range" className="block text-sm font-medium text-[#212121] mb-1"> {/* Text color update */}
               Price Range
             </Label>
-            <Select value={priceRange} onValueChange={setPriceRange}>
+            <Select value={priceRange} onValueChange={setPriceRange} className="text-[#212121]"> {/* Text color update */}
               <SelectTrigger id="price-range">
                 <SelectValue placeholder="Any Price" />
               </SelectTrigger>
@@ -93,14 +93,14 @@ const PropertySearch = () => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
-            <Label className="block text-sm font-medium text-gray-700 mb-1 opacity-0">
+            <Label className="block text-sm font-medium text-[#212121] mb-1 opacity-0"> {/* Text color update */}
               Search
             </Label>
-            <Button 
-              type="submit" 
-              className="w-full bg-primary hover:bg-primary-dark text-white"
+            <Button
+              type="submit"
+              className="w-full bg-[#1A237E] hover:bg-[#0D1642] text-white"
             >
               Search Properties
             </Button>

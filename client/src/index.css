@@ -3,86 +3,87 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 20 14.3% 4.1%;
-  --muted: 60 4.8% 95.9%;
-  --muted-foreground: 25 5.3% 44.7%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 20 14.3% 4.1%;
-  --card: 0 0% 100%;
-  --card-foreground: 20 14.3% 4.1%;
-  --border: 20 5.9% 90%;
-  --input: 20 5.9% 90%;
-  --primary: 142 76% 36%;
-  --primary-light: 142 76% 56%;
-  --primary-dark: 142 76% 26%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 45 100% 50%;
-  --secondary-foreground: 24 9.8% 10%;
-  --accent: 60 4.8% 95.9%;
-  --accent-foreground: 24 9.8% 10%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 60 9.1% 97.8%;
-  --ring: 20 14.3% 4.1%;
+  /* Main colors from the provided color scheme */
+  --background: 210 20% 98%; /* Light Grey #F8F9FA */
+  --foreground: 0 0% 13%; /* Charcoal #212121 */
+  --muted: 60 11% 90%; /* Lighter version of background */
+  --muted-foreground: 0 0% 45%; /* Muted text */
+  --popover: 210 20% 98%; /* Same as background */
+  --popover-foreground: 0 0% 13%; /* Same as foreground */
+  --card: 0 0% 100%; /* White for cards */
+  --card-foreground: 0 0% 13%; /* Same as foreground */
+  --border: 0 0% 90%; /* Light border */
+  --input: 0 0% 90%; /* Light input */
+  --primary: 230 63% 30%; /* Navy Blue #1A237E */
+  --primary-light: 230 63% 40%; /* Lighter Navy */
+  --primary-dark: 230 63% 20%; /* Darker Navy */
+  --primary-foreground: 0 0% 100%; /* White text on primary */
+  --secondary: 60 67% 91%; /* Warm Beige #F5F5DC */
+  --secondary-foreground: 0 0% 13%; /* Dark text on secondary */
+  --accent: 51 100% 50%; /* Soft Gold #FFD700 */
+  --accent-foreground: 0 0% 13%; /* Dark text on accent */
+  --destructive: 0 70% 56%; /* Soft Red #E53935 */
+  --destructive-foreground: 0 0% 100%; /* White text on destructive */
+  --ring: 230 63% 30%; /* Navy Blue for focus rings */
   --radius: 0.5rem;
   
   /* Chart colors */
-  --chart-1: 142 76% 36%;
-  --chart-2: 45 100% 50%;
-  --chart-3: 217 91% 60%;
-  --chart-4: 336 80% 58%;
-  --chart-5: 15 80% 50%;
+  --chart-1: 230 63% 30%; /* Navy Blue #1A237E */
+  --chart-2: 51 100% 50%; /* Soft Gold #FFD700 */
+  --chart-3: 120 48% 34%; /* Emerald Green #2E7D32 */
+  --chart-4: 0 70% 56%; /* Soft Red #E53935 */
+  --chart-5: 60 67% 91%; /* Warm Beige #F5F5DC */
   
   /* Sidebar colors (same as main) */
-  --sidebar-background: 0 0% 100%;
-  --sidebar-foreground: 20 14.3% 4.1%;
-  --sidebar-primary: 142 76% 36%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 60 4.8% 95.9%;
-  --sidebar-accent-foreground: 24 9.8% 10%;
-  --sidebar-border: 20 5.9% 90%;
-  --sidebar-ring: 20 14.3% 4.1%;
+  --sidebar-background: 210 20% 98%; /* Light Grey #F8F9FA */
+  --sidebar-foreground: 0 0% 13%; /* Charcoal #212121 */
+  --sidebar-primary: 230 63% 30%; /* Navy Blue #1A237E */
+  --sidebar-primary-foreground: 0 0% 100%; /* White text on primary */
+  --sidebar-accent: 51 100% 50%; /* Soft Gold #FFD700 */
+  --sidebar-accent-foreground: 0 0% 13%; /* Dark text on accent */
+  --sidebar-border: 0 0% 90%; /* Light border */
+  --sidebar-ring: 230 63% 30%; /* Navy Blue for focus rings */
 }
 
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --primary: 142 76% 36%;
-  --primary-light: 142 76% 46%;
-  --primary-dark: 142 76% 26%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 45 100% 50%;
-  --secondary-foreground: 0 0% 98%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --ring: 240 4.9% 83.9%;
+  --background: 230 40% 10%; /* Dark Navy background */
+  --foreground: 0 0% 98%; /* Light text */
+  --muted: 230 30% 15%; /* Slightly lighter than background */
+  --muted-foreground: 210 20% 70%; /* Muted light text */
+  --popover: 230 40% 10%; /* Same as background */
+  --popover-foreground: 0 0% 98%; /* Same as foreground */
+  --card: 230 40% 12%; /* Slightly lighter than background */
+  --card-foreground: 0 0% 98%; /* Light text */
+  --border: 230 30% 20%; /* Dark border */
+  --input: 230 30% 20%; /* Dark input */
+  --primary: 230 63% 40%; /* Brighter Navy in dark mode */
+  --primary-light: 230 63% 50%; /* Even brighter navy */
+  --primary-dark: 230 63% 30%; /* Original navy */
+  --primary-foreground: 0 0% 98%; /* Light text on primary */
+  --secondary: 60 30% 50%; /* Darker beige for dark mode */
+  --secondary-foreground: 0 0% 98%; /* Light text on secondary */
+  --accent: 51 80% 45%; /* Darker gold for dark mode */
+  --accent-foreground: 0 0% 98%; /* Light text on accent */
+  --destructive: 0 70% 45%; /* Darker red for dark mode */
+  --destructive-foreground: 0 0% 98%; /* Light text on destructive */
+  --ring: 60 30% 50%; /* Beige for focus rings in dark mode */
   
   /* Chart colors */
-  --chart-1: 142 76% 46%;
-  --chart-2: 45 100% 60%;
-  --chart-3: 217 91% 70%;
-  --chart-4: 336 80% 68%;
-  --chart-5: 15 80% 60%;
+  --chart-1: 230 63% 50%; /* Brighter Navy */
+  --chart-2: 51 100% 55%; /* Brighter Gold */
+  --chart-3: 120 48% 44%; /* Brighter Green */
+  --chart-4: 0 70% 66%; /* Brighter Red */
+  --chart-5: 60 40% 70%; /* Brighter Beige */
   
   /* Sidebar colors (same as main) */
-  --sidebar-background: 240 10% 3.9%;
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 142 76% 36%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 240 3.7% 15.9%;
-  --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-border: 240 3.7% 15.9%;
-  --sidebar-ring: 240 4.9% 83.9%;
+  --sidebar-background: 230 40% 10%; /* Dark Navy background */
+  --sidebar-foreground: 0 0% 98%; /* Light text */
+  --sidebar-primary: 230 63% 40%; /* Brighter Navy in dark mode */
+  --sidebar-primary-foreground: 0 0% 98%; /* Light text on primary */
+  --sidebar-accent: 51 80% 45%; /* Darker gold for dark mode */
+  --sidebar-accent-foreground: 0 0% 98%; /* Light text on accent */
+  --sidebar-border: 230 30% 20%; /* Dark border */
+  --sidebar-ring: 60 30% 50%; /* Beige for focus rings in dark mode */
 }
 
 @layer base {

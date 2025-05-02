@@ -44,12 +44,12 @@ const Hero = () => {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4">
                       <Link href={slide.primaryLink}>
-                        <Button size="lg" className="bg-primary hover:bg-primary-dark text-white transition duration-300">
+                        <Button size="lg" className="bg-[#1A237E] hover:bg-[#0D1642] text-white transition duration-300">
                           {slide.primaryText}
                         </Button>
                       </Link>
                       <Link href={slide.secondaryLink}>
-                        <Button size="lg" variant="outline" className="bg-white hover:bg-gray-100 text-primary border-primary transition duration-300">
+                        <Button size="lg" variant="outline" className="border-[#1A237E] text-[#1A237E] hover:bg-[#1A237E] hover:text-white transition duration-300">
                           {slide.secondaryText}
                         </Button>
                       </Link>
@@ -61,7 +61,7 @@ const Hero = () => {
           ))}
         </div>
       </div>
-      
+
       {/* Slide Controls */}
       <div className="absolute bottom-5 left-0 right-0 flex justify-center space-x-2">
         {slides.map((_, index) => (
@@ -75,7 +75,7 @@ const Hero = () => {
           ></button>
         ))}
       </div>
-      
+
       {/* Property Search Form */}
       <div className="container mx-auto px-4 relative -mt-16 z-10">
         <PropertySearch />
