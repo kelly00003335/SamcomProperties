@@ -50,20 +50,20 @@ export const getHeroImages = (): HeroSlide[] => {
 export const getAboutPageImages = () => {
   return [
     {
-      src: "https://images.unsplash.com/photo-1580746738099-fe7018c07177",
-      alt: "Kenyan Real Estate Transaction"
+      src: "https://i.imgur.com/82H7kON.jpeg",
+      alt: "Kenyan Residential Property"
     },
     {
-      src: "https://images.unsplash.com/photo-1580746730782-41b52b516f68",
-      alt: "Kenyan Real Estate Professional"
+      src: "https://i.imgur.com/IX11M27.jpeg",
+      alt: "Kenyan Real Estate"
     },
     {
-      src: "https://images.unsplash.com/photo-1580746769998-d9bb6d4c891e",
+      src: "https://images.unsplash.com/photo-1560184897-ae75f418493e",
+      alt: "Kenyan Land Investment"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
       alt: "Modern Kenyan Home"
-    },
-    {
-      src: "https://images.unsplash.com/photo-1581100372057-ae79a48df642",
-      alt: "Kenyan Property Development"
     }
   ];
 };
