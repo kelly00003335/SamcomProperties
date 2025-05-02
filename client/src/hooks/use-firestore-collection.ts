@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
-import { collection, query, onSnapshot, where, Query, DocumentData, QueryConstraint } from 'firebase/firestore';
+import { collection, query, onSnapshot, where, Query, DocumentData, QueryConstraint, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+
+// Define types for common document fields that need special handling
+type CommonFields = {
+  id: string | number;
+  createdAt?: Date | null;
+};
 
 /**
  * Custom hook for real-time Firestore collection data
@@ -8,7 +14,7 @@ import { db } from '@/lib/firebase';
  * @param constraints Optional query constraints (where clauses, etc)
  * @returns Object containing the documents array, loading state, and any error
  */
-export function useFirestoreCollection<T>(
+export function useFirestoreCollection<T extends CommonFields>(
   collectionName: string,
   constraints: QueryConstraint[] = []
 ) {
