@@ -8,11 +8,11 @@ import {
   Bath, 
   Square 
 } from "lucide-react";
-import { Property } from "@shared/schema";
+import { Property, FirebaseProperty } from "@shared/schema";
 import { formatPriceDisplay } from "@/lib/utils";
 
 interface PropertyCardProps {
-  property: Property;
+  property: Property | FirebaseProperty;
 }
 
 const PropertyCard: React.FC<PropertyCardProps> = ({ property }) => {

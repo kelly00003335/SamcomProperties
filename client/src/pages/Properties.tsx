@@ -1,10 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import PropertyCard from "@/components/properties/PropertyCard";
 import PropertySearch from "@/components/properties/PropertySearch";
-import { Property } from "@shared/schema";
+import { FirebaseProperty } from "@shared/schema";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useFirestoreCollection } from "@/hooks/use-firestore-collection";
+import { where, QueryConstraint } from "firebase/firestore";
 
 const Properties = () => {
   const [location] = useLocation();
@@ -28,26 +29,42 @@ const Properties = () => {
     setSearchParams(newParams);
   }, [location]);
 
-  // Build the query string for the API
-  const getQueryString = () => {
-    const params = new URLSearchParams();
+  // Build Firestore query constraints based on search params
+  const constraints = useMemo(() => {
+    const constraintArray: QueryConstraint[] = [];
     
-    if (searchParams.location) params.append("location", searchParams.location);
-    if (searchParams.type) params.append("type", searchParams.type);
-    if (searchParams.minPrice) params.append("minPrice", searchParams.minPrice);
-    if (searchParams.maxPrice) params.append("maxPrice", searchParams.maxPrice);
+    if (searchParams.location) {
+      constraintArray.push(where('location', '==', searchParams.location));
+    }
     
-    const queryString = params.toString();
-    return queryString ? `/api/properties/search?${queryString}` : '/api/properties';
-  };
+    if (searchParams.type) {
+      constraintArray.push(where('type', '==', searchParams.type));
+    }
+    
+    return constraintArray;
+  }, [searchParams]);
 
-  const { data: properties, isLoading, error } = useQuery<Property[]>({
-    queryKey: [getQueryString()],
-    refetchOnMount: true,
-    staleTime: 0, // Consider data always stale to ensure fresh data
-    refetchOnWindowFocus: true, // Refetch when window regains focus
-    refetchInterval: 30000, // Refetch every 30 seconds
-  });
+  // Use real-time listener instead of React Query
+  const { documents: properties, loading: isLoading, error } = 
+    useFirestoreCollection<FirebaseProperty>('properties', constraints);
+
+  // Additional client-side filtering for price (since Firestore can't do multiple range queries)
+  const filteredProperties = useMemo(() => {
+    if (!properties) return [];
+    
+    return properties.filter(property => {
+      // Apply price filters if specified
+      if (searchParams.minPrice && property.price < parseInt(searchParams.minPrice)) {
+        return false;
+      }
+      
+      if (searchParams.maxPrice && property.price > parseInt(searchParams.maxPrice)) {
+        return false;
+      }
+      
+      return true;
+    });
+  }, [properties, searchParams]);
 
   // Build page title based on search params
   const getPageTitle = () => {
@@ -111,7 +128,7 @@ const Properties = () => {
             <div className="text-center py-8">
               <p className="text-red-500">Failed to load properties. Please try again later.</p>
             </div>
-          ) : properties?.length === 0 ? (
+          ) : filteredProperties.length === 0 ? (
             <div className="text-center py-16 bg-white rounded-lg shadow-sm">
               <h3 className="text-xl font-bold mb-2">No Properties Found</h3>
               <p className="text-gray-600 mb-4">
@@ -123,7 +140,7 @@ const Properties = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {properties?.map((property) => (
+              {filteredProperties.map((property) => (
                 <PropertyCard key={property.id} property={property} />
               ))}
             </div>

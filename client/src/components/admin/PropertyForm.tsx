@@ -133,36 +133,21 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
         return apiRequest("/api/properties/create", "POST", processedData);
       }
     },
-    onSuccess: async () => {
-      // Log cache state before any operations
-      const beforeCache = queryClient.getQueryData(["/api/properties"]);
-      console.log('Cache before refresh:', beforeCache ? 'Has data' : 'No data');
-      
+    onSuccess: () => {
       toast({
         title: property ? "Property updated" : "Property created",
         description: property
           ? "The property has been updated successfully."
           : "New property has been created successfully.",
       });
+
+      // Note: We don't need to manually invalidate or refresh queries anymore
+      // since we're using real-time Firestore listeners that will automatically
+      // update when the database changes!
       
-      // More specific invalidation instead of invalidating all queries
-      await queryClient.invalidateQueries({ queryKey: ["/api/properties"] });
-      await queryClient.invalidateQueries({ queryKey: ["/api/properties/featured"] });
-      await queryClient.invalidateQueries({ queryKey: ["/api/properties/search"] });
+      console.log('Property successfully saved to Firebase - real-time listeners will update UI');
       
-      // Force refetch with refetchQueries
-      console.log('Force refetching property queries...');
-      await queryClient.refetchQueries({ queryKey: ["/api/properties"], exact: false });
-      
-      // Add a slight delay to ensure Firebase has updated
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Log cache state after updates
-      const afterCache = queryClient.getQueryData(["/api/properties"]);
-      console.log('Cache after refresh:', 
-        afterCache ? `Has data: ${Array.isArray(afterCache) ? afterCache.length : 'unknown'} items` : 'No data');
-      
-      // Close the form after ensuring the data has been refreshed
+      // Close the form
       onClose();
     },
     onError: (error) => {
@@ -183,21 +168,8 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
       // Add a property ID tracking log
       console.log('Current property being edited:', property ? `ID: ${property.id}` : 'New property');
       
-      const result = await propertyMutation.mutateAsync(data);
-      console.log('Property mutation completed, result:', JSON.stringify(result, null, 2));
-      
-      // Log current cache state for debugging
-      const currentCache = queryClient.getQueryData(['/api/properties']);
-      console.log('Current properties cache before refresh:', 
-        Array.isArray(currentCache) ? 
-          `${currentCache.length} items` : 
-          'No cached data');
-      
-      // Only trigger a manual refetch after we've completely closed the form
-      if (!property) {
-        console.log('Property created, will refetch list after form closes');
-        // We'll let onSuccess handler in the mutation handle this
-      }
+      // Execute the mutation - the onSuccess handler will show the toast and close the form
+      await propertyMutation.mutateAsync(data);
       
     } catch (error) {
       console.error("Submit error:", error);
