@@ -84,9 +84,9 @@ const AboutUs = () => {
                 className="rounded-lg shadow-md w-full h-24 sm:h-32 md:h-48 object-cover" 
               />
               <img 
-                src="https://i.imgur.com/Tc1e4Ya.jpeg"
+                src="https://i.imgur.com/FgBZ1io.jpeg"
                 alt="Beautiful Kenyan Landscape"
-                className="rounded-lg shadow-md w-full h-32 sm:h-48 md:h-64 object-cover" 
+                className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
             </div>
           </div>
