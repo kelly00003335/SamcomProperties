@@ -34,7 +34,7 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/about"
     },
     {
-      image: "./attached_assets/image_1746189767238.png",
+      image: "https://i.imgur.com/Tc1e4Ya.jpeg",
       alt: "Beautiful Kenyan Landscape",
       title: "Invest In Land",
       description: "Grow your wealth with strategic property and land investments guided by our experts.",

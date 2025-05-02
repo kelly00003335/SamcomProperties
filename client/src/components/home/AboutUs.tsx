@@ -47,7 +47,7 @@ const AboutUs = () => {
               Our mission is to help clients find their dream properties while providing transparent, professional service every step of the way. 
               With a team of experienced agents, we ensure that your property journey is smooth and successful.
             </p>
-            
+
             <div className="grid grid-cols-2 gap-4 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-center">
@@ -56,14 +56,14 @@ const AboutUs = () => {
                 </div>
               ))}
             </div>
-            
+
             <Link href="/about">
               <Button className="bg-primary hover:bg-primary-dark text-white">
                 Learn More About Us
               </Button>
             </Link>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-4">
               <img 
@@ -84,8 +84,8 @@ const AboutUs = () => {
                 className="rounded-lg shadow-md w-full h-48 object-cover" 
               />
               <img 
-                src="./attached_assets/springfield-by-fanaka-web-banner.jpg"
-                alt="Premium Properties"
+                src="https://i.imgur.com/Tc1e4Ya.jpeg"
+                alt="Beautiful Kenyan Landscape"
                 className="rounded-lg shadow-md w-full h-64 object-cover" 
               />
             </div>
