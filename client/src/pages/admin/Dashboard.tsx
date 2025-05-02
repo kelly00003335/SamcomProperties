@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Property, Agent, ContactMessage } from "@shared/schema";
+import { Property, Agent, ContactMessage, FirebaseProperty } from "@shared/schema";
+import { useFirestoreCollection } from "@/hooks/use-firestore-collection";
 
 import {
   Tabs,
@@ -30,13 +31,16 @@ const Dashboard = () => {
   const [showAgentForm, setShowAgentForm] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
-  // Fetch all properties
-  const propertiesQuery = useQuery({
-    queryKey: ["/api/properties"],
-    refetchOnWindowFocus: true, // Refetch on window focus to ensure fresh data
-    staleTime: 0, // Always consider data stale to ensure fresh fetch
-    refetchInterval: 30000, // Refetch every 30 seconds
-  });
+  // Use real-time Firestore collection for properties
+  const { 
+    documents: propertiesData, 
+    loading: propertiesLoading,
+    error: propertiesError 
+  } = useFirestoreCollection<FirebaseProperty>("properties");
+  
+  // Convert FirebaseProperty to Property for compatibility
+  const properties = propertiesData as unknown as Property[] || [];
+  console.log('Admin dashboard properties:', properties.length, properties.map(p => p.title));
 
   // Fetch all agents
   const agentsQuery = useQuery({
@@ -50,7 +54,6 @@ const Dashboard = () => {
     refetchOnWindowFocus: false,
   });
 
-  const properties = propertiesQuery.data as Property[] || [];
   const agents = agentsQuery.data as Agent[] || [];
   const messages = messagesQuery.data as ContactMessage[] || [];
 
@@ -75,7 +78,7 @@ const Dashboard = () => {
   };
 
   const isLoading =
-    propertiesQuery.isLoading || agentsQuery.isLoading || messagesQuery.isLoading;
+    propertiesLoading || agentsQuery.isLoading || messagesQuery.isLoading;
 
   if (isLoading) {
     return (
