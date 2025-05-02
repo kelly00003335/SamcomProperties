@@ -14,8 +14,8 @@ export interface HeroSlide {
 export const getHeroImages = (): HeroSlide[] => {
   return [
     {
-      image: "https://i.imgur.com/IX11M27.jpeg",
-      alt: "Kenyan Property",
+      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1776&auto=format&fit=crop",
+      alt: "Modern Kenyan Home",
       title: "Find Your Dream Home",
       description: "Samcom Properties Agency helps you find the perfect property that fits your lifestyle and budget.",
       primaryText: "View Properties",
@@ -24,8 +24,8 @@ export const getHeroImages = (): HeroSlide[] => {
       secondaryLink: "/contact"
     },
     {
-      image: "https://i.imgur.com/82H7kON.jpeg",
-      alt: "Kenyan Residential Area",
+      image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?q=80&w=1784&auto=format&fit=crop",
+      alt: "Luxury Kenyan Property",
       title: "Premium Properties",
       description: "Discover exceptional homes with top-tier amenities and prime locations.",
       primaryText: "Explore Premium Listings",
