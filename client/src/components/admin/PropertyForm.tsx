@@ -366,8 +366,42 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
                   <FormItem>
                     <FormLabel>Area (Square Feet)</FormLabel>
                     <FormControl>
-                      <Input type="number" {...field} />
+                      <div className="space-y-2">
+                        <Input type="number" {...field} />
+                        <div className="flex flex-wrap gap-2 text-xs">
+                          <button 
+                            type="button" 
+                            onClick={() => form.setValue('area', 5000)}
+                            className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200"
+                          >
+                            50x100 (5,000 sq.ft)
+                          </button>
+                          <button 
+                            type="button" 
+                            onClick={() => form.setValue('area', 10000)}
+                            className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200"
+                          >
+                            100x100 (10,000 sq.ft)
+                          </button>
+                          <button 
+                            type="button" 
+                            onClick={() => form.setValue('area', 43560)}
+                            className="px-2 py-1 bg-gray-100 rounded hover:bg-gray-200"
+                          >
+                            1 Acre (43,560 sq.ft)
+                          </button>
+                        </div>
+                      </div>
                     </FormControl>
+                    <FormDescription>
+                      <button 
+                        type="button"
+                        onClick={() => document.getElementById('size-guide-dialog')?.classList.toggle('hidden')}
+                        className="text-primary text-sm underline"
+                      >
+                        View land size reference chart
+                      </button>
+                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -443,6 +477,91 @@ const PropertyForm = ({ property, onClose }: PropertyFormProps) => {
           </div>
         </form>
       </Form>
+
+      {/* Land Size Reference Dialog */}
+      <div 
+        id="size-guide-dialog" 
+        className="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            document.getElementById('size-guide-dialog')?.classList.add('hidden');
+          }
+        }}
+      >
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-auto">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold">Land Size Reference Chart</h3>
+            <button 
+              onClick={() => document.getElementById('size-guide-dialog')?.classList.add('hidden')}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              &times;
+            </button>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border p-2 text-left">Unit Name</th>
+                  <th className="border p-2 text-left">Size (Approx.)</th>
+                  <th className="border p-2 text-left">Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border p-2 font-medium">Acre</td>
+                  <td className="border p-2">43,560 sq. ft. or ~4,047 m²</td>
+                  <td className="border p-2">Standard for large properties or farming</td>
+                </tr>
+                <tr>
+                  <td className="border p-2 font-medium">Hectare</td>
+                  <td className="border p-2">2.471 acres or 10,000 m²</td>
+                  <td className="border p-2">Less commonly used in real estate ads</td>
+                </tr>
+                <tr>
+                  <td className="border p-2 font-medium">Plot</td>
+                  <td className="border p-2">Varies (often 50x100 ft)</td>
+                  <td className="border p-2">Common term, size depends on region</td>
+                </tr>
+                <tr>
+                  <td className="border p-2 font-medium">50x100 ft</td>
+                  <td className="border p-2">5,000 sq. ft. (approx. 1/8 acre)</td>
+                  <td className="border p-2">Urban residential standard</td>
+                </tr>
+                <tr>
+                  <td className="border p-2 font-medium">100x100 ft</td>
+                  <td className="border p-2">10,000 sq. ft. (approx. 1/4 acre)</td>
+                  <td className="border p-2">Popular for corner plots</td>
+                </tr>
+                <tr>
+                  <td className="border p-2 font-medium">Square Meters</td>
+                  <td className="border p-2">Used in legal docs & title deeds</td>
+                  <td className="border p-2">Metric option, often seen in titles</td>
+                </tr>
+                <tr>
+                  <td className="border p-2 font-medium">Acres & Hectares</td>
+                  <td className="border p-2">Used in rural, commercial, or agri plots</td>
+                  <td className="border p-2">Especially large tracts</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="mt-4 text-sm text-gray-600">
+            <p>For land property listings, it's important to specify the exact measurements. Common standard plot sizes in Kenya are 50x100 ft plots (1/8 acre).</p>
+          </div>
+          
+          <div className="mt-4 flex justify-end">
+            <button 
+              onClick={() => document.getElementById('size-guide-dialog')?.classList.add('hidden')}
+              className="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
