@@ -1,3 +1,4 @@
+
 import { cn } from "@/lib/utils";
 
 interface SpinnerProps {
@@ -37,3 +38,6 @@ export function Spinner({ size = "md", className }: SpinnerProps) {
     </div>
   );
 }
+
+// Also add a default export for backward compatibility
+export default Spinner;
