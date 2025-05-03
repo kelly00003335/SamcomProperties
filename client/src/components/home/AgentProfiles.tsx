@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { AgentAPI } from '@/lib/api';
 import Spinner from '@/components/ui/spinner';
 import { Agent } from '@shared/schema';
-import { LinkedinIcon, TwitterIcon, Mail, Phone } from '@heroicons/react/24/outline';
+import { MailIcon, PhoneIcon } from '@heroicons/react/outline';
+import { FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 export default function AgentProfiles() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -67,19 +68,19 @@ export default function AgentProfiles() {
                 <div className="mt-4 flex gap-3">
                   {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
                     <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
-                      <LinkedinIcon className="h-5 w-5" />
+                      <FaLinkedin className="h-5 w-5" />
                     </a>
                   )}
                   {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
                     <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
-                      <TwitterIcon className="h-5 w-5" />
+                      <FaTwitter className="h-5 w-5" />
                     </a>
                   )}
                   <a href={`mailto:${agent.email}`} className="text-gray-400 hover:text-blue-600" aria-label="Email">
-                    <Mail className="h-5 w-5" />
+                    <MailIcon className="h-5 w-5" />
                   </a>
                   <a href={`tel:${agent.phone}`} className="text-gray-400 hover:text-blue-600" aria-label="Phone">
-                    <Phone className="h-5 w-5" />
+                    <PhoneIcon className="h-5 w-5" />
                   </a>
                 </div>
                 )}
