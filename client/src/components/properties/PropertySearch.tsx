@@ -80,7 +80,7 @@ export default function PropertySearch() {
             </SelectTrigger>
             <SelectContent>
               {LOCATIONS.map((location) => (
-                <SelectItem key={location.value} value={location.value}>
+                <SelectItem key={location.value} value={location.value || "all-locations"}>
                   {location.label}
                 </SelectItem>
               ))}
@@ -98,7 +98,7 @@ export default function PropertySearch() {
             </SelectTrigger>
             <SelectContent>
               {PROPERTY_TYPES.map((type) => (
-                <SelectItem key={type.value} value={type.value}>
+                <SelectItem key={type.value} value={type.value || "all-types"}>
                   {type.label}
                 </SelectItem>
               ))}
@@ -116,7 +116,7 @@ export default function PropertySearch() {
             </SelectTrigger>
             <SelectContent>
               {PROPERTY_STATUS.map((status) => (
-                <SelectItem key={status.value} value={status.value}>
+                <SelectItem key={status.value} value={status.value || "all-status"}>
                   {status.label}
                 </SelectItem>
               ))}
