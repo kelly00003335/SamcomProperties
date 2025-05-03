@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRoute } from 'wouter';
 import { formatPriceDisplay, timeAgo } from '@/lib/utils';
 import { PropertyAPI } from '@/lib/api';
+import { ContactAPI } from '@/lib/api';
 import { FirebaseProperty } from '@shared/schema';
 import PropertyGallery from '@/components/properties/PropertyGallery';
 import PropertyFeatures from '@/components/properties/PropertyFeatures';
@@ -22,10 +23,12 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 
 export default function PropertyDetail() {
   const [, params] = useRoute('/properties/:id');
   const propertyId = params?.id;
+  const { toast } = useToast();
 
   const [property, setProperty] = useState<FirebaseProperty | null>(null);
   const [loading, setLoading] = useState(true);
@@ -169,7 +172,7 @@ export default function PropertyDetail() {
             <h3 className="text-xl font-semibold mb-4">Interested in this property?</h3>
             <p className="mb-4">Contact us for more information or to schedule a viewing.</p>
 
-            <Dialog>
+            <Dialog data-dialog-viewing>
               <DialogTrigger asChild>
                 <Button className="w-full mb-4">Schedule a Viewing</Button>
               </DialogTrigger>
@@ -180,37 +183,84 @@ export default function PropertyDetail() {
                     Fill out the form below to schedule a viewing for this property.
                   </DialogDescription>
                 </DialogHeader>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const name = formData.get('name') as string;
+                  const email = formData.get('email') as string;
+                  const phone = formData.get('phone') as string;
+                  const date = formData.get('date') as string;
+                  const time = formData.get('time') as string;
+
+                  try {
+                    // Create a message to send to the contact messages collection
+                    await ContactAPI.createContactMessage({
+                      name,
+                      email,
+                      phone,
+                      subject: `Viewing Request for ${property.title}`,
+                      message: `Viewing requested for property: ${property.title} (ID: ${property.id})
+                      
+Requested Date: ${date}
+Requested Time: ${time}
+
+Property Information:
+Location: ${property.location}
+Price: ${formatPriceDisplay(property.price || 0, property.status || 'unknown')}
+Status: ${property.status}
+`,
+                    });
+                    
+                    // Show success message and close the dialog
+                    toast({
+                      title: "Request Submitted",
+                      description: "Your viewing request has been sent successfully. We'll contact you soon to confirm.",
+                    });
+                    
+                    // Close the dialog by clicking the dialog close button
+                    const closeButton = document.querySelector('[data-dialog-viewing] button[data-state="open"]');
+                    if (closeButton) {
+                      (closeButton as HTMLButtonElement).click();
+                    }
+                  } catch (error) {
+                    console.error('Error submitting viewing request:', error);
+                    toast({
+                      variant: "destructive",
+                      title: "Error",
+                      description: "There was a problem submitting your request. Please try again.",
+                    });
+                  }
+                }}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="name" className="text-right">
                         Name
                       </Label>
-                      <Input id="name" className="col-span-3" placeholder="Your full name" />
+                      <Input id="name" name="name" className="col-span-3" placeholder="Your full name" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="email" className="text-right">
                         Email
                       </Label>
-                      <Input id="email" type="email" className="col-span-3" placeholder="Your email" />
+                      <Input id="email" name="email" type="email" className="col-span-3" placeholder="Your email" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="phone" className="text-right">
                         Phone
                       </Label>
-                      <Input id="phone" type="tel" className="col-span-3" placeholder="Your phone number" />
+                      <Input id="phone" name="phone" type="tel" className="col-span-3" placeholder="Your phone number" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="date" className="text-right">
                         Date
                       </Label>
-                      <Input id="date" type="date" className="col-span-3" />
+                      <Input id="date" name="date" type="date" className="col-span-3" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="time" className="text-right">
                         Time
                       </Label>
-                      <Input id="time" type="time" className="col-span-3" />
+                      <Input id="time" name="time" type="time" className="col-span-3" required />
                     </div>
                   </div>
                   <DialogFooter>
@@ -220,7 +270,7 @@ export default function PropertyDetail() {
               </DialogContent>
             </Dialog>
 
-            <Dialog>
+            <Dialog data-dialog-info>
               <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">
                   Request Information
@@ -233,31 +283,76 @@ export default function PropertyDetail() {
                     Ask us anything about this property and we'll get back to you.
                   </DialogDescription>
                 </DialogHeader>
-                <form className="space-y-4">
+                <form className="space-y-4" onSubmit={async (e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.currentTarget);
+                  const name = formData.get('info-name') as string;
+                  const email = formData.get('info-email') as string;
+                  const phone = formData.get('info-phone') as string;
+                  const message = formData.get('info-message') as string;
+
+                  try {
+                    // Create a message to send to the contact messages collection
+                    await ContactAPI.createContactMessage({
+                      name,
+                      email,
+                      phone,
+                      subject: `Information Request for ${property.title}`,
+                      message: `Information requested for property: ${property.title} (ID: ${property.id})
+                      
+Client's message: ${message}
+
+Property Information:
+Location: ${property.location}
+Price: ${formatPriceDisplay(property.price || 0, property.status || 'unknown')}
+Status: ${property.status}
+`,
+                    });
+                    
+                    // Show success message and close the dialog
+                    toast({
+                      title: "Request Submitted",
+                      description: "Your information request has been sent successfully. We'll contact you soon.",
+                    });
+                    
+                    // Close the dialog by clicking the dialog close button
+                    const closeButton = document.querySelector('[data-dialog-info] button[data-state="open"]');
+                    if (closeButton) {
+                      (closeButton as HTMLButtonElement).click();
+                    }
+                  } catch (error) {
+                    console.error('Error submitting information request:', error);
+                    toast({
+                      variant: "destructive",
+                      title: "Error",
+                      description: "There was a problem submitting your request. Please try again.",
+                    });
+                  }
+                }}>
                   <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="info-name" className="text-right">
                         Name
                       </Label>
-                      <Input id="info-name" className="col-span-3" placeholder="Your full name" />
+                      <Input id="info-name" name="info-name" className="col-span-3" placeholder="Your full name" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="info-email" className="text-right">
                         Email
                       </Label>
-                      <Input id="info-email" type="email" className="col-span-3" placeholder="Your email" />
+                      <Input id="info-email" name="info-email" type="email" className="col-span-3" placeholder="Your email" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="info-phone" className="text-right">
                         Phone
                       </Label>
-                      <Input id="info-phone" type="tel" className="col-span-3" placeholder="Your phone number" />
+                      <Input id="info-phone" name="info-phone" type="tel" className="col-span-3" placeholder="Your phone number" required />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="message" className="text-right">
+                      <Label htmlFor="info-message" className="text-right">
                         Message
                       </Label>
-                      <Textarea id="message" className="col-span-3" placeholder="Your questions about this property" />
+                      <Textarea id="info-message" name="info-message" className="col-span-3" placeholder="Your questions about this property" required />
                     </div>
                   </div>
                   <DialogFooter>
