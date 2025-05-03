@@ -1,0 +1,221 @@
+~/workspace$ npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/components/home/AgentProfiles.tsx:67:17 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 67                 {agent.social && typeof agent.social === 'object' && (
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 68                 <div className="mt-4 flex gap-3">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 85                 </div>
+    ~~~~~~~~~~~~~~~~~~~~~~
+ 86                 )}
+    ~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:69:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 69                   {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 70                     <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 72                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 73                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:74:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 74                   {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 75                     <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 77                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 78                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:31:40 - error TS2339: Property 'getById' does not exist on type '{ getAllProperties: () => Promise<FirebaseProperty[]>; getPropertyById: (id: string) => Promise<FirebaseProperty | null>; ... 4 more ...; deleteProperty: (id: string) => Promise<...>; }'.
+
+31         const data = await PropertyAPI.getById(propertyId);
+                                          ~~~~~~~
+
+
+Found 4 errors in 2 files.
+
+Errors  Files
+     3  client/src/components/home/AgentProfiles.tsx:67
+     1  client/src/pages/PropertyDetail.tsx:31
+~/workspace$ npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/components/home/AgentProfiles.tsx:68:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 68                   {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 69                     <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 71                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 72                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:73:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 73                   {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 74                     <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 76                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 77                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:89:10 - error TS2741: Property 'title' is missing in type '{ images: string[]; }' but required in type 'PropertyGalleryProps'.
+
+89         <PropertyGallery images={property.images} />
+            ~~~~~~~~~~~~~~~
+
+  client/src/components/properties/PropertyGallery.tsx:7:3
+    7   title: string;
+        ~~~~~
+    'title' is declared here.
+
+client/src/pages/PropertyDetail.tsx:99:14 - error TS18047: 'property.bedrooms' is possibly 'null'.
+
+99             {property.bedrooms > 0 && (
+                ~~~~~~~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:105:14 - error TS18047: 'property.bathrooms' is possibly 'null'.
+
+105             {property.bathrooms > 0 && (
+                 ~~~~~~~~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:111:14 - error TS18047: 'property.area' is possibly 'null'.
+
+111             {property.area > 0 && (
+                 ~~~~~~~~~~~~~
+
+
+Found 6 errors in 2 files.
+
+Errors  Files
+     2  client/src/components/home/AgentProfiles.tsx:68
+     4  client/src/pages/PropertyDetail.tsx:89
+~/workspace$ 
+
+
+ChatGPT said:
+Alright, let’s dissect and squash these bugs, one by one. You're getting a bunch of TypeScript errors mostly around type safety and missing props. Here's the blueprint to fix them:
+
+🧠 1. "Type 'unknown' is not assignable to type 'ReactNode'"
+Error locations:
+
+AgentProfiles.tsx:68, AgentProfiles.tsx:73
+
+Cause:
+TypeScript doesn’t trust the structure of agent.social since its type is unknown (or any).
+
+Fix:
+You need to explicitly type agent.social. Either define it in your interface or assert the type inline.
+
+🔧 Example fix:
+Make sure agent.social has a known structure, like:
+
+ts
+Copy
+Edit
+interface Agent {
+  // ...
+  social?: {
+    linkedin?: string;
+    twitter?: string;
+  };
+}
+Then, your render code can be:
+
+tsx
+Copy
+Edit
+{agent.social?.linkedin && (
+  <a href={agent.social.linkedin} ...>LinkedIn</a>
+)}
+
+{agent.social?.twitter && (
+  <a href={agent.social.twitter} ...>Twitter</a>
+)}
+🧠 2. "Property 'getById' does not exist"
+Error:
+
+PropertyDetail.tsx:31
+
+Cause:
+You're trying to use PropertyAPI.getById, but your API only has getPropertyById.
+
+Fix:
+Change this:
+
+ts
+Copy
+Edit
+const data = await PropertyAPI.getById(propertyId);
+To this:
+
+ts
+Copy
+Edit
+const data = await PropertyAPI.getPropertyById(propertyId);
+🧠 3. "Property 'title' is missing in type..."
+Error:
+
+PropertyDetail.tsx:89
+
+Fix:
+Your <PropertyGallery /> component expects a title prop too, not just images.
+
+Add it:
+
+tsx
+Copy
+Edit
+<PropertyGallery title={property.title} images={property.images} />
+(Assumes property.title exists. If not, add a fallback.)
+
+🧠 4. "Possibly null values on bedrooms, bathrooms, area"
+Errors:
+
+PropertyDetail.tsx:99, 105, 111
+
+Fix:
+Use optional chaining and nullish checks:
+
+tsx
+Copy
+Edit
+{(property.bedrooms ?? 0) > 0 && (...)}
+{(property.bathrooms ?? 0) > 0 && (...)}
+{(property.area ?? 0) > 0 && (...)}
+Or, if you’re fine with assuming it will never be null:
+
+tsx
+Copy
+Edit
+{property.bedrooms! > 0 && (...)}
+But use non-null assertions (!) sparingly — TypeScript is yelling for a reason.
+
+✅ Summary Fix Plan:
+Add proper types to agent.social
+
+Use getPropertyById() instead of getById()
+
+Pass title to PropertyGallery
+
+Handle possible null in property.* values with ?? or !
