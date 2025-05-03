@@ -1,142 +1,159 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import {
+import { useState } from 'react';
+import { useLocation } from 'wouter';
+import { 
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
+  SelectValue
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
-const PropertySearch = () => {
-  const [location, setLocationPath] = useLocation();
-  const [locationFilter, setLocationFilter] = useState("all-locations");
-  const [propertyType, setPropertyType] = useState("all-types");
-  const [priceRange, setPriceRange] = useState("any-price");
+const locationOptions = ['', 'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret'];
+const typeOptions = ['', 'house', 'apartment', 'land', 'commercial'];
+const statusOptions = ['', 'for-sale', 'for-rent'];
 
-  // Extract search params from URL when component mounts or URL changes
-  useEffect(() => {
-    if (location.includes('?')) {
-      const params = new URLSearchParams(location.split('?')[1]);
+export default function PropertySearch() {
+  const [, setLocation] = useLocation();
+  const [searchParams, setSearchParams] = useState({
+    location: '',
+    type: '',
+    minPrice: '',
+    maxPrice: '',
+    status: '',
+  });
 
-      // Set form values based on URL parameters
-      if (params.has('location')) {
-        setLocationFilter(params.get('location') || 'all-locations');
-      }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSearchParams(prev => ({ ...prev, [name]: value }));
+  };
 
-      if (params.has('type')) {
-        setPropertyType(params.get('type') || 'all-types');
-      }
-
-      if (params.has('minPrice') || params.has('maxPrice')) {
-        const min = params.get('minPrice') || '';
-        const max = params.get('maxPrice') || '';
-        const range = min && max ? `${min}-${max}` : 
-                     min ? `${min}-` : 
-                     max ? `0-${max}` : 'any-price';
-        setPriceRange(range);
-      }
-    }
-  }, [location]);
+  const handleSelectChange = (name: string, value: string) => {
+    setSearchParams(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Build query string
-    const params = new URLSearchParams();
+    // Build the query string from non-empty parameters
+    const queryParams = new URLSearchParams();
 
-    if (locationFilter && locationFilter !== 'all-locations') params.append("location", locationFilter);
-    if (propertyType && propertyType !== 'all-types') params.append("type", propertyType);
-
-    if (priceRange && priceRange !== 'any-price') {
-      const [min, max] = priceRange.split("-");
-      if (min) params.append("minPrice", min);
-      if (max) params.append("maxPrice", max);
+    if (searchParams.location) {
+      queryParams.append('location', searchParams.location);
     }
 
-    // Navigate to properties page with search parameters
-    setLocationPath(`/properties?${params.toString()}`);
+    if (searchParams.type) {
+      queryParams.append('type', searchParams.type);
+    }
 
-    console.log('Search parameters:', {
-      location: locationFilter,
-      type: propertyType,
-      priceRange
-    });
+    if (searchParams.status) {
+      queryParams.append('status', searchParams.status);
+    }
+
+    if (searchParams.minPrice) {
+      queryParams.append('minPrice', searchParams.minPrice);
+    }
+
+    if (searchParams.maxPrice) {
+      queryParams.append('maxPrice', searchParams.maxPrice);
+    }
+
+    const queryString = queryParams.toString();
+    setLocation(`/properties${queryString ? `?${queryString}` : ''}`);
   };
 
   return (
-    <Card className="bg-[#F8F9FA] rounded-lg shadow-lg">
-      <CardContent className="p-4 sm:p-6"> {/* Added padding for smaller screens */}
-        <form onSubmit={handleSearch} className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4"> {/* Responsive grid */}
-          <div>
-            <Label htmlFor="location" className="block text-sm sm:text-base font-medium text-[#212121] mb-1">
-              Location
-            </Label>
-            <Select value={locationFilter} onValueChange={setLocationFilter} className="text-[#212121] w-full"> {/* Added w-full for full width */}
-              <SelectTrigger id="location">
-                <SelectValue placeholder="All Locations" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all-locations">All Locations</SelectItem>
-                <SelectItem value="nairobi">Nairobi</SelectItem>
-                <SelectItem value="mombasa">Mombasa</SelectItem>
-                <SelectItem value="kisumu">Kisumu</SelectItem>
-                <SelectItem value="nakuru">Nakuru</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+    <div className="w-full max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6 -mt-10 relative z-10">
+      <form onSubmit={handleSearch} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div>
+          <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
+            Location
+          </label>
+          <Select value={searchParams.location} onValueChange={(value) => handleSelectChange('location', value)}>
+            <SelectTrigger id="location">
+              <SelectValue placeholder="Any location" />
+            </SelectTrigger>
+            <SelectContent>
+              {locationOptions.map((location) => (
+                <SelectItem key={location || 'any'} value={location}>
+                  {location ? location : 'Any location'}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          <div>
-            <Label htmlFor="property-type" className="block text-sm sm:text-base font-medium text-[#212121] mb-1">
-              Property Type
-            </Label>
-            <Select value={propertyType} onValueChange={setPropertyType} className="text-[#212121] w-full">
-              <SelectTrigger id="property-type">
-                <SelectValue placeholder="All Types" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all-types">All Types</SelectItem>
-                <SelectItem value="apartment">Apartment</SelectItem>
-                <SelectItem value="house">House</SelectItem>
-                <SelectItem value="land">Land</SelectItem>
-                <SelectItem value="commercial">Commercial</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <div>
+          <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+            Property Type
+          </label>
+          <Select value={searchParams.type} onValueChange={(value) => handleSelectChange('type', value)}>
+            <SelectTrigger id="type">
+              <SelectValue placeholder="Any type" />
+            </SelectTrigger>
+            <SelectContent>
+              {typeOptions.map((type) => (
+                <SelectItem key={type || 'any-type'} value={type}>
+                  {type ? type.charAt(0).toUpperCase() + type.slice(1) : 'Any type'}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          <div>
-            <Label htmlFor="price-range" className="block text-sm sm:text-base font-medium text-[#212121] mb-1">
-              Price Range
-            </Label>
-            <Select value={priceRange} onValueChange={setPriceRange} className="text-[#212121] w-full">
-              <SelectTrigger id="price-range">
-                <SelectValue placeholder="Any Price" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="any-price">Any Price</SelectItem>
-                <SelectItem value="0-5000000">KSh 0 - 5M</SelectItem>
-                <SelectItem value="5000000-10000000">KSh 5M - 10M</SelectItem>
-                <SelectItem value="10000000-20000000">KSh 10M - 20M</SelectItem>
-                <SelectItem value="20000000-">KSh 20M+</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+        <div>
+          <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+            Status
+          </label>
+          <Select value={searchParams.status} onValueChange={(value) => handleSelectChange('status', value)}>
+            <SelectTrigger id="status">
+              <SelectValue placeholder="Any status" />
+            </SelectTrigger>
+            <SelectContent>
+              {statusOptions.map((status) => (
+                <SelectItem key={status || 'any-status'} value={status}>
+                  {status 
+                    ? status.replace('-', ' ').charAt(0).toUpperCase() + status.replace('-', ' ').slice(1) 
+                    : 'Any status'}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-          <div className="sm:mt-6 md:mt-0"> {/* Added spacing for better mobile layout */}
-            <Button
-              type="submit"
-              className="w-full bg-[#1A237E] hover:bg-[#0D1642] text-white"
-            >
-              Search Properties
-            </Button>
+        <div>
+          <label htmlFor="price-range" className="block text-sm font-medium text-gray-700 mb-1">
+            Price Range (KES)
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <Input
+              type="number"
+              id="min-price"
+              name="minPrice"
+              value={searchParams.minPrice}
+              onChange={handleInputChange}
+              placeholder="Min"
+              className="w-full"
+            />
+            <Input
+              type="number"
+              id="max-price"
+              name="maxPrice"
+              value={searchParams.maxPrice}
+              onChange={handleInputChange}
+              placeholder="Max"
+              className="w-full"
+            />
           </div>
-        </form>
-      </CardContent>
-    </Card>
+        </div>
+
+        <div className="flex items-end">
+          <Button type="submit" className="w-full">
+            Search Properties
+          </Button>
+        </div>
+      </form>
+    </div>
   );
-};
-
-export default PropertySearch;
+}

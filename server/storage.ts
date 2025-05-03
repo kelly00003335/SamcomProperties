@@ -471,10 +471,10 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (conditions.length > 0) {
-      query = conditions.length > 0 
-        ? query.where(and(...conditions)) 
-        : query;
+      return await query.where(and(...conditions));
     }
+    
+    return await query;
     
     return await query;
   }
