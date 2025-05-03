@@ -1,17 +1,9 @@
+
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-export function formatPrice(price: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'KES',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(price);
 }
 
 /**
@@ -32,8 +24,15 @@ export function formatPriceDisplay(price: number, status?: string): string {
   }
 }
 
-// Also export formatPrice as an alias for formatPriceDisplay for backward compatibility
-export const formatPrice = formatPriceDisplay;
+// Export formatPrice as a function that uses formatPriceDisplay internally
+export function formatPrice(price: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'KES',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
+}
 
 /**
  * Truncate text with ellipsis

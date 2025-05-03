@@ -1,4 +1,3 @@
-
 import { useEffect, useState, ReactNode } from 'react';
 import { AgentAPI } from '@/lib/api';
 import Spinner from '@/components/ui/spinner';
@@ -66,16 +65,16 @@ export default function AgentProfiles() {
 
                 {agent.social && typeof agent.social === 'object' ? (
                 <div className="mt-4 flex gap-3">
-                  {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin ? (
+                  {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
                     <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
                       <FaLinkedin className="h-5 w-5" />
                     </a>
-                  ) : null}
-                  {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter ? (
+                  )}
+                  {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
                     <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
                       <FaTwitter className="h-5 w-5" />
                     </a>
-                  ) : null}
+                  )}
                   <a href={`mailto:${agent.email}`} className="text-gray-400 hover:text-blue-600" aria-label="Email">
                     <FaEnvelope className="h-5 w-5" />
                   </a>
@@ -83,7 +82,16 @@ export default function AgentProfiles() {
                     <FaPhone className="h-5 w-5" />
                   </a>
                 </div>
-                ) : null}
+                ) : (
+                <div className="mt-4 flex gap-3">
+                  <a href={`mailto:${agent.email}`} className="text-gray-400 hover:text-blue-600" aria-label="Email">
+                    <FaEnvelope className="h-5 w-5" />
+                  </a>
+                  <a href={`tel:${agent.phone}`} className="text-gray-400 hover:text-blue-600" aria-label="Phone">
+                    <FaPhone className="h-5 w-5" />
+                  </a>
+                </div>
+                )}
               </div>
             </div>
           ))}

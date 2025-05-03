@@ -26,13 +26,10 @@ export default function PropertyDetail() {
     }
 
     const fetchProperty = async () => {
-      setLoading(true);
       try {
         const data = await PropertyAPI.getPropertyById(propertyId);
         if (data) {
-          console.log('Property data:', data);
           setProperty(data);
-          setError(null);
         } else {
           setError('Property not found');
         }
@@ -49,157 +46,127 @@ export default function PropertyDetail() {
 
   if (loading) {
     return (
-      <div className="container mx-auto py-20 flex justify-center">
-        <Spinner />
+      <div className="flex justify-center items-center min-h-[60vh]">
+        <Spinner className="h-12 w-12 text-primary" />
       </div>
     );
   }
 
   if (error || !property) {
     return (
-      <div className="container mx-auto py-20">
-        <div className="bg-red-50 p-6 rounded-lg text-center">
-          <h1 className="text-2xl font-semibold text-red-600 mb-2">Error</h1>
-          <p className="text-red-500">{error || 'Property not found'}</p>
-          <Button className="mt-4" onClick={() => window.history.back()}>
-            Go Back
-          </Button>
-        </div>
+      <div className="container mx-auto px-4 py-12 text-center">
+        <h1 className="text-2xl font-bold text-red-600">{error || 'Property not found'}</h1>
+        <p className="mt-4">The property you're looking for could not be found.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Property Gallery */}
-      <PropertyGallery images={property.images || []} title={property.title} />
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">{property.title}</h1>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <div className="flex flex-wrap justify-between items-start mb-4">
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-semibold text-gray-800 mb-2">{property.title}</h1>
-                  <p className="text-gray-500 mb-2">{property.location}</p>
-                </div>
-                <div>
-                  <span className="text-xl sm:text-2xl font-bold text-blue-600">
-                    {formatPriceDisplay(property.price)}
-                  </span>
-                  {property.status === 'for-rent' && <span className="text-gray-500 text-sm"> / month</span>}
-                </div>
+      {/* Location and status */}
+      <div className="flex flex-wrap items-center mb-6 gap-4">
+        <div className="flex items-center">
+          <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+            {property.location}
+          </span>
+        </div>
+        <div>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium text-white ${property.status === 'for-sale' ? 'bg-blue-600' : 'bg-green-600'}`}>
+            {property.status === 'for-sale' ? 'For Sale' : 'For Rent'}
+          </span>
+        </div>
+        <div className="ml-auto">
+          <span className="text-2xl font-bold text-primary">
+            {formatPriceDisplay(property.price, property.status)}
+          </span>
+        </div>
+      </div>
+
+      {/* Property gallery */}
+      <div className="mb-10">
+        <PropertyGallery images={property.images} />
+      </div>
+
+      {/* Property details */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="md:col-span-2">
+          <h2 className="text-2xl font-semibold mb-4">Property Details</h2>
+
+          {/* Property specs */}
+          <div className="flex flex-wrap gap-6 mb-6 bg-gray-50 p-4 rounded-lg">
+            {property.bedrooms > 0 && (
+              <div className="flex items-center">
+                <FaBed className="text-primary mr-2" />
+                <span>{property.bedrooms} Bedrooms</span>
               </div>
-
-              {/* Property specs */}
-              <div className="grid grid-cols-3 gap-4 mb-6 border-t border-b border-gray-100 py-4">
-                {property.bedrooms !== null && (
-                  <div className="flex flex-col items-center p-2">
-                    <div className="flex items-center text-blue-600 mb-1">
-                      <FaBed className="mr-2" />
-                      <span className="font-semibold text-xl">{property.bedrooms}</span>
-                    </div>
-                    <span className="text-gray-500 text-sm">Bedrooms</span>
-                  </div>
-                )}
-
-                {property.bathrooms !== null && (
-                  <div className="flex flex-col items-center p-2">
-                    <div className="flex items-center text-blue-600 mb-1">
-                      <FaBath className="mr-2" />
-                      <span className="font-semibold text-xl">{property.bathrooms}</span>
-                    </div>
-                    <span className="text-gray-500 text-sm">Bathrooms</span>
-                  </div>
-                )}
-
-                {property.area !== null && (
-                  <div className="flex flex-col items-center p-2">
-                    <div className="flex items-center text-blue-600 mb-1">
-                      <FaRuler className="mr-2" />
-                      <span className="font-semibold text-xl">{property.area}</span>
-                    </div>
-                    <span className="text-gray-500 text-sm">sq.ft</span>
-                  </div>
-                )}
+            )}
+            {property.bathrooms > 0 && (
+              <div className="flex items-center">
+                <FaBath className="text-primary mr-2" />
+                <span>{property.bathrooms} Bathrooms</span>
               </div>
-
-              <div className="mb-6">
-                <h2 className="text-xl font-semibold text-gray-800 mb-3">Description</h2>
-                <p className="text-gray-600 whitespace-pre-line">{property.description}</p>
+            )}
+            {property.area > 0 && (
+              <div className="flex items-center">
+                <FaRuler className="text-primary mr-2" />
+                <span>{property.area} sq ft</span>
               </div>
-
-              {/* Property features */}
-              {property.features && property.features.length > 0 && (
-                <PropertyFeatures features={property.features} />
-              )}
+            )}
+            <div className="flex items-center">
+              <span className="text-gray-600">Type: </span>
+              <span className="ml-2 capitalize">{property.type}</span>
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Property Details</h2>
+          {/* Description */}
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-2">Description</h3>
+            <p className="text-gray-700 whitespace-pre-line">{property.description}</p>
+          </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Status:</span>
-                  <span className="font-semibold text-gray-800 capitalize">
-                    {property.status?.replace('-', ' ') || 'N/A'}
-                  </span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Type:</span>
-                  <span className="font-semibold text-gray-800 capitalize">{property.type || 'N/A'}</span>
-                </div>
-
-                {property.bedrooms !== null && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Bedrooms:</span>
-                    <span className="font-semibold text-gray-800">{property.bedrooms}</span>
-                  </div>
-                )}
-
-                {property.bathrooms !== null && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Bathrooms:</span>
-                    <span className="font-semibold text-gray-800">{property.bathrooms}</span>
-                  </div>
-                )}
-
-                {property.area !== null && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Area:</span>
-                    <span className="font-semibold text-gray-800">{property.area} sq.ft</span>
-                  </div>
-                )}
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Location:</span>
-                  <span className="font-semibold text-gray-800">{property.location}</span>
-                </div>
-
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Price:</span>
-                  <span className="font-semibold text-blue-600">
-                    {formatPriceDisplay(property.price)}
-                    {property.status === 'for-rent' && <span className="text-sm text-gray-500"> / month</span>}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-6">
-                <Button className="w-full">Contact Agent</Button>
-              </div>
+          {/* Features */}
+          {property.features && property.features.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-2">Features</h3>
+              <PropertyFeatures features={property.features} />
             </div>
+          )}
+
+          {/* Location on map (placeholder) */}
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold mb-2">Location</h3>
+            <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
+              <p className="text-gray-600">Map view will be available soon</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div>
+          <div className="sticky top-24 bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+            <h3 className="text-xl font-semibold mb-4">Interested in this property?</h3>
+            <p className="mb-4">Contact us for more information or to schedule a viewing.</p>
+
+            <Button className="w-full mb-4">Schedule a Viewing</Button>
+            <Button variant="outline" className="w-full">
+              Request Information
+            </Button>
+
+            {property.createdAt && (
+              <p className="text-sm text-gray-500 mt-6">
+                Listed {timeAgo(property.createdAt)}
+              </p>
+            )}
           </div>
         </div>
       </div>
 
       {/* Contact section */}
-      <ContactSection />
+      <div className="mt-16">
+        <ContactSection />
+      </div>
     </div>
   );
 }
