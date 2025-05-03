@@ -1,0 +1,47 @@
+  npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+~/workspace$ npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/pages/Properties.tsx:45:22 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+45     if (searchParams.status) {
+                        ~~~~~~
+
+client/src/pages/Properties.tsx:46:63 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+46       constraintArray.push(where('status', '==', searchParams.status));
+                                                                 ~~~~~~
+
+client/src/pages/Properties.tsx:81:24 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+81       if (searchParams.status && property.status !== searchParams.status) {
+                          ~~~~~~
+
+client/src/pages/Properties.tsx:81:67 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+81       if (searchParams.status && property.status !== searchParams.status) {
+                                                                     ~~~~~~
+
+client/src/pages/Properties.tsx:97:22 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+97     if (searchParams.status) {
+                        ~~~~~~
+
+client/src/pages/Properties.tsx:99:22 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+99         searchParams.status === 'for-sale' ? 'Properties For Sale' :
+                        ~~~~~~
+
+client/src/pages/Properties.tsx:100:22 - error TS2339: Property 'status' does not exist on type '{ location?: string | undefined; type?: string | undefined; minPrice?: string | undefined; maxPrice?: string | undefined; }'.
+
+100         searchParams.status === 'for-rent' ? 'Properties For Rent' : ''
+                         ~~~~~~
+
+
+Found 7 errors in the same file, starting at: client/src/pages/Properties.tsx:45
