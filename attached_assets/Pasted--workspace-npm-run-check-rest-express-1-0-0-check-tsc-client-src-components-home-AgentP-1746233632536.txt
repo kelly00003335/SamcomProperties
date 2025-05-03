@@ -1,0 +1,194 @@
+~/workspace$ npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/components/home/AgentProfiles.tsx:61:27 - error TS2304: Cannot find name 'firestoreError'.
+
+61   if (firestoreLoading && firestoreError) {
+                             ~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:99:58 - error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+
+99                   <a href={agent.social && 'linkedin' in agent.social ? agent.social.linkedin as string : '#'} className="text-gray-600 hover:text-primary">
+                                                            ~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:102:57 - error TS2638: Type '{}' may represent a primitive value, which is not permitted as the right operand of the 'in' operator.
+
+102                   <a href={agent.social && 'twitter' in agent.social ? agent.social.twitter as string : '#'} className="text-gray-600 hover:text-primary">
+                                                            ~~~~~~~~~~~~
+
+client/src/components/home/Testimonials.tsx:30:15 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ id: number; role: string; content: string; image: string; name: string; rating: number; }'.
+
+30               createdAt: new Date()
+                 ~~~~~~~~~
+
+client/src/components/home/Testimonials.tsx:39:15 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ id: number; role: string; content: string; image: string; name: string; rating: number; }'.
+
+39               createdAt: new Date()
+                 ~~~~~~~~~
+
+client/src/components/home/Testimonials.tsx:48:15 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ id: number; role: string; content: string; image: string; name: string; rating: number; }'.
+
+48               createdAt: new Date()
+                 ~~~~~~~~~
+
+client/src/components/home/Testimonials.tsx:57:15 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ id: number; role: string; content: string; image: string; name: string; rating: number; }'.
+
+57               createdAt: new Date()
+                 ~~~~~~~~~
+
+client/src/components/properties/PropertySearch.tsx:78:78 - error TS2322: Type '{ children: (string | Element)[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+
+78             <Select value={locationFilter} onValueChange={setLocationFilter} className="text-[#212121] w-full"> {/* Added w-full for full width */}
+                                                                                ~~~~~~~~~
+
+client/src/components/properties/PropertySearch.tsx:96:74 - error TS2322: Type '{ children: Element[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+
+96             <Select value={propertyType} onValueChange={setPropertyType} className="text-[#212121] w-full">
+                                                                            ~~~~~~~~~
+
+client/src/components/properties/PropertySearch.tsx:114:70 - error TS2322: Type '{ children: Element[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+
+114             <Select value={priceRange} onValueChange={setPriceRange} className="text-[#212121] w-full">
+                                                                         ~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:42:49 - error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+
+42       const agent = await AgentAPI.getAgentById(property?.agentId);
+                                                   ~~~~~~~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:172:31 - error TS2769: No overload matches this call.
+  Overload 1 of 4, '(value: string | number | Date): Date', gave the following error.
+    Argument of type 'Date | null' is not assignable to parameter of type 'string | number | Date'.
+      Type 'null' is not assignable to type 'string | number | Date'.
+  Overload 2 of 4, '(value: string | number): Date', gave the following error.
+    Argument of type 'Date | null' is not assignable to parameter of type 'string | number'.
+      Type 'null' is not assignable to type 'string | number'.
+
+172                     {new Date(property.createdAt).getFullYear()}
+                                  ~~~~~~~~~~~~~~~~~~
+
+
+server/storage.ts:474:7 - error TS2740: Type 'Omit<PgSelectBase<"properties", { id: PgColumn<{ name: "id"; tableName: "properties"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; ... 5 more ...; generated: undefined; }, {}, {}>; ... 13 more ...; createdAt: PgColumn<...>; }, ......' is missing the following properties from type 'PgSelectBase<"properties", { id: PgColumn<{ name: "id"; tableName: "properties"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; ... 5 more ...; generated: undefined; }, {}, {}>; ... 13 more ...; createdAt: PgColumn<...>; }, ... 5 mo...': config, joinsNotNullableMap, tableName, isPartialSelect, and 5 more.
+
+474       query = conditions.length > 0
+          ~~~~~
+
+server/vite.ts:39:5 - error TS2322: Type '{ middlewareMode: boolean; hmr: { server: Server<typeof IncomingMessage, typeof ServerResponse>; }; allowedHosts: string; }' is not assignable to type 'ServerOptions'.
+  Types of property 'allowedHosts' are incompatible.
+    Type 'string' is not assignable to type 'true | string[] | undefined'.
+
+39     server: serverOptions,
+       ~~~~~~
+
+
+Found 14 errors in 6 files.
+
+Errors  Files
+     3  client/src/components/home/AgentProfiles.tsx:61
+     4  client/src/components/home/Testimonials.tsx:30
+     3  client/src/components/properties/PropertySearch.tsx:78
+     2  client/src/pages/PropertyDetail.tsx:42
+     1  server/storage.ts:474
+     1  server/vite.ts:39
+~/workspace$ npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/components/home/AgentProfiles.tsx:15:37 - error TS2339: Property 'getAll' does not exist on type '{ getAllAgents: () => Promise<{ title: string; image: string; id: number; name: string; email: string; bio: string; phone: string; social: unknown; }[]>; getAgentById: (id: string) => Promise<{ title: string; ... 6 more ...; social: unknown; } | null>; createAgent: (agent: any) => Promise<...>; updateAgent: (id: str...'.
+
+15         const data = await AgentAPI.getAll();
+                                       ~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:65:17 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 65                 {agent.social && (
+                    ~~~~~~~~~~~~~~~~~~
+ 66                 <div className="mt-4 flex gap-3">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 87                 </div>
+    ~~~~~~~~~~~~~~~~~~~~~~
+ 88                 )}
+    ~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:67:33 - error TS2339: Property 'linkedin' does not exist on type '{}'.
+
+67                   {agent.social.linkedin && (
+                                   ~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:68:43 - error TS2339: Property 'linkedin' does not exist on type '{}'.
+
+68                     <a href={agent.social.linkedin} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
+                                             ~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:72:33 - error TS2339: Property 'twitter' does not exist on type '{}'.
+
+72                   {agent.social.twitter && (
+                                   ~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:73:43 - error TS2339: Property 'twitter' does not exist on type '{}'.
+
+73                     <a href={agent.social.twitter} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
+                                             ~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:77:33 - error TS2339: Property 'email' does not exist on type '{}'.
+
+77                   {agent.social.email && (
+                                   ~~~~~
+
+client/src/components/home/AgentProfiles.tsx:82:33 - error TS2339: Property 'phone' does not exist on type '{}'.
+
+82                   {agent.social.phone && (
+                                   ~~~~~
+
+client/src/components/home/Testimonials.tsx:15:43 - error TS2339: Property 'getAll' does not exist on type '{ getAllTestimonials: () => Promise<{ image: string; id: number; role: string; content: string; name: string; rating: number; }[]>; createTestimonial: (testimonial: any) => Promise<{ image: string; ... 4 more ...; rating: number; }>; }'.
+
+15         const data = await TestimonialAPI.getAll();
+                                             ~~~~~~
+
+client/src/pages/PropertyDetail.tsx:31:40 - error TS2339: Property 'getById' does not exist on type '{ getAllProperties: () => Promise<FirebaseProperty[]>; getPropertyById: (id: string) => Promise<FirebaseProperty | null>; ... 4 more ...; deleteProperty: (id: string) => Promise<...>; }'.
+
+31         const data = await PropertyAPI.getById(propertyId);
+                                          ~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:89:22 - error TS2554: Expected 2 arguments, but got 1.
+
+89                     {formatPriceDisplay(property.price)}
+                        ~~~~~~~~~~~~~~~~~~
+
+  client/src/lib/utils.ts:14:51
+    14 export function formatPriceDisplay(price: number, status: string): string {
+                                                         ~~~~~~~~~~~~~~
+    An argument for 'status' was not provided.
+
+client/src/pages/PropertyDetail.tsx:187:22 - error TS2554: Expected 2 arguments, but got 1.
+
+187                     {formatPriceDisplay(property.price)}
+                         ~~~~~~~~~~~~~~~~~~
+
+  client/src/lib/utils.ts:14:51
+    14 export function formatPriceDisplay(price: number, status: string): string {
+                                                         ~~~~~~~~~~~~~~
+    An argument for 'status' was not provided.
+
+server/vite.ts:39:5 - error TS2322: Type '{ middlewareMode: boolean; hmr: { server: Server<typeof IncomingMessage, typeof ServerResponse>; }; allowedHosts: boolean; }' is not assignable to type 'ServerOptions'.
+  Types of property 'allowedHosts' are incompatible.
+    Type 'boolean' is not assignable to type 'true | string[] | undefined'.
+
+39     server: serverOptions,
+       ~~~~~~
+
+
+Found 13 errors in 4 files.
+
+Errors  Files
+     8  client/src/components/home/AgentProfiles.tsx:15
+     1  client/src/components/home/Testimonials.tsx:15
+     3  client/src/pages/PropertyDetail.tsx:31
+     1  server/vite.ts:39
