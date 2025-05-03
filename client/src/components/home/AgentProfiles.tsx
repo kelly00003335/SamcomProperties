@@ -1,9 +1,9 @@
+
 import { useEffect, useState } from 'react';
 import { AgentAPI } from '@/lib/api';
 import Spinner from '@/components/ui/spinner';
 import { Agent } from '@shared/schema';
-import { MailIcon, PhoneIcon } from '@heroicons/react/outline';
-import { FaLinkedin, FaTwitter } from 'react-icons/fa';
+import { FaLinkedin, FaTwitter, FaEnvelope, FaPhone } from 'react-icons/fa';
 
 export default function AgentProfiles() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -77,10 +77,10 @@ export default function AgentProfiles() {
                     </a>
                   )}
                   <a href={`mailto:${agent.email}`} className="text-gray-400 hover:text-blue-600" aria-label="Email">
-                    <MailIcon className="h-5 w-5" />
+                    <FaEnvelope className="h-5 w-5" />
                   </a>
                   <a href={`tel:${agent.phone}`} className="text-gray-400 hover:text-blue-600" aria-label="Phone">
-                    <PhoneIcon className="h-5 w-5" />
+                    <FaPhone className="h-5 w-5" />
                   </a>
                 </div>
                 )}
