@@ -1,0 +1,53 @@
+~/workspace$ npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/components/home/AgentProfiles.tsx:67:17 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 67                 {agent.social && typeof agent.social === 'object' && (
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 68                 <div className="mt-4 flex gap-3">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 85                 </div>
+    ~~~~~~~~~~~~~~~~~~~~~~
+ 86                 )}
+    ~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:69:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 69                   {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 70                     <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 72                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 73                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:74:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 74                   {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 75                     <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 77                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 78                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:31:40 - error TS2339: Property 'getById' does not exist on type '{ getAllProperties: () => Promise<FirebaseProperty[]>; getPropertyById: (id: string) => Promise<FirebaseProperty | null>; ... 4 more ...; deleteProperty: (id: string) => Promise<...>; }'.
+
+31         const data = await PropertyAPI.getById(propertyId);
+                                          ~~~~~~~
+
+
+Found 4 errors in 2 files.
+
+Errors  Files
+     3  client/src/components/home/AgentProfiles.tsx:67
+     1  client/src/pages/PropertyDetail.tsx:31
+~/workspace$ 
