@@ -1,7 +1,7 @@
 // Simple build helper
 import { execSync } from 'child_process';
 import fs from 'fs';
-import path from 'path'; // Import path module
+import path from 'path';
 
 console.log('🔄 Starting build process');
 
