@@ -23,6 +23,9 @@ export function formatPriceDisplay(price: number, status: string): string {
   }
 }
 
+// Also export formatPrice as an alias for formatPriceDisplay for backward compatibility
+export const formatPrice = formatPriceDisplay;
+
 /**
  * Truncate text with ellipsis
  * @param text Text to truncate
