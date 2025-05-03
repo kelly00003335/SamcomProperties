@@ -1,0 +1,73 @@
+~/workspace$  npm run check
+
+> rest-express@1.0.0 check
+> tsc
+
+client/src/components/home/AgentProfiles.tsx:69:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 69                   {agent.social &&
+                      ~~~~~~~~~~~~~~~~
+ 70                    typeof agent.social === 'object' &&
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 75                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 76                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:77:19 - error TS2322: Type 'unknown' is not assignable to type 'ReactNode'.
+
+ 77                   {agent.social &&
+                      ~~~~~~~~~~~~~~~~
+ 78                    typeof agent.social === 'object' &&
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+... 
+ 83                     </a>
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+ 84                   )}
+    ~~~~~~~~~~~~~~~~~~~~
+
+
+Found 2 errors in the same file, starting at: client/src/components/home/AgentProfiles.tsx:69
+
+
+ChatGPT said:
+Alright, TypeScript is still throwing a tantrum because it can't guarantee that the result of your logical expression is a valid ReactNode. It's paranoid like that — even though the JSX is fine, the && chaining results in a type of unknown, which React doesn't accept directly.
+
+Let’s shut it up once and for all. Here's how to cleanly fix this:
+
+✅ SOLUTION: Wrap in a fragment (<>...</>) and isolate your logic
+Update the component to this:
+
+tsx
+Copy
+Edit
+{agent.social && typeof agent.social === 'object' && (
+  <>
+    {'linkedin' in agent.social && agent.social.linkedin ? (
+      <a
+        href={String(agent.social.linkedin)}
+        className="text-gray-400 hover:text-blue-600"
+        aria-label="LinkedIn"
+      >
+        <FaLinkedin />
+      </a>
+    ) : null}
+
+    {'twitter' in agent.social && agent.social.twitter ? (
+      <a
+        href={String(agent.social.twitter)}
+        className="text-gray-400 hover:text-blue-500"
+        aria-label="Twitter"
+      >
+        <FaTwitter />
+      </a>
+    ) : null}
+  </>
+)}
+Why this works:
+JSX expressions must return a ReactNode.
+
+When you use && chains directly in JSX, TypeScript considers the final result unknown if it can’t infer that it definitely returns valid JSX.
+
+Wrapping each block in a ternary like condition ? <JSX /> : null guarantees a valid return type.
