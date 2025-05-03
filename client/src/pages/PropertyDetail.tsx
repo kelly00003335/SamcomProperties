@@ -28,7 +28,7 @@ export default function PropertyDetail() {
     const fetchProperty = async () => {
       setLoading(true);
       try {
-        const data = await PropertyAPI.getById(propertyId);
+        const data = await PropertyAPI.getPropertyById(propertyId);
         if (data) {
           console.log('Property data:', data);
           setProperty(data);

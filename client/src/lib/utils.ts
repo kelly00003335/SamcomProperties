@@ -1,8 +1,17 @@
-import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+export function formatPrice(price: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'KES',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(price);
 }
 
 /**
@@ -14,7 +23,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatPriceDisplay(price: number, status?: string): string {
   // Format number with commas
   const formattedPrice = price.toLocaleString('en-US');
-  
+
   // Add KSh and /mo for rentals
   if (status === 'for-rent') {
     return `KSh ${formattedPrice}/mo`;
@@ -45,20 +54,20 @@ export function truncateText(text: string, maxLength: number): string {
 export function timeAgo(date: Date | string): string {
   const now = new Date();
   const diffMs = now.getTime() - new Date(date).getTime();
-  
+
   const seconds = Math.floor(diffMs / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
   const months = Math.floor(days / 30);
   const years = Math.floor(months / 12);
-  
+
   if (years > 0) return `${years} year${years > 1 ? 's' : ''} ago`;
   if (months > 0) return `${months} month${months > 1 ? 's' : ''} ago`;
   if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
   if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
   if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-  
+
   return 'Just now';
 }
 

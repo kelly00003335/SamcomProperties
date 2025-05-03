@@ -1,31 +1,21 @@
-import React from "react";
-import { cn } from "@/lib/utils";
 
-interface SpinnerProps extends React.HTMLAttributes<HTMLDivElement> {
+import React from "react";
+
+interface SpinnerProps {
   size?: "sm" | "md" | "lg";
+  className?: string;
 }
 
-const Spinner = React.forwardRef<HTMLDivElement, SpinnerProps>(
-  ({ className, size = "md", ...props }, ref) => {
-    const sizeClasses = {
-      sm: "h-4 w-4",
-      md: "h-8 w-8",
-      lg: "h-12 w-12",
-    };
+export default function Spinner({ size = "md", className = "" }: SpinnerProps) {
+  const sizeClasses = {
+    sm: "h-4 w-4",
+    md: "h-8 w-8",
+    lg: "h-12 w-12",
+  };
 
-    return (
-      <div
-        ref={ref}
-        className={cn("animate-spin", sizeClasses[size], className)}
-        {...props}
-      >
-        <div className="h-full w-full rounded-full border-4 border-primary border-t-transparent"></div>
-      </div>
-    );
-  }
-);
-
-Spinner.displayName = "Spinner";
-
-export { Spinner };
-export default Spinner;
+  return (
+    <div className={`${className} flex justify-center items-center`}>
+      <div className={`animate-spin rounded-full border-t-2 border-b-2 border-blue-500 ${sizeClasses[size]}`}></div>
+    </div>
+  );
+}
