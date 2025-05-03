@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { AgentAPI } from '@/lib/api';
 import Spinner from '@/components/ui/spinner';
 import { Agent } from '@shared/schema';
+import { LinkedinIcon, TwitterIcon, Mail, Phone } from '@heroicons/react/24/outline';
 
 export default function AgentProfiles() {
   const [agents, setAgents] = useState<Agent[]>([]);
@@ -12,8 +13,8 @@ export default function AgentProfiles() {
     const fetchAgents = async () => {
       setLoading(true);
       try {
-        const data = await AgentAPI.getAll();
-        setAgents(data);
+        const data = await AgentAPI.getAllAgents();
+        setAgents(data || []);
         setError(null);
       } catch (err) {
         console.error('Error fetching agents:', err);
@@ -62,28 +63,24 @@ export default function AgentProfiles() {
                   </span>
                 </div>
 
-                {agent.social && (
+                {agent.social && typeof agent.social === 'object' && (
                 <div className="mt-4 flex gap-3">
-                  {agent.social.linkedin && (
-                    <a href={agent.social.linkedin} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
-                      <i className="fab fa-linkedin fa-lg"></i>
+                  {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
+                    <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
+                      <LinkedinIcon className="h-5 w-5" />
                     </a>
                   )}
-                  {agent.social.twitter && (
-                    <a href={agent.social.twitter} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
-                      <i className="fab fa-twitter fa-lg"></i>
+                  {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
+                    <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
+                      <TwitterIcon className="h-5 w-5" />
                     </a>
                   )}
-                  {agent.social.email && (
-                    <a href={`mailto:${agent.email}`} className="text-gray-400 hover:text-red-500" aria-label="Email">
-                      <i className="fas fa-envelope fa-lg"></i>
-                    </a>
-                  )}
-                  {agent.social.phone && (
-                    <a href={`tel:${agent.phone}`} className="text-gray-400 hover:text-green-500" aria-label="Phone">
-                      <i className="fas fa-phone fa-lg"></i>
-                    </a>
-                  )}
+                  <a href={`mailto:${agent.email}`} className="text-gray-400 hover:text-blue-600" aria-label="Email">
+                    <Mail className="h-5 w-5" />
+                  </a>
+                  <a href={`tel:${agent.phone}`} className="text-gray-400 hover:text-blue-600" aria-label="Phone">
+                    <Phone className="h-5 w-5" />
+                  </a>
                 </div>
                 )}
               </div>

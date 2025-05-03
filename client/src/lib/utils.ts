@@ -11,7 +11,7 @@ export function cn(...inputs: ClassValue[]) {
  * @param status Property status (for-sale, for-rent)
  * @returns Formatted price string
  */
-export function formatPriceDisplay(price: number, status: string): string {
+export function formatPriceDisplay(price: number, status?: string): string {
   // Format number with commas
   const formattedPrice = price.toLocaleString('en-US');
   

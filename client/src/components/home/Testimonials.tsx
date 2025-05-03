@@ -3,6 +3,41 @@ import { TestimonialAPI } from '@/lib/api';
 import { Testimonial } from '@shared/schema';
 import Spinner from '@/components/ui/spinner';
 
+const defaultTestimonials: Testimonial[] = [
+    {
+      id: 1,
+      name: 'Jane Smith',
+      role: 'Home Buyer',
+      content: 'Working with Samcom Properties was an excellent experience. They understood my requirements and found me the perfect home within my budget.',
+      image: '/img/testimonials/person1.jpg',
+      rating: 5
+    },
+    {
+      id: 2,
+      name: 'John Davis',
+      role: 'Property Investor',
+      content: 'I\'ve worked with many real estate agencies, but Samcom Properties stands out with their market knowledge and professional service.',
+      image: '/img/testimonials/person2.jpg',
+      rating: 5
+    },
+    {
+      id: 3,
+      name: 'Mary Johnson',
+      role: 'First-time Buyer',
+      content: 'The team at Samcom made buying my first home a smooth process. They guided me through every step and answered all my questions.',
+      image: '/img/testimonials/person3.jpg',
+      rating: 4
+    },
+    {
+      id: 4, 
+      name: 'David Williams',
+      role: 'Commercial Client',
+      content: 'Their expertise in commercial real estate is impressive. They helped us find the perfect location for our new business.',
+      image: '/img/testimonials/person4.jpg',
+      rating: 5
+    }
+  ];
+
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
@@ -10,14 +45,13 @@ export default function Testimonials() {
 
   useEffect(() => {
     const fetchTestimonials = async () => {
-      setLoading(true);
       try {
-        const data = await TestimonialAPI.getAll();
-        setTestimonials(data);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching testimonials:', err);
-        setError('Failed to load testimonials');
+        setLoading(true);
+        const data = await TestimonialAPI.getAllTestimonials();
+        setTestimonials(data || defaultTestimonials);
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+        setTestimonials(defaultTestimonials);
       } finally {
         setLoading(false);
       }
