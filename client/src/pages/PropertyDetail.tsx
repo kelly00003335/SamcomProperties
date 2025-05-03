@@ -10,6 +10,18 @@ import ContactSection from '@/components/home/ContactSection';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { FaBed, FaBath, FaRuler } from 'react-icons/fa';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function PropertyDetail() {
   const [, params] = useRoute('/properties/:id');
@@ -157,10 +169,103 @@ export default function PropertyDetail() {
             <h3 className="text-xl font-semibold mb-4">Interested in this property?</h3>
             <p className="mb-4">Contact us for more information or to schedule a viewing.</p>
 
-            <Button className="w-full mb-4">Schedule a Viewing</Button>
-            <Button variant="outline" className="w-full">
-              Request Information
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="w-full mb-4">Schedule a Viewing</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Schedule a Viewing</DialogTitle>
+                  <DialogDescription>
+                    Fill out the form below to schedule a viewing for this property.
+                  </DialogDescription>
+                </DialogHeader>
+                <form className="space-y-4">
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Name
+                      </Label>
+                      <Input id="name" className="col-span-3" placeholder="Your full name" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="email" className="text-right">
+                        Email
+                      </Label>
+                      <Input id="email" type="email" className="col-span-3" placeholder="Your email" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="phone" className="text-right">
+                        Phone
+                      </Label>
+                      <Input id="phone" type="tel" className="col-span-3" placeholder="Your phone number" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="date" className="text-right">
+                        Date
+                      </Label>
+                      <Input id="date" type="date" className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="time" className="text-right">
+                        Time
+                      </Label>
+                      <Input id="time" type="time" className="col-span-3" />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Submit Request</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="w-full">
+                  Request Information
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Request Information</DialogTitle>
+                  <DialogDescription>
+                    Ask us anything about this property and we'll get back to you.
+                  </DialogDescription>
+                </DialogHeader>
+                <form className="space-y-4">
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="info-name" className="text-right">
+                        Name
+                      </Label>
+                      <Input id="info-name" className="col-span-3" placeholder="Your full name" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="info-email" className="text-right">
+                        Email
+                      </Label>
+                      <Input id="info-email" type="email" className="col-span-3" placeholder="Your email" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="info-phone" className="text-right">
+                        Phone
+                      </Label>
+                      <Input id="info-phone" type="tel" className="col-span-3" placeholder="Your phone number" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="message" className="text-right">
+                        Message
+                      </Label>
+                      <Textarea id="message" className="col-span-3" placeholder="Your questions about this property" />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Send Request</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
 
             {property.createdAt && (
               <p className="text-sm text-gray-500 mt-6">
