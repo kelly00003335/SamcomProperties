@@ -10,18 +10,18 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const locationOptions = ['', 'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret'];
-const typeOptions = ['', 'house', 'apartment', 'land', 'commercial'];
-const statusOptions = ['', 'for-sale', 'for-rent'];
+const locationOptions = ['all', 'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret'];
+const typeOptions = ['all', 'house', 'apartment', 'land', 'commercial'];
+const statusOptions = ['all', 'for-sale', 'for-rent'];
 
 export default function PropertySearch() {
   const [, setLocation] = useLocation();
   const [searchParams, setSearchParams] = useState({
-    location: '',
-    type: '',
+    location: 'all',
+    type: 'all',
     minPrice: '',
     maxPrice: '',
-    status: '',
+    status: 'all',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,15 +39,15 @@ export default function PropertySearch() {
     // Build the query string from non-empty parameters
     const queryParams = new URLSearchParams();
 
-    if (searchParams.location) {
+    if (searchParams.location !== 'all') {
       queryParams.append('location', searchParams.location);
     }
 
-    if (searchParams.type) {
+    if (searchParams.type !== 'all') {
       queryParams.append('type', searchParams.type);
     }
 
-    if (searchParams.status) {
+    if (searchParams.status !== 'all') {
       queryParams.append('status', searchParams.status);
     }
 
@@ -76,8 +76,8 @@ export default function PropertySearch() {
             </SelectTrigger>
             <SelectContent>
               {locationOptions.map((location) => (
-                <SelectItem key={location || 'any'} value={location}>
-                  {location ? location : 'Any location'}
+                <SelectItem key={location} value={location}>
+                  {location === 'all' ? 'Any location' : location}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -94,8 +94,8 @@ export default function PropertySearch() {
             </SelectTrigger>
             <SelectContent>
               {typeOptions.map((type) => (
-                <SelectItem key={type || 'any-type'} value={type}>
-                  {type ? type.charAt(0).toUpperCase() + type.slice(1) : 'Any type'}
+                <SelectItem key={type} value={type}>
+                  {type === 'all' ? 'Any type' : type.charAt(0).toUpperCase() + type.slice(1)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -112,10 +112,10 @@ export default function PropertySearch() {
             </SelectTrigger>
             <SelectContent>
               {statusOptions.map((status) => (
-                <SelectItem key={status || 'any-status'} value={status}>
-                  {status 
-                    ? status.replace('-', ' ').charAt(0).toUpperCase() + status.replace('-', ' ').slice(1) 
-                    : 'Any status'}
+                <SelectItem key={status} value={status}>
+                  {status === 'all'
+                    ? 'Any status'
+                    : status.replace('-', ' ').charAt(0).toUpperCase() + status.replace('-', ' ').slice(1)}
                 </SelectItem>
               ))}
             </SelectContent>

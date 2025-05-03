@@ -9,7 +9,7 @@ import {
   Square 
 } from "lucide-react";
 import { Property, FirebaseProperty } from "@shared/schema";
-import { formatPriceDisplay } from "@/lib/utils";
+import { formatPriceDisplay, truncateText } from "@/lib/utils";
 
 interface PropertyCardProps {
   property: Property | FirebaseProperty;

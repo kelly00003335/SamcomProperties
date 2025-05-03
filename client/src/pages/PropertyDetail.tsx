@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRoute } from 'wouter';
-import { formatPrice } from '@/lib/utils';
+import { formatPriceDisplay, timeAgo } from '@/lib/utils';
 import { PropertyAPI } from '@/lib/api';
 import { FirebaseProperty } from '@shared/schema';
 import PropertyGallery from '@/components/properties/PropertyGallery';
@@ -86,7 +86,7 @@ export default function PropertyDetail() {
                 </div>
                 <div>
                   <span className="text-xl sm:text-2xl font-bold text-blue-600">
-                    {formatPrice(property.price)}
+                    {formatPriceDisplay(property.price)}
                   </span>
                   {property.status === 'for-rent' && <span className="text-gray-500 text-sm"> / month</span>}
                 </div>
@@ -184,7 +184,7 @@ export default function PropertyDetail() {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Price:</span>
                   <span className="font-semibold text-blue-600">
-                    {formatPrice(property.price)}
+                    {formatPriceDisplay(property.price)}
                     {property.status === 'for-rent' && <span className="text-sm text-gray-500"> / month</span>}
                   </span>
                 </div>

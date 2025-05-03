@@ -23,7 +23,7 @@ const FeaturedProperties = () => {
             <Skeleton className="h-10 w-64 mx-auto mb-4" />
             <Skeleton className="h-6 w-full max-w-2xl mx-auto" />
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -65,13 +65,13 @@ const FeaturedProperties = () => {
             Discover our handpicked selection of premium properties available for sale and rent across Kenya.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {properties?.map((property) => (
             <PropertyCard key={property.id} property={property} />
           ))}
         </div>
-        
+
         <div className="text-center mt-12">
           <Link href="/properties">
             <Button className="bg-primary hover:bg-primary-dark text-white">
