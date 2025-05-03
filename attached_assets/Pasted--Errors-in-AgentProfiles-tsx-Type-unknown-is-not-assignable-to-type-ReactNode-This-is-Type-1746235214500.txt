@@ -1,0 +1,68 @@
+🚨 Errors in AgentProfiles.tsx — "Type 'unknown' is not assignable to type 'ReactNode'"
+This is TypeScript freaking out because you're using optional chaining and a runtime check, but TS still isn't convinced the returned expression is a valid React node.
+
+Fix: You need to cast the conditionally rendered JSX block as React.ReactNode, or wrap it in a fragment.
+
+🔧 Suggested Fix:
+tsx
+Copy
+Edit
+{agent.social && typeof agent.social === 'object' && (
+  <>
+    {'linkedin' in agent.social && agent.social.linkedin && (
+      <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
+        <FaLinkedin />
+      </a>
+    )}
+    {'twitter' in agent.social && agent.social.twitter && (
+      <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
+        <FaTwitter />
+      </a>
+    )}
+  </>
+)}
+Alternatively, explicitly cast the block:
+
+tsx
+Copy
+Edit
+{(agent.social && typeof agent.social === 'object' && (
+  <div>...</div>
+)) as React.ReactNode}
+⚠️ Errors in PropertyDetail.tsx
+❌ Missing title prop in <PropertyGallery />:
+ts
+Copy
+Edit
+<PropertyGallery images={property.images} />
+Fix: Pass the title prop like:
+
+ts
+Copy
+Edit
+<PropertyGallery title={property.title || 'Property'} images={property.images} />
+❌ Nullish values being compared (property.bedrooms > 0, etc.)
+This happens because property.bedrooms, property.bathrooms, or property.area could be null.
+
+Fix: Use optional chaining or a nullish coalescing fallback:
+
+tsx
+Copy
+Edit
+{(property.bedrooms ?? 0) > 0 && (
+  <p>{property.bedrooms} Bedrooms</p>
+)}
+Or for a one-liner:
+
+tsx
+Copy
+Edit
+{property.bedrooms && property.bedrooms > 0 && ( ... )}
+But the ?? operator is safer if 0 is a valid value and you want to guard against null or undefined.
+
+Summary of Fixes
+✅ Wrap conditional blocks in React.Fragment or cast to React.ReactNode.
+
+✅ Pass required props (title) to components.
+
+✅ Use null-coalescing for potentially nullable number fields.
