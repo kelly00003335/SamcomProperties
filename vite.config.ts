@@ -18,7 +18,7 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    allowedHosts: 'all',
+    allowedHosts: ['all', 'b0283b18-2dd0-4b9f-b455-63b892239c9e-00-358fq5170gbf.janeway.replit.dev'],
   },
   resolve: {
     alias: {
