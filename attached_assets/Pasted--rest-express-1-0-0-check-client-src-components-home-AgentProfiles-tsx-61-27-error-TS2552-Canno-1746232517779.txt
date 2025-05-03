@@ -1,0 +1,305 @@
+
+> rest-express@1.0.0 check
+client/src/components/home/AgentProfiles.tsx:61:27 - error TS2552: Cannot find name 'error'. Did you mean 'Error'?
+
+61   if (firestoreLoading && error) {
+                             ~~~~~
+
+  node_modules/typescript/lib/lib.es5.d.ts:1087:13
+    1087 declare var Error: ErrorConstructor;
+                     ~~~~~
+    'Error' is declared here.
+
+client/src/components/home/AgentProfiles.tsx:99:42 - error TS2339: Property 'linkedin' does not exist on type '{}'.
+
+99                   <a href={agent.social?.linkedin} className="text-gray-600 hover:text-primary">
+                                            ~~~~~~~~
+
+client/src/components/home/AgentProfiles.tsx:102:42 - error TS2339: Property 'twitter' does not exist on type '{}'.
+
+102                   <a href={agent.social?.twitter} className="text-gray-600 hover:text-primary">
+                                             ~~~~~~~
+
+client/src/components/home/Testimonials.tsx:24:15 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+24               id: "1",
+                 ~~
+
+  node_modules/drizzle-orm/utils.d.ts:11:27
+    11 export type Simplify<T> = {
+                                 ~
+    12     [K in keyof T]: T[K];
+       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    13 } & {};
+       ~
+    The expected type comes from property 'id' which is declared here on type '{ id: number; name: string; image: string; role: string; content: string; rating: number; }'
+
+client/src/components/home/Testimonials.tsx:33:15 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+33               id: "2",
+                 ~~
+
+  node_modules/drizzle-orm/utils.d.ts:11:27
+    11 export type Simplify<T> = {
+                                 ~
+    12     [K in keyof T]: T[K];
+       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    13 } & {};
+       ~
+    The expected type comes from property 'id' which is declared here on type '{ id: number; name: string; image: string; role: string; content: string; rating: number; }'
+
+client/src/components/home/Testimonials.tsx:42:15 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+42               id: "3",
+                 ~~
+
+  node_modules/drizzle-orm/utils.d.ts:11:27
+    11 export type Simplify<T> = {
+                                 ~
+    12     [K in keyof T]: T[K];
+       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    13 } & {};
+       ~
+    The expected type comes from property 'id' which is declared here on type '{ id: number; name: string; image: string; role: string; content: string; rating: number; }'
+
+client/src/components/home/Testimonials.tsx:51:15 - error TS2322: Type 'string' is not assignable to type 'number'.
+
+51               id: "4",
+                 ~~
+
+  node_modules/drizzle-orm/utils.d.ts:11:27
+    11 export type Simplify<T> = {
+                                 ~
+    12     [K in keyof T]: T[K];
+       ~~~~~~~~~~~~~~~~~~~~~~~~~
+    13 } & {};
+       ~
+    The expected type comes from property 'id' which is declared here on type '{ id: number; name: string; image: string; role: string; content: string; rating: number; }'
+
+client/src/components/properties/PropertySearch.tsx:78:78 - error TS2322: Type '{ children: (string | Element)[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+
+78             <Select value={locationFilter} onValueChange={setLocationFilter} className="text-[#212121] w-full"> {/* Added w-full for full width */}
+                                                                                ~~~~~~~~~
+
+client/src/components/properties/PropertySearch.tsx:96:74 - error TS2322: Type '{ children: Element[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+
+96             <Select value={propertyType} onValueChange={setPropertyType} className="text-[#212121] w-full">
+                                                                            ~~~~~~~~~
+
+client/src/components/properties/PropertySearch.tsx:114:70 - error TS2322: Type '{ children: Element[]; value: string; onValueChange: Dispatch<SetStateAction<string>>; className: string; }' is not assignable to type 'IntrinsicAttributes & SelectProps'.
+  Property 'className' does not exist on type 'IntrinsicAttributes & SelectProps'.
+
+114             <Select value={priceRange} onValueChange={setPriceRange} className="text-[#212121] w-full">
+                                                                         ~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:27:5 - error TS2769: No overload matches this call.
+  Overload 1 of 3, '(options: DefinedInitialDataOptions<FirebaseProperty, Error, FirebaseProperty, QueryKey>, queryClient?: QueryClient | undefined): DefinedUseQueryResult<...>', gave the following error.
+    Type '() => Promise<FirebaseProperty | null>' is not assignable to type 'unique symbol | QueryFunction<FirebaseProperty, QueryKey, never> | undefined'.
+      Type '() => Promise<FirebaseProperty | null>' is not assignable to type 'QueryFunction<FirebaseProperty, QueryKey, never>'.
+        Type 'Promise<FirebaseProperty | null>' is not assignable to type 'FirebaseProperty | Promise<FirebaseProperty>'.
+          Type 'Promise<FirebaseProperty | null>' is not assignable to type 'Promise<FirebaseProperty>'.
+            Type 'FirebaseProperty | null' is not assignable to type 'FirebaseProperty'.
+              Type 'null' is not assignable to type 'FirebaseProperty'.
+                Type 'null' is not assignable to type 'Omit<{ id: number; title: string; description: string; price: number; location: string; type: string; status: string; bedrooms: number | null; bathrooms: number | null; area: number | null; images: string[]; features: string[] | null; agentId: number | null; isFeatured: boolean | null; createdAt: Date | null; }, "id">'.
+  Overload 2 of 3, '(options: UndefinedInitialDataOptions<FirebaseProperty, Error, FirebaseProperty, QueryKey>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Type '() => Promise<FirebaseProperty | null>' is not assignable to type 'unique symbol | QueryFunction<FirebaseProperty, QueryKey, never> | undefined'.
+      Type '() => Promise<FirebaseProperty | null>' is not assignable to type 'QueryFunction<FirebaseProperty, QueryKey, never>'.
+        Type 'Promise<FirebaseProperty | null>' is not assignable to type 'FirebaseProperty | Promise<FirebaseProperty>'.
+          Type 'Promise<FirebaseProperty | null>' is not assignable to type 'Promise<FirebaseProperty>'.
+            Type 'FirebaseProperty | null' is not assignable to type 'FirebaseProperty'.
+              Type 'null' is not assignable to type 'FirebaseProperty'.
+                Type 'null' is not assignable to type 'Omit<{ id: number; title: string; description: string; price: number; location: string; type: string; status: string; bedrooms: number | null; bathrooms: number | null; area: number | null; images: string[]; features: string[] | null; agentId: number | null; isFeatured: boolean | null; createdAt: Date | null; }, "id">'.
+  Overload 3 of 3, '(options: UseQueryOptions<FirebaseProperty, Error, FirebaseProperty, QueryKey>, queryClient?: QueryClient | undefined): UseQueryResult<...>', gave the following error.
+    Type '() => Promise<FirebaseProperty | null>' is not assignable to type 'unique symbol | QueryFunction<FirebaseProperty, QueryKey, never> | undefined'.
+      Type '() => Promise<FirebaseProperty | null>' is not assignable to type 'QueryFunction<FirebaseProperty, QueryKey, never>'.
+        Type 'Promise<FirebaseProperty | null>' is not assignable to type 'FirebaseProperty | Promise<FirebaseProperty>'.
+          Type 'Promise<FirebaseProperty | null>' is not assignable to type 'Promise<FirebaseProperty>'.
+            Type 'FirebaseProperty | null' is not assignable to type 'FirebaseProperty'.
+              Type 'null' is not assignable to type 'FirebaseProperty'.
+                Type 'null' is not assignable to type 'Omit<{ id: number; title: string; description: string; price: number; location: string; type: string; status: string; bedrooms: number | null; bathrooms: number | null; area: number | null; images: string[]; features: string[] | null; agentId: number | null; isFeatured: boolean | null; createdAt: Date | null; }, "id">'.
+
+27     queryFn: async () => {
+       ~~~~~~~
+
+  node_modules/@tanstack/query-core/build/modern/hydration-mKPlgzt9.d.ts:579:5
+    579     queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam> | SkipToken;
+            ~~~~~~~
+    The expected type comes from property 'queryFn' which is declared here on type 'DefinedInitialDataOptions<FirebaseProperty, Error, FirebaseProperty, QueryKey>'
+  node_modules/@tanstack/query-core/build/modern/hydration-mKPlgzt9.d.ts:579:5
+    579     queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam> | SkipToken;
+            ~~~~~~~
+    The expected type comes from property 'queryFn' which is declared here on type 'UndefinedInitialDataOptions<FirebaseProperty, Error, FirebaseProperty, QueryKey>'
+  node_modules/@tanstack/query-core/build/modern/hydration-mKPlgzt9.d.ts:579:5
+    579     queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam> | SkipToken;
+            ~~~~~~~
+    The expected type comes from property 'queryFn' which is declared here on type 'UseQueryOptions<FirebaseProperty, Error, FirebaseProperty, QueryKey>'
+
+client/src/pages/PropertyDetail.tsx:35:35 - error TS2339: Property 'agentId' does not exist on type 'NonNullable<TQueryFnData>'.
+
+35     queryKey: ['agent', property?.agentId],
+                                     ~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:37:56 - error TS2339: Property 'agentId' does not exist on type 'NonNullable<TQueryFnData>'.
+
+37       console.log(`Fetching agent with ID: ${property?.agentId}`);
+                                                          ~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:38:52 - error TS2339: Property 'agentId' does not exist on type 'NonNullable<TQueryFnData>'.
+
+38       return await AgentAPI.getAgentById(property?.agentId || '');
+                                                      ~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:40:26 - error TS2339: Property 'agentId' does not exist on type 'NonNullable<TQueryFnData>'.
+
+40     enabled: !!property?.agentId,
+                            ~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:116:90 - error TS2339: Property 'title' does not exist on type 'NonNullable<TQueryFnData>'.
+
+116               <h1 className="text-3xl md:text-4xl font-bold mb-2 font-heading">{property.title}</h1>
+                                                                                             ~~~~~
+
+client/src/pages/PropertyDetail.tsx:118:76 - error TS2339: Property 'location' does not exist on type 'NonNullable<TQueryFnData>'.
+
+118                 <MapPin className="h-4 w-4 text-primary mr-2" /> {property.location}
+                                                                               ~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:123:46 - error TS2339: Property 'price' does not exist on type 'NonNullable<TQueryFnData>'.
+
+123                 {formatPriceDisplay(property.price, property.status)}
+                                                 ~~~~~
+
+client/src/pages/PropertyDetail.tsx:123:62 - error TS2339: Property 'status' does not exist on type 'NonNullable<TQueryFnData>'.
+
+123                 {formatPriceDisplay(property.price, property.status)}
+                                                                 ~~~~~~
+
+client/src/pages/PropertyDetail.tsx:134:47 - error TS2339: Property 'images' does not exist on type 'NonNullable<TQueryFnData>'.
+
+134             <PropertyGallery images={property.images} title={property.title} />
+                                                  ~~~~~~
+
+client/src/pages/PropertyDetail.tsx:134:71 - error TS2339: Property 'title' does not exist on type 'NonNullable<TQueryFnData>'.
+
+134             <PropertyGallery images={property.images} title={property.title} />
+                                                                          ~~~~~
+
+client/src/pages/PropertyDetail.tsx:139:27 - error TS2339: Property 'bedrooms' does not exist on type 'NonNullable<TQueryFnData>'.
+
+139                 {property.bedrooms !== null && (
+                              ~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:142:71 - error TS2339: Property 'bedrooms' does not exist on type 'NonNullable<TQueryFnData>'.
+
+142                     <span className="text-lg font-semibold">{property.bedrooms}</span>
+                                                                          ~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:147:27 - error TS2339: Property 'bathrooms' does not exist on type 'NonNullable<TQueryFnData>'.
+
+147                 {property.bathrooms !== null && (
+                              ~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:150:71 - error TS2339: Property 'bathrooms' does not exist on type 'NonNullable<TQueryFnData>'.
+
+150                     <span className="text-lg font-semibold">{property.bathrooms}</span>
+                                                                          ~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:155:27 - error TS2339: Property 'area' does not exist on type 'NonNullable<TQueryFnData>'.
+
+155                 {property.area !== null && (
+                              ~~~~
+
+client/src/pages/PropertyDetail.tsx:158:71 - error TS2339: Property 'area' does not exist on type 'NonNullable<TQueryFnData>'.
+
+158                     <span className="text-lg font-semibold">{property.area}</span>
+                                                                          ~~~~
+
+client/src/pages/PropertyDetail.tsx:166:40 - error TS2339: Property 'createdAt' does not exist on type 'NonNullable<TQueryFnData>'.
+
+166                     {new Date(property.createdAt).getFullYear()}
+                                           ~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:173:59 - error TS2339: Property 'description' does not exist on type 'NonNullable<TQueryFnData>'.
+
+173               <p className="text-gray-600 mb-4">{property.description}</p>
+                                                              ~~~~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:176:52 - error TS2339: Property 'features' does not exist on type 'NonNullable<TQueryFnData>'.
+
+176               <PropertyFeatures features={property.features || []} />
+                                                       ~~~~~~~~
+
+client/src/pages/PropertyDetail.tsx:210:116 - error TS2339: Property 'title' does not exist on type 'NonNullable<TQueryFnData>'.
+
+210                     onClick={() => window.location.href = `mailto:${agent.email}?subject=Inquiry about ${property?.title || 'property'}`}
+                                                                                                                       ~~~~~
+
+client/src/pages/PropertyDetail.tsx:224:69 - error TS2339: Property 'title' does not exist on type 'NonNullable<TQueryFnData>'.
+
+224               <Link href={`/contact?subject=Inquiry for ${property?.title || 'Property'} (ID: ${propertyId})`}>
+                                                                        ~~~~~
+
+server/seed.ts:78:7 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ title: string; description: string; price: number; location: string; type: string; status: string; images: string[]; bedrooms?: number | null | undefined; bathrooms?: number | null | undefined; area?: number | ... 1 more ... | undefined; features?: string[] | ... 1 more ... | undefined; agentId?: number | ... 1 mo...'.
+
+78       createdAt: new Date()
+         ~~~~~~~~~
+
+server/seed.ts:98:7 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ title: string; description: string; price: number; location: string; type: string; status: string; images: string[]; bedrooms?: number | null | undefined; bathrooms?: number | null | undefined; area?: number | ... 1 more ... | undefined; features?: string[] | ... 1 more ... | undefined; agentId?: number | ... 1 mo...'.
+
+98       createdAt: new Date()
+         ~~~~~~~~~
+
+server/seed.ts:118:7 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ title: string; description: string; price: number; location: string; type: string; status: string; images: string[]; bedrooms?: number | null | undefined; bathrooms?: number | null | undefined; area?: number | ... 1 more ... | undefined; features?: string[] | ... 1 more ... | undefined; agentId?: number | ... 1 mo...'.
+
+118       createdAt: new Date()
+          ~~~~~~~~~
+
+server/seed.ts:138:7 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ title: string; description: string; price: number; location: string; type: string; status: string; images: string[]; bedrooms?: number | null | undefined; bathrooms?: number | null | undefined; area?: number | ... 1 more ... | undefined; features?: string[] | ... 1 more ... | undefined; agentId?: number | ... 1 mo...'.
+
+138       createdAt: new Date()
+          ~~~~~~~~~
+
+server/seed.ts:158:7 - error TS2353: Object literal may only specify known properties, and 'createdAt' does not exist in type '{ title: string; description: string; price: number; location: string; type: string; status: string; images: string[]; bedrooms?: number | null | undefined; bathrooms?: number | null | undefined; area?: number | ... 1 more ... | undefined; features?: string[] | ... 1 more ... | undefined; agentId?: number | ... 1 mo...'.
+
+158       createdAt: new Date()
+          ~~~~~~~~~
+
+server/storage.ts:122:11 - error TS2322: Type '{ id: number; createdAt: Date; title: string; description: string; price: number; location: string; type: string; status: string; images: string[]; bedrooms?: number | null | undefined; bathrooms?: number | ... 1 more ... | undefined; area?: number | ... 1 more ... | undefined; features?: string[] | ... 1 more ... |...' is not assignable to type '{ id: number; title: string; description: string; price: number; location: string; type: string; status: string; bedrooms: number | null; bathrooms: number | null; area: number | null; images: string[]; features: string[] | null; agentId: number | null; isFeatured: boolean | null; createdAt: Date | null; }'.
+  Types of property 'bedrooms' are incompatible.
+    Type 'number | null | undefined' is not assignable to type 'number | null'.
+      Type 'undefined' is not assignable to type 'number | null'.
+
+122     const newProperty: Property = { ...property, id, createdAt };
+              ~~~~~~~~~~~
+
+server/storage.ts:156:11 - error TS2322: Type '{ id: number; title: string; name: string; bio: string; image: string; email: string; phone: string; social?: Json | undefined; }' is not assignable to type '{ id: number; title: string; name: string; bio: string; image: string; email: string; phone: string; social: unknown; }'.
+  Property 'social' is optional in type '{ id: number; title: string; name: string; bio: string; image: string; email: string; phone: string; social?: Json | undefined; }' but required in type '{ id: number; title: string; name: string; bio: string; image: string; email: string; phone: string; social: unknown; }'.
+
+156     const newAgent: Agent = { ...agent, id };
+              ~~~~~~~~
+
+server/storage.ts:460:7 - error TS2740: Type 'Omit<PgSelectBase<"properties", { id: PgColumn<{ name: "id"; tableName: "properties"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; ... 5 more ...; generated: undefined; }, {}, {}>; ... 13 more ...; createdAt: PgColumn<...>; }, ......' is missing the following properties from type 'PgSelectBase<"properties", { id: PgColumn<{ name: "id"; tableName: "properties"; dataType: "number"; columnType: "PgSerial"; data: number; driverParam: number; notNull: true; hasDefault: true; isPrimaryKey: true; ... 5 more ...; generated: undefined; }, {}, {}>; ... 13 more ...; createdAt: PgColumn<...>; }, ... 5 mo...': config, joinsNotNullableMap, tableName, isPartialSelect, and 5 more.
+
+460       query = query.where(and(...conditions));
+          ~~~~~
+
+server/vite.ts:39:5 - error TS2322: Type '{ middlewareMode: boolean; hmr: { server: Server<typeof IncomingMessage, typeof ServerResponse>; }; allowedHosts: boolean; }' is not assignable to type 'ServerOptions'.
+  Types of property 'allowedHosts' are incompatible.
+    Type 'boolean' is not assignable to type 'true | string[] | undefined'.
+
+39     server: serverOptions,
+       ~~~~~~
+
+
+Found 41 errors in 7 files.
+
+Errors  Files
+     3  client/src/components/home/AgentProfiles.tsx:61
+     4  client/src/components/home/Testimonials.tsx:24
+     3  client/src/components/properties/PropertySearch.tsx:78
+    22  client/src/pages/PropertyDetail.tsx:27
+     5  server/seed.ts:78
+     3  server/storage.ts:122
+     1  server/vite.ts:39
