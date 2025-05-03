@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import { useRoute } from 'wouter';
 import { formatPriceDisplay, timeAgo } from '@/lib/utils';
@@ -7,7 +8,7 @@ import PropertyGallery from '@/components/properties/PropertyGallery';
 import PropertyFeatures from '@/components/properties/PropertyFeatures';
 import ContactSection from '@/components/home/ContactSection';
 import { Button } from '@/components/ui/button';
-import Spinner from '@/components/ui/spinner';
+import { Spinner } from '@/components/ui/spinner';
 import { FaBed, FaBath, FaRuler } from 'react-icons/fa';
 
 export default function PropertyDetail() {
@@ -93,7 +94,7 @@ export default function PropertyDetail() {
 
       {/* Property gallery */}
       <div className="mb-10">
-        <PropertyGallery images={property.images || []} title={property.title}/> {/* Added title prop */}
+        <PropertyGallery images={property.images || []} title={property.title}/> 
       </div>
 
       {/* Property details */}
@@ -103,19 +104,19 @@ export default function PropertyDetail() {
 
           {/* Property specs */}
           <div className="flex flex-wrap gap-6 mb-6 bg-gray-50 p-4 rounded-lg">
-            {property.bedrooms > 0 && (
+            {(property.bedrooms ?? 0) > 0 && (
               <div className="flex items-center">
                 <FaBed className="text-primary mr-2" />
                 <span>{property.bedrooms} Bedrooms</span>
               </div>
             )}
-            {property.bathrooms > 0 && (
+            {(property.bathrooms ?? 0) > 0 && (
               <div className="flex items-center">
                 <FaBath className="text-primary mr-2" />
                 <span>{property.bathrooms} Bathrooms</span>
               </div>
             )}
-            {property.area > 0 && (
+            {(property.area ?? 0) > 0 && (
               <div className="flex items-center">
                 <FaRuler className="text-primary mr-2" />
                 <span>{property.area} sq ft</span>

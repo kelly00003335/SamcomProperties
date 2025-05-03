@@ -1,6 +1,7 @@
-import { useEffect, useState, ReactNode } from 'react';
+
+import { useEffect, useState } from 'react';
 import { AgentAPI } from '@/lib/api';
-import Spinner from '@/components/ui/spinner';
+import { Spinner } from '@/components/ui/spinner';
 import { Agent } from '@shared/schema';
 import { FaLinkedin, FaTwitter, FaEnvelope, FaPhone } from 'react-icons/fa';
 
