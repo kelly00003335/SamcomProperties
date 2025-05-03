@@ -1,7 +1,7 @@
 
 import { cn } from "@/lib/utils";
 
-export function Spinner({ className }: { className?: string }) {
+function Spinner({ className }: { className?: string }) {
   return (
     <div
       className={cn(
@@ -12,4 +12,5 @@ export function Spinner({ className }: { className?: string }) {
   );
 }
 
+export { Spinner };
 export default Spinner;

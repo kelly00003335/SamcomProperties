@@ -28,11 +28,7 @@ export default function PropertyDetail() {
     const fetchProperty = async () => {
       try {
         const data = await PropertyAPI.getPropertyById(propertyId);
-        if (data) {
-          setProperty(data);
-        } else {
-          setError('Property not found');
-        }
+        setProperty(data); //Directly set the data, handling potential null values within the API call.
       } catch (err) {
         console.error('Error fetching property:', err);
         setError('Failed to load property details');
@@ -52,14 +48,25 @@ export default function PropertyDetail() {
     );
   }
 
-  if (error || !property) {
+  if (error) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <h1 className="text-2xl font-bold text-red-600">{error || 'Property not found'}</h1>
+        <h1 className="text-2xl font-bold text-red-600">{error}</h1>
         <p className="mt-4">The property you're looking for could not be found.</p>
       </div>
     );
   }
+
+  //Handle potential null values for property fields
+  if (!property) {
+    return (
+      <div className="container mx-auto px-4 py-12 text-center">
+        <h1 className="text-2xl font-bold text-red-600">Property not found</h1>
+        <p className="mt-4">The property you're looking for could not be found.</p>
+      </div>
+    );
+  }
+
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -69,7 +76,7 @@ export default function PropertyDetail() {
       <div className="flex flex-wrap items-center mb-6 gap-4">
         <div className="flex items-center">
           <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
-            {property.location}
+            {property.location || 'Unknown Location'}
           </span>
         </div>
         <div>
@@ -79,14 +86,14 @@ export default function PropertyDetail() {
         </div>
         <div className="ml-auto">
           <span className="text-2xl font-bold text-primary">
-            {formatPriceDisplay(property.price, property.status)}
+            {formatPriceDisplay(property.price || 0, property.status || 'unknown')}
           </span>
         </div>
       </div>
 
       {/* Property gallery */}
       <div className="mb-10">
-        <PropertyGallery images={property.images} />
+        <PropertyGallery images={property.images || []} title={property.title}/> {/* Added title prop */}
       </div>
 
       {/* Property details */}
@@ -116,14 +123,14 @@ export default function PropertyDetail() {
             )}
             <div className="flex items-center">
               <span className="text-gray-600">Type: </span>
-              <span className="ml-2 capitalize">{property.type}</span>
+              <span className="ml-2 capitalize">{property.type || 'Unknown Type'}</span>
             </div>
           </div>
 
           {/* Description */}
           <div className="mb-8">
             <h3 className="text-xl font-semibold mb-2">Description</h3>
-            <p className="text-gray-700 whitespace-pre-line">{property.description}</p>
+            <p className="text-gray-700 whitespace-pre-line">{property.description || 'No description available'}</p>
           </div>
 
           {/* Features */}

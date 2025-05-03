@@ -65,12 +65,18 @@ export default function AgentProfiles() {
 
                 {agent.social && typeof agent.social === 'object' ? (
                 <div className="mt-4 flex gap-3">
-                  {agent.social && typeof agent.social === 'object' && 'linkedin' in agent.social && agent.social.linkedin && (
+                  {agent.social && 
+                   typeof agent.social === 'object' && 
+                   'linkedin' in agent.social && 
+                   agent.social.linkedin && (
                     <a href={String(agent.social.linkedin)} className="text-gray-400 hover:text-blue-600" aria-label="LinkedIn">
                       <FaLinkedin className="h-5 w-5" />
                     </a>
                   )}
-                  {agent.social && typeof agent.social === 'object' && 'twitter' in agent.social && agent.social.twitter && (
+                  {agent.social && 
+                   typeof agent.social === 'object' && 
+                   'twitter' in agent.social && 
+                   agent.social.twitter && (
                     <a href={String(agent.social.twitter)} className="text-gray-400 hover:text-blue-500" aria-label="Twitter">
                       <FaTwitter className="h-5 w-5" />
                     </a>
