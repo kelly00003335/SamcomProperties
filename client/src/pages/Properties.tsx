@@ -25,6 +25,7 @@ const Properties = () => {
     if (params.has('type')) newParams.type = params.get('type');
     if (params.has('minPrice')) newParams.minPrice = params.get('minPrice');
     if (params.has('maxPrice')) newParams.maxPrice = params.get('maxPrice');
+    if (params.has('status')) newParams.status = params.get('status');
     
     setSearchParams(newParams);
   }, [location]);
@@ -39,6 +40,10 @@ const Properties = () => {
     
     if (searchParams.type) {
       constraintArray.push(where('type', '==', searchParams.type));
+    }
+    
+    if (searchParams.status) {
+      constraintArray.push(where('status', '==', searchParams.status));
     }
     
     return constraintArray;
@@ -72,6 +77,11 @@ const Properties = () => {
         return false;
       }
       
+      // Filter by status if present
+      if (searchParams.status && property.status !== searchParams.status) {
+        return false;
+      }
+      
       return true;
     });
   }, [properties, searchParams]);
@@ -84,12 +94,19 @@ const Properties = () => {
     
     const parts = [];
     
-    if (searchParams.type) {
+    if (searchParams.status) {
+      parts.push(
+        searchParams.status === 'for-sale' ? 'Properties For Sale' : 
+        searchParams.status === 'for-rent' ? 'Properties For Rent' : ''
+      );
+    } else if (searchParams.type) {
       parts.push(
         searchParams.type.charAt(0).toUpperCase() + 
         searchParams.type.slice(1) + 
         "s"
       );
+    } else {
+      parts.push("Properties");
     }
     
     if (searchParams.location) {
@@ -103,7 +120,7 @@ const Properties = () => {
       parts.push(`(${priceRange.join(" ")})`);
     }
     
-    return parts.length > 0 ? parts.join(" ") : "Properties";
+    return parts.join(" ");
   };
 
   return (

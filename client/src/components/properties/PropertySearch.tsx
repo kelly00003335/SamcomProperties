@@ -10,18 +10,22 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const locationOptions = ['all', 'Nairobi', 'Mombasa', 'Kisumu', 'Nakuru', 'Eldoret'];
-const typeOptions = ['all', 'house', 'apartment', 'land', 'commercial'];
-const statusOptions = ['all', 'for-sale', 'for-rent'];
+// Import constants from lib/constants
+import { LOCATIONS, PROPERTY_TYPES, PROPERTY_STATUS } from '@/lib/constants';
 
 export default function PropertySearch() {
   const [, setLocation] = useLocation();
+  
+  // Parse URL parameters for initial state
+  const [currentLocation] = useLocation();
+  const urlParams = new URLSearchParams(currentLocation.split('?')[1] || '');
+  
   const [searchParams, setSearchParams] = useState({
-    location: 'all',
-    type: 'all',
-    minPrice: '',
-    maxPrice: '',
-    status: 'all',
+    location: urlParams.get('location') || '',
+    type: urlParams.get('type') || '',
+    minPrice: urlParams.get('minPrice') || '',
+    maxPrice: urlParams.get('maxPrice') || '',
+    status: urlParams.get('status') || '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,15 +43,15 @@ export default function PropertySearch() {
     // Build the query string from non-empty parameters
     const queryParams = new URLSearchParams();
 
-    if (searchParams.location !== 'all') {
+    if (searchParams.location) {
       queryParams.append('location', searchParams.location);
     }
 
-    if (searchParams.type !== 'all') {
+    if (searchParams.type) {
       queryParams.append('type', searchParams.type);
     }
 
-    if (searchParams.status !== 'all') {
+    if (searchParams.status) {
       queryParams.append('status', searchParams.status);
     }
 
@@ -75,9 +79,9 @@ export default function PropertySearch() {
               <SelectValue placeholder="Any location" />
             </SelectTrigger>
             <SelectContent>
-              {locationOptions.map((location) => (
-                <SelectItem key={location} value={location}>
-                  {location === 'all' ? 'Any location' : location}
+              {LOCATIONS.map((location) => (
+                <SelectItem key={location.value} value={location.value}>
+                  {location.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -93,9 +97,9 @@ export default function PropertySearch() {
               <SelectValue placeholder="Any type" />
             </SelectTrigger>
             <SelectContent>
-              {typeOptions.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type === 'all' ? 'Any type' : type.charAt(0).toUpperCase() + type.slice(1)}
+              {PROPERTY_TYPES.map((type) => (
+                <SelectItem key={type.value} value={type.value}>
+                  {type.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -111,11 +115,9 @@ export default function PropertySearch() {
               <SelectValue placeholder="Any status" />
             </SelectTrigger>
             <SelectContent>
-              {statusOptions.map((status) => (
-                <SelectItem key={status} value={status}>
-                  {status === 'all'
-                    ? 'Any status'
-                    : status.replace('-', ' ').charAt(0).toUpperCase() + status.replace('-', ' ').slice(1)}
+              {PROPERTY_STATUS.map((status) => (
+                <SelectItem key={status.value} value={status.value}>
+                  {status.label}
                 </SelectItem>
               ))}
             </SelectContent>
