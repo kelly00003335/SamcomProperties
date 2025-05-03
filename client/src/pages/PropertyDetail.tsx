@@ -25,17 +25,23 @@ const PropertyDetail = () => {
   const { data: property, isLoading, error } = useQuery<FirebaseProperty>({
     queryKey: ['property', propertyId],
     queryFn: async () => {
+      if (!propertyId) throw new Error('Property ID not provided');
       console.log(`Fetching property with ID: ${propertyId}`);
-      return await PropertyAPI.getPropertyById(propertyId || '');
+      const property = await PropertyAPI.getPropertyById(propertyId);
+      if (!property) throw new Error('Property not found');
+      return property;
     },
     enabled: !!propertyId,
   });
 
-  const { data: agent } = useQuery<any>({
+  const { data: agent, isError: agentError, error: agentErrorDetails } = useQuery<any>({
     queryKey: ['agent', property?.agentId],
     queryFn: async () => {
+      if (!property?.agentId) return null; //Handle null agentId
       console.log(`Fetching agent with ID: ${property?.agentId}`);
-      return await AgentAPI.getAgentById(property?.agentId || '');
+      const agent = await AgentAPI.getAgentById(property?.agentId);
+      if (!agent) return null; //Handle null agent
+      return agent;
     },
     enabled: !!property?.agentId,
   });
@@ -85,7 +91,7 @@ const PropertyDetail = () => {
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-3xl font-bold mb-6">Property Not Found</h1>
           <p className="text-gray-600 mb-8">
-            The property you're looking for doesn't exist or has been removed.
+            The property you're looking for doesn't exist or has been removed.  {error?.message}
           </p>
           <Link href="/properties">
             <Button className="bg-primary hover:bg-primary-dark text-white">
@@ -212,6 +218,11 @@ const PropertyDetail = () => {
                     <Mail className="mr-2 h-4 w-4" /> Email Agent
                   </Button>
                 </div>
+              </div>
+            )}
+            {agentError && (
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <p className="text-red-500">Error loading agent information: {agentErrorDetails?.message}</p>
               </div>
             )}
 

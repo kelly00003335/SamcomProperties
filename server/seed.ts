@@ -7,7 +7,7 @@ import {
 
 async function seed() {
   console.log('Seeding database...');
-  
+
   // Sample agents
   const agentsData: InsertAgent[] = [
     {
@@ -50,12 +50,12 @@ async function seed() {
 
   await db.insert(agents).values(agentsData);
   console.log('✓ Agents seeded');
-  
+
   // Sample properties
   // First get the agent IDs
   const agentRows = await db.select({ id: agents.id }).from(agents);
   const agentIds = agentRows.map(agent => agent.id);
-  
+
   const propertiesData: InsertProperty[] = [
     {
       title: "Modern Villa in Karen",
@@ -75,7 +75,7 @@ async function seed() {
       features: ["Swimming Pool", "Garden", "Security", "Servant Quarter", "CCTV"],
       agentId: agentIds[0],
       isFeatured: true,
-      createdAt: new Date()
+      // createdAt will be added by the database
     },
     {
       title: "Luxury Apartment in Westlands",
@@ -95,7 +95,7 @@ async function seed() {
       features: ["24/7 Security", "Gym", "Parking", "Elevator", "Furnished"],
       agentId: agentIds[1],
       isFeatured: true,
-      createdAt: new Date()
+      // createdAt will be added by the database
     },
     {
       title: "Modern Townhouse in Kilimani",
@@ -115,7 +115,7 @@ async function seed() {
       features: ["Gated Community", "Garden", "Security", "Parking"],
       agentId: agentIds[2],
       isFeatured: true,
-      createdAt: new Date()
+      // createdAt will be added by the database
     },
     {
       title: "Beachfront Villa in Diani",
@@ -135,7 +135,7 @@ async function seed() {
       features: ["Beachfront", "Swimming Pool", "Garden", "Security", "Staff Quarters"],
       agentId: agentIds[3],
       isFeatured: false,
-      createdAt: new Date()
+      // createdAt will be added by the database
     },
     {
       title: "Commercial Space in Upperhill",
@@ -155,13 +155,13 @@ async function seed() {
       features: ["24/7 Security", "Parking", "Elevator", "Backup Generator"],
       agentId: agentIds[1],
       isFeatured: false,
-      createdAt: new Date()
+      // createdAt will be added by the database
     }
   ];
 
   await db.insert(properties).values(propertiesData);
   console.log('✓ Properties seeded');
-  
+
   // Sample testimonials
   const testimonialsData: InsertTestimonial[] = [
     {
@@ -186,10 +186,10 @@ async function seed() {
       rating: 4
     }
   ];
-  
+
   await db.insert(testimonials).values(testimonialsData);
   console.log('✓ Testimonials seeded');
-  
+
   console.log('Database seeding completed successfully!');
 }
 
@@ -199,7 +199,7 @@ async function run() {
   try {
     const result = await db.execute(sql`SELECT COUNT(*) as count FROM ${agents}`);
     console.log('Count result:', result.rows[0]);
-    
+
     if (Number(result.rows[0].count) === 0) {
       await seed();
     } else {

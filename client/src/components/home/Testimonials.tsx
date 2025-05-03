@@ -21,7 +21,7 @@ const Testimonials = () => {
           // These are fallback testimonials that will display if none are in the database
           const defaultTestimonials: Testimonial[] = [
             {
-              id: "1",
+              id: 1,
               name: "Sarah Kamau",
               role: "Homeowner, Nairobi",
               image: "https://images.unsplash.com/photo-1589156229687-496a31ad1d1f",
@@ -30,7 +30,7 @@ const Testimonials = () => {
               createdAt: new Date()
             },
             {
-              id: "2",
+              id: 2,
               name: "James Omondi",
               role: "Property Investor",
               image: "https://images.unsplash.com/photo-1539037116277-4db20889f2d4",
@@ -39,7 +39,7 @@ const Testimonials = () => {
               createdAt: new Date()
             },
             {
-              id: "3",
+              id: 3,
               name: "Mary Wambui",
               role: "First-time Buyer",
               image: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce",
@@ -48,7 +48,7 @@ const Testimonials = () => {
               createdAt: new Date()
             },
             {
-              id: "4",
+              id: 4,
               name: "Joseph Njoroge",
               role: "Land Investor, Naivasha",
               image: "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6",

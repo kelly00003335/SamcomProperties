@@ -58,7 +58,7 @@ const AgentProfiles = () => {
   }
 
   // Error state
-  if (firestoreLoading && error) {
+  if (firestoreLoading && firestoreError) {
     return (
       <section className="py-16">
         <div className="container mx-auto px-4">
@@ -96,10 +96,10 @@ const AgentProfiles = () => {
                 <p className="text-primary font-medium mb-3">{agent.title}</p>
                 <p className="text-gray-600 mb-4">{agent.bio}</p>
                 <div className="flex space-x-3">
-                  <a href={agent.social?.linkedin} className="text-gray-600 hover:text-primary">
+                  <a href={agent.social && 'linkedin' in agent.social ? agent.social.linkedin as string : '#'} className="text-gray-600 hover:text-primary">
                     <Linkedin size={18} />
                   </a>
-                  <a href={agent.social?.twitter} className="text-gray-600 hover:text-primary">
+                  <a href={agent.social && 'twitter' in agent.social ? agent.social.twitter as string : '#'} className="text-gray-600 hover:text-primary">
                     <Twitter size={18} />
                   </a>
                   <a href={`mailto:${agent.email}`} className="text-gray-600 hover:text-primary">

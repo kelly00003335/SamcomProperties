@@ -21,16 +21,16 @@ const PropertySearch = () => {
   useEffect(() => {
     if (location.includes('?')) {
       const params = new URLSearchParams(location.split('?')[1]);
-      
+
       // Set form values based on URL parameters
       if (params.has('location')) {
         setLocationFilter(params.get('location') || 'all-locations');
       }
-      
+
       if (params.has('type')) {
         setPropertyType(params.get('type') || 'all-types');
       }
-      
+
       if (params.has('minPrice') || params.has('maxPrice')) {
         const min = params.get('minPrice') || '';
         const max = params.get('maxPrice') || '';
@@ -59,7 +59,7 @@ const PropertySearch = () => {
 
     // Navigate to properties page with search parameters
     setLocationPath(`/properties?${params.toString()}`);
-    
+
     console.log('Search parameters:', {
       location: locationFilter,
       type: propertyType,

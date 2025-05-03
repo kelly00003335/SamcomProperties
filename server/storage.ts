@@ -119,7 +119,17 @@ export class MemStorage implements IStorage {
   async createProperty(property: InsertProperty): Promise<Property> {
     const id = this.propertyId++;
     const createdAt = new Date();
-    const newProperty: Property = { ...property, id, createdAt };
+    const newProperty: Property = { 
+      ...property, 
+      id, 
+      createdAt,
+      bedrooms: property.bedrooms ?? null,
+      bathrooms: property.bathrooms ?? null,
+      area: property.area ?? null,
+      features: property.features ?? null,
+      agentId: property.agentId ?? null,
+      isFeatured: property.isFeatured ?? null
+    };
     this.properties.set(id, newProperty);
     return newProperty;
   }
@@ -153,7 +163,11 @@ export class MemStorage implements IStorage {
 
   async createAgent(agent: InsertAgent): Promise<Agent> {
     const id = this.agentId++;
-    const newAgent: Agent = { ...agent, id };
+    const newAgent: Agent = { 
+      ...agent, 
+      id,
+      social: agent.social ?? {} 
+    };
     this.agents.set(id, newAgent);
     return newAgent;
   }
@@ -457,7 +471,9 @@ export class DatabaseStorage implements IStorage {
     }
     
     if (conditions.length > 0) {
-      query = query.where(and(...conditions));
+      query = conditions.length > 0 
+        ? query.where(and(...conditions)) 
+        : query;
     }
     
     return await query;
